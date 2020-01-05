@@ -60,8 +60,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="C:\Users\Amira Aiouez\Desktop\PFE\Dev\reso\Parking pic.png" />
-                                      <entry key="outputName" value="ic_parking1" />
+                                      <entry key="foregroundImage" value="C:\Users\Amira Aiouez\Desktop\PFE\Dev\reso\54068.jpg" />
+                                      <entry key="outputName" value="splash_logo" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -109,6 +109,29 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                      </PersistentState>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState>
+              <option name="children">
+                <map>
+                  <entry key="vectorAssetStep">
+                    <value>
+                      <PersistentState>
+                        <option name="values">
+                          <map>
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_slide1_icon" />
+                            <entry key="sourceFile" value="C:\Users\Amira Aiouez\Desktop\slide1_icon.svg" />
                           </map>
                         </option>
                       </PersistentState>

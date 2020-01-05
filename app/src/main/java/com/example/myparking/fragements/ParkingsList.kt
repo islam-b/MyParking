@@ -1,4 +1,4 @@
-package com.example.myparking
+package com.example.myparking.fragements
 
 import android.content.Context
 import android.net.Uri
@@ -9,9 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myparking.ParkingsListAdapter.OnParkingClickListener
 import com.example.myparking.models.Parking
 import android.util.Log
+import com.example.myparking.utils.DataSource
+import com.example.myparking.activities.ParkingDetailsActivity
+import com.example.myparking.R
+import com.example.myparking.adapters.ListAdapter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,18 +29,25 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ParkingsList.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ParkingsList : Fragment(),  OnParkingClickListener{
-    override fun OnParkingClick(parking: Parking) {
-        Log.d("PARKING INFO", parking.name)
-//        val intent = ParkingDetailsActivity.newIntent(this, parking) {
-//            startActivity(intent)
-//        }
+class ParkingsList : Fragment(),  ListAdapter.OnItemClickListener{
+    override fun OnItemClick(item: Any) {
+        Log.d("PARKING INFO", (item as Parking).name)
+        val intent = ParkingDetailsActivity.newIntent(
+            this.activity as Context,
+            item
+        )
+        startActivity(intent)
     }
+    /* override fun OnParkingClick(parking: Parking) {
+         Log.d("PARKING INFO", parking.name)
+         val intent = ParkingDetailsActivity.newIntent(this.activity as Context, parking)
+             startActivity(intent)
+     }*/
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var listener: OnParkingClickListener? = null
+    private var listener: ListAdapter.OnItemClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,19 +78,21 @@ class ParkingsList : Fragment(),  OnParkingClickListener{
     fun initParkings(view: View) {
         var recyclerview = view.findViewById<RecyclerView>(R.id.parkings_list)
         recyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        val adapter = ParkingsListAdapter(DataSource.getParkings(), this)
+        val adapter = ListAdapter(DataSource.getParkings(), this)
         recyclerview.adapter = adapter
+        /*val adapter = ParkingsListAdapter(DataSource.getParkings(), this)
+        recyclerview.adapter = adapter*/
 
     }
 
-    override fun onAttach(context: Context) {
+   /* override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnParkingClickListener) {
+        if (context is ListAdapter.OnItemClickListener) {
             listener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
-    }
+    }*/
 
     override fun onDetach() {
         super.onDetach()

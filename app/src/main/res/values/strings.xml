@@ -6,4 +6,15 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="para">By specifying Behaviors for child views of a CoordinatorLayout you can provide many different interactions within a single parent and those views can also interact with one another. View classes can specify a default behavior when used as a child of a CoordinatorLayout using the CoordinatorLayout.DefaultBehavior annotation.
+
+Behaviors may be used to implement a variety of interactions and additional layout modifications ranging from sliding drawers and panels to swipe-dismissable elements and buttons that stick to other elements as they move and animate.
+
+Children of a CoordinatorLayout may have an anchor. This view id must correspond to an arbitrary descendant of the CoordinatorLayout, but it may not be the anchored child itself or a descendant of the anchored child. This can be used to place floating views relative to other arbitrary content panes.
+
+Children can specify insetEdge to describe how the view insets the CoordinatorLayout. Any child views which are set to dodge the same inset edges by dodgeInsetEdges will be moved appropriately so that the views do not overlap.</string>
+
+    <string name="slide2_description">ProPark vous guide vers votre destination en proposant le meilleur itinériare.</string>
+    <string name="slide3_description">ProPark vous permet de réserver votre place parking à lavance afin de garantir la disponibilité</string>
+    <string name="slide1_description">ProPark vous permet de trouvez les meilleures places parkings disponibles à proximité de votre destination.</string>
 </resources>
