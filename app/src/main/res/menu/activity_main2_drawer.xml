@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+<!--    <group android:checkableBehavior="single">-->
+<!--        <item-->
+<!--            android:id="@+id/nav_home"-->
+<!--            android:iconTint="@color/colorPrimary"-->
+<!--            android:icon="@drawable/ic_menu_camera"-->
+<!--            android:title="@string/menu_home" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_gallery"-->
+<!--            android:iconTint="@color/colorPrimary"-->
+<!--            android:icon="@drawable/ic_menu_gallery"-->
+<!--            android:title="@string/menu_gallery" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_slideshow"-->
+<!--            android:iconTint="@color/colorPrimary"-->
+<!--            android:icon="@drawable/ic_menu_slideshow"-->
+<!--            android:title="@string/menu_slideshow" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_tools"-->
+<!--            android:iconTint="@color/colorPrimary"-->
+<!--            android:icon="@drawable/ic_menu_manage"-->
+<!--            android:title="@string/menu_tools" />-->
+<!--    </group>-->
+
+    <group android:id="@+id/group_1">
+
+            <item
+                android:id="@+id/nav_reservations"
+                android:icon="@drawable/ic_event"
+                android:iconTint="@color/colorPrimary"
+                android:title="Mes réservations" />
+            <item
+                android:id="@+id/nav_notifs"
+                android:icon="@drawable/ic_notifications"
+                android:title="Notifications" />
+            <item
+                android:id="@+id/nav_find_my_car"
+                android:icon="@drawable/ic_my_location"
+                android:title="Trouvez ma voiture" />
+
+    </group>
+    <group android:id="@+id/group_2">
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_settings"
+                android:title="Paramètres" />
+            <item
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_forum"
+                android:title="Contactez nous" />
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help"
+                android:title="Aide" />
+    </group>
+    <group android:id="@+id/group_3">
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_exit"
+                android:title="Se déconnecter" />
+
+    </group>
+
+</menu>
