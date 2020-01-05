@@ -1,4 +1,4 @@
-package com.example.myparking
+package com.example.myparking.fragements
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -10,13 +10,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.myparking.R
+import com.example.myparking.models.ParkingModel
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.MapView
-import com.example.myparking.Utils.MapsUtils
+import com.example.myparking.utils.MapsUtils
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -58,7 +60,8 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
                     .position(LatLng(it.lat,it.long))
                     .title(it.name)
                     .icon(BitmapDescriptorFactory.fromBitmap(
-                        MapsUtils.createCustomMarker(context!!,mMapView, R.color.colorPrimary,"10%")
+                        MapsUtils.createCustomMarker(context!!,mMapView,
+                            R.color.colorPrimary,"10%")
                     )))
             pin.tag = it
             r++
@@ -128,10 +131,30 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
 //        {'id_parking': 'ChIJMYWLDY1RjhIRqzl9svJjJ2I', 'name': 'Parking au visiteurs', 'location': [36.7158669, 3.1865293], 'places': 18}
 //        ]
         parkings.addAll(listOf(
-            ParkingModel("ChIJwa_rIPhRjhIRWG5EvXi9l6s", "Parking de carrfour Alger", 36.7289608, 3.1794445),
-            ParkingModel("ChIJn365GQ1SjhIRusvV1OXvFJQ", "Parking Safex Public", 36.7315206, 3.1593492),
-            ParkingModel("ChIJZzTFn3VSjhIR-G7-af43cBU", "Parking ABC Tower", 36.7390456, 3.1553383),
-            ParkingModel("ChIJicmhtXZSjhIR2rBuhVj-B2c", "Parking Safex Public 2", 36.7351639, 3.1516975)
+            ParkingModel(
+                "ChIJwa_rIPhRjhIRWG5EvXi9l6s",
+                "Parking de carrfour Alger",
+                36.7289608,
+                3.1794445
+            ),
+            ParkingModel(
+                "ChIJn365GQ1SjhIRusvV1OXvFJQ",
+                "Parking Safex Public",
+                36.7315206,
+                3.1593492
+            ),
+            ParkingModel(
+                "ChIJZzTFn3VSjhIR-G7-af43cBU",
+                "Parking ABC Tower",
+                36.7390456,
+                3.1553383
+            ),
+            ParkingModel(
+                "ChIJicmhtXZSjhIR2rBuhVj-B2c",
+                "Parking Safex Public 2",
+                36.7351639,
+                3.1516975
+            )
         ))
 
 
@@ -206,6 +229,7 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 }
             }
     }
+
 }
 interface OnLocationListener {
     fun onLocationReady(location: Location)

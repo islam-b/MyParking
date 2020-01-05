@@ -1,13 +1,7 @@
 package com.example.myparking
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -16,16 +10,19 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import com.example.myparking.Utils.MapsUtils
+import androidx.fragment.app.Fragment
+import com.example.myparking.adapters.ListAdapter
+import com.example.myparking.fragements.ParkingsList
+import com.example.myparking.fragements.ParkingsMap
+import com.example.myparking.utils.MapsUtils
 import com.luseen.spacenavigation.SpaceItem
 import com.luseen.spacenavigation.SpaceNavigationView
 import com.luseen.spacenavigation.SpaceOnClickListener
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main2.*
 
-class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener{
+class Main2Activity : AppCompatActivity(), ListAdapter.OnItemClickListener, NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener{
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
+
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -55,6 +52,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         spaceNavigationView.addSpaceItem(SpaceItem(0,"Liste", R.drawable.list_view))
         spaceNavigationView.addSpaceItem(SpaceItem(1,"Carte", R.drawable.map_view))
         spaceNavigationView.setSpaceOnClickListener(this)
+        onItemClick(0,"Liste")
 
     }
 
@@ -64,15 +62,20 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     }
 
     override fun onItemClick(itemIndex: Int, itemName: String?) {
+        var fragment: Fragment
         when (itemIndex) {
             0-> {
+                fragment = ParkingsList.newInstance("","")
 
             }
             1-> {
-                val fragment = ParkingsMap.newInstance()
-                supportFragmentManager.beginTransaction().replace(R.id.nav_host,fragment).commit()
+                fragment = ParkingsMap.newInstance()
+            }
+            else -> {
+                fragment = ParkingsList.newInstance("","")
             }
         }
+        supportFragmentManager.beginTransaction().replace(R.id.nav_host,fragment).commit()
     }
 
     override fun onItemReselected(itemIndex: Int, itemName: String?) {
@@ -100,6 +103,9 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main2, menu)
         return true
+    }
+
+    override fun OnItemClick(item: Any) {
     }
 
 

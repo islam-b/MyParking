@@ -102,7 +102,7 @@
         app:maxImageSize="36dp"
         app:borderWidth="0dp"
         android:backgroundTint="@color/colorPrimaryDark"
-        android:src="@drawable/ic_directions_black_24dp"
+        android:src="@drawable/ic_directions_36dp"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_marginEnd="16dp"

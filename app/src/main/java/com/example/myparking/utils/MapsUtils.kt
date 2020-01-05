@@ -1,4 +1,4 @@
-package com.example.myparking.Utils
+package com.example.myparking.utils
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -21,8 +21,9 @@ import androidx.annotation.ColorRes
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.myparking.OnLocationListener
+
 import com.example.myparking.R
+import com.example.myparking.fragements.OnLocationListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -74,7 +75,10 @@ object MapsUtils {
                 mFusedLocationClient.lastLocation.addOnCompleteListener { task ->
                     location = task.result
                     if (location == null) {
-                        requestNewLocationData(context, locationCallback)
+                        requestNewLocationData(
+                            context,
+                            locationCallback
+                        )
                     } else {
                         listener.onLocationReady(location!!)
                     }

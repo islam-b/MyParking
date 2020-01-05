@@ -1,15 +1,17 @@
-package com.example.myparking
+package com.example.myparking.fragements
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.myparking.R
+import com.example.myparking.models.ParkingModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 private const val ARG_PARAM1 = "param1"
 private const val TAG = "ActionBottomDialog"
+
 class ParkingBottomSheet : BottomSheetDialogFragment() {
 
 

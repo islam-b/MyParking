@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    tools:context=".MainActivity"
+    tools:context="MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -30,35 +30,42 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
+
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <FrameLayout
-        android:id="@+id/nav_host"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
         android:layout_gravity="top"
-    />
+        android:paddingTop="56dp"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/nav_host"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top"
+            />
 
-    <com.luseen.spacenavigation.SpaceNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        <com.luseen.spacenavigation.SpaceNavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
 
-        app:active_item_color="@color/colorPrimary"
-        app:centre_button_color="@color/colorPrimary"
-        app:centre_button_icon="@drawable/filter_icon"
-        app:inactive_item_color="@color/inactive"
-        android:layout_gravity="bottom"
-        app:layout_behavior="com.luseen.spacenavigation.SpaceNavigationViewBehavior"
-        app:menu="@menu/bottom_nav_menu"
-        app:space_background_color="@color/white"
-        app:space_item_text_size="@dimen/space_item_text_default_size" />
+            app:active_item_color="@color/colorPrimary"
+            app:centre_button_color="@color/colorPrimary"
+            app:centre_button_icon="@drawable/filter_icon"
+            app:inactive_item_color="@color/inactive"
+            android:layout_gravity="bottom"
+
+            app:menu="@menu/bottom_nav_menu"
+            app:space_background_color="@color/white"
+            app:space_item_text_size="@dimen/space_item_text_default_size" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
