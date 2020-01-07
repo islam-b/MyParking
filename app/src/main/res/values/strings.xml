@@ -35,4 +35,6 @@ Children can specify insetEdge to describe how the view insets the CoordinatorLa
     <string name="slide3_description">ProPark vous permet de réserver votre place parking à lavance afin de garantir la disponibilité</string>
     <string name="slide1_description">ProPark vous permet de trouvez les meilleures places parkings disponibles à proximité de votre destination.</string>
 
+    <string name="my_preference">"com.abc.com.MyPref"</string>
+    <string name="my_preference_key">"com.abc.com.MyPrefKey"</string>
 </resources>

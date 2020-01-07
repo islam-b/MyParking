@@ -7,12 +7,12 @@ import androidx.viewpager.widget.PagerAdapter
 import android.view.View
 import com.example.myparking.utils.SlideObject
 
-class SlideViewPagerAdapter(private var context: Context) : PagerAdapter() {
+class SlideViewPagerAdapter(val layouts : Array<SlideObject>, private var context: Context) : PagerAdapter() {
 
+    private val inflater =  LayoutInflater.from(context)
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val slideObject = SlideObject.values()[position]
-        val inflater = LayoutInflater.from(context)
+        val slideObject = layouts[position]
         val layout = inflater.inflate(slideObject.layoutResId,container,false)
         container.addView(layout)
         return layout
