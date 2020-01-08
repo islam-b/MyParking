@@ -10,4 +10,6 @@
     <color name="info">#5F87FE</color>
     <color name="greyBg">#eaeaea</color>
 
+    <color name="inactiveDot">#BEBEBE</color>
+
 </resources>

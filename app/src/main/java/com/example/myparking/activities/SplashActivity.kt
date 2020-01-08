@@ -17,8 +17,8 @@ class SplashActivity : AppCompatActivity() {
 
         myHandler = Handler()
         myHandler.postDelayed({
-            goToMainActivity()
-            //goToSliderActivity()
+           // goToMainActivity()
+            goToSliderActivity()
         }, splashTime)
     }
 
@@ -33,9 +33,6 @@ class SplashActivity : AppCompatActivity() {
         startActivity(loginActivityIntent)
         finish()
 
-    }
-    companion object{
-        const val DELAY_MILIS : Long = 2000
     }
 }
 
