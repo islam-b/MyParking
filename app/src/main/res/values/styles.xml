@@ -28,6 +28,10 @@
 
     </style>
 
+    <style name="AppTheme.FacebookButton" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/facebook</item>
+    </style>
+
 
 
 </resources>

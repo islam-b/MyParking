@@ -10,11 +10,13 @@ import com.example.myparking.utils.SlideObject
 import kotlinx.android.synthetic.main.activity_login.*
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isEmpty
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.myparking.Main2Activity
 import com.example.myparking.utils.PreferenceManager
@@ -27,7 +29,7 @@ class LoginActivity : AppCompatActivity(){
     //private var dots= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // PreferenceManager(this).clearreference()  // remove this to show slider again
+        PreferenceManager(this).clearreference()  // remove this to show slider again
         if(PreferenceManager(this).checkPreference())
         {
             goToMainActivity()
@@ -51,16 +53,20 @@ class LoginActivity : AppCompatActivity(){
                 createDots(position)
                 if (position == layouts.size-1) {
                     skip_slider.visibility=View.INVISIBLE
+                } else {
+                    skip_slider.visibility=View.VISIBLE
                 }
             }
         })
         skip_slider?.setOnClickListener {
-            goToMainActivity()
+            //goToMainActivity()
+            goToLoginActivity() //real login
             PreferenceManager(this).writePreference()
         }
         next_slider?.setOnClickListener{
             goToNextSlide()
         }
+
 
     }
 
@@ -72,7 +78,7 @@ class LoginActivity : AppCompatActivity(){
             else  dots[i]?.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_dot))
 
            val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            params.setMargins(8,0,8,0)
+            params.setMargins(4,0,4,0)
             dotslayout.addView(dots[i], params)
         }
     }
@@ -93,10 +99,17 @@ class LoginActivity : AppCompatActivity(){
         {
             slider_viewPager.currentItem = nextSlide
         }else {
-            goToMainActivity()
+            //goToMainActivity()
+            goToLoginActivity()
             PreferenceManager(this).writePreference()
         }
 
+    }
+
+    private fun goToLoginActivity() {
+        val loginActivityIntent = Intent(applicationContext, LoginActivity2::class.java)
+        startActivity(loginActivityIntent)
+        finish()
     }
 }
 
