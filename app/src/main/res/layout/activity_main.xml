@@ -36,16 +36,13 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_gravity="top"
-        android:paddingTop="56dp"
-        android:layout_height="match_parent">
+
         <FrameLayout
             android:id="@+id/nav_host"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="56dp"
             android:layout_gravity="top"
             />
 
@@ -59,12 +56,11 @@
             app:centre_button_icon="@drawable/filter_icon"
             app:inactive_item_color="@color/inactive"
             android:layout_gravity="bottom"
-
             app:menu="@menu/bottom_nav_menu"
             app:space_background_color="@color/white"
             app:space_item_text_size="@dimen/space_item_text_default_size" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 
 
