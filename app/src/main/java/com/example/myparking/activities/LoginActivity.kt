@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity(){
                 createDots(position)
                 if (position == layouts.size-1) {
                     skip_slider.visibility=View.INVISIBLE
-                }
+                } else skip_slider.visibility=View.VISIBLE
             }
         })
         skip_slider?.setOnClickListener {
@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity(){
             else  dots[i]?.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_dot))
 
            val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            params.setMargins(8,0,8,0)
+            params.setMargins(4,0,4,0)
             dotslayout.addView(dots[i], params)
         }
     }

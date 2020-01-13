@@ -14,6 +14,7 @@ import android.util.Log
 import com.example.myparking.utils.DataSource
 import com.example.myparking.activities.ParkingDetailsActivity
 import com.example.myparking.R
+import com.example.myparking.activities.ParkingsDetailsContainer
 import com.example.myparking.adapters.ListAdapter
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,10 +32,11 @@ private const val ARG_PARAM2 = "param2"
  */
 class ParkingsList : Fragment(),  ListAdapter.OnItemClickListener{
     override fun OnItemClick(item: Any) {
+        val list = DataSource.getParkings()
         Log.d("PARKING INFO", (item as Parking).name)
-        val intent = ParkingDetailsActivity.newIntent(
+        val intent = ParkingsDetailsContainer.newIntent(
             this.activity as Context,
-            item
+            list, list.indexOf(item)
         )
         startActivity(intent)
     }

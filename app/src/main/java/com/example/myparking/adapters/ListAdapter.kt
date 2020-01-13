@@ -15,6 +15,7 @@ class ListAdapter<T>(val items : ArrayList<T>, listener : OnItemClickListener) :
     private val VIEW_TYPE_HORAIRE_LIST = 1
     private val VIEW_TYPE_TARIFS_LIST = 2
     private val VIEW_TYPE_PAIEMENT_LIST = 3
+    private val VIEW_TYPE_DURATION_LIST = 4
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_PARKING_LIST){
@@ -39,12 +40,19 @@ class ListAdapter<T>(val items : ArrayList<T>, listener : OnItemClickListener) :
             val tarifholder = holder as TarifViewHolder
             tarifholder.tarif_time.text = tarif.tarif_time
             tarifholder.tarif_sum.text = tarif.tarif_sum
-        } else if ( getItemViewType(position) == VIEW_TYPE_PAIEMENT_LIST){
+        } else if ( getItemViewType(position) == VIEW_TYPE_PAIEMENT_LIST) {
             val paiement = items[position] as Paiement
             val paiementholder = holder as PaiementViewHolder
-           // if (paiement.icon!= ""){ Picasso.get().load(paiement.icon).fit().centerInside().into(paiementholder.right_icon)}
+            // if (paiement.icon!= ""){ Picasso.get().load(paiement.icon).fit().centerInside().into(paiementholder.right_icon)}
             paiementholder.left_text.text = paiement.type
             paiementholder.right_icon.setImageResource(paiement.icon)
+        } else if (getItemViewType(position) == VIEW_TYPE_DURATION_LIST) {
+            val duration = items[position] as Duration
+            val durationHolder = holder as DurationViewHolder
+            durationHolder.duration_text1.text = duration.text1
+            durationHolder.duration_text2.text = duration.text2
+            durationHolder.icon.setImageResource(duration.icon)
+            durationHolder.mDuration = duration
         } else { //equipement
             val equipement = items[position] as Equipement
             val equipementtholder = holder as EquipementViewHolder
@@ -66,6 +74,8 @@ class ListAdapter<T>(val items : ArrayList<T>, listener : OnItemClickListener) :
             return  VIEW_TYPE_TARIFS_LIST
         } else if (items[position] is Paiement) {
             return VIEW_TYPE_PAIEMENT_LIST
+        } else if (items[position] is Duration) {
+            return VIEW_TYPE_DURATION_LIST
         }
         return 100000
     }
@@ -81,9 +91,13 @@ class ListAdapter<T>(val items : ArrayList<T>, listener : OnItemClickListener) :
         }else if (viewType == VIEW_TYPE_TARIFS_LIST) {
             val vi = LayoutInflater.from(parent.context).inflate(R.layout.horaire_item, parent, false)
             return TarifViewHolder(vi, mListener)
-        }else if (viewType == VIEW_TYPE_PAIEMENT_LIST){
-            val vi = LayoutInflater.from(parent.context).inflate(R.layout.parking_details_item_type2, parent, false)
+        }else if (viewType == VIEW_TYPE_PAIEMENT_LIST) {
+            val vi = LayoutInflater.from(parent.context)
+                .inflate(R.layout.parking_details_item_type2, parent, false)
             return PaiementViewHolder(vi, mListener)
+        }else if (viewType == VIEW_TYPE_DURATION_LIST) {
+            val vi = LayoutInflater.from(parent.context).inflate(R.layout.reservation_duration_layout, parent, false)
+            return DurationViewHolder(vi, mListener)
         } else {
             val vi = LayoutInflater.from(parent.context).inflate(R.layout.parking_details_item_type2, parent, false)
             return EquipementViewHolder(vi, mListener)

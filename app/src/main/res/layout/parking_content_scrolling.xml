@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardElevation="4dp"
+            app:cardCornerRadius="0dp"
             app:layout_constraintBottom_toTopOf="@+id/horaire"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -35,15 +36,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:maxLines="2"
                     android:text="Metropolis at Metrotown"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/parking_address"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
                     android:text="4700 kingsway Burnaby, BC V5H 2C3"
                     android:textSize="14sp" />
 

@@ -21,9 +21,11 @@ class ParkingDetailsActivity : AppCompatActivity() , ListAdapter.OnItemClickList
 
 //    private var currentParking = Parking()
     private var currentParking : Parking? = null
+    private var currentId :Int? =0
+    private var parkingsList = DataSource.getParkings()
 
     override fun OnItemClick(item: Any) {
-      Log.d("Horaire", item as String)
+      //Log.d("Horaire", item as String)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +34,10 @@ class ParkingDetailsActivity : AppCompatActivity() , ListAdapter.OnItemClickList
         bundle?.let {
             bundle.apply {
                 currentParking = getParcelable<Parking>("PARKING") as Parking
+                currentId = getInt("POSITION")
             }
         }
+        Log.d("PARK ID", currentId.toString())
         setContentView(R.layout.activity_parking_details)
 
         //horaire recycleview
@@ -87,13 +91,25 @@ class ParkingDetailsActivity : AppCompatActivity() , ListAdapter.OnItemClickList
             this
         )
         recyclerviewEquip.adapter = adapterEquip
+
+        //reserve btn click listener
+        reserver.setOnClickListener {
+            val i = ReservationActivity.newIntent(this)
+            startActivity(i)
+            finish()
+        }
+
     }
 
+
+
     companion object {
-        fun newIntent(context: Context, parking: Parking): Intent {
+        fun newIntent(context: Context, list:ArrayList<Parking>, position: Int): Intent {
             val intent = Intent(context, ParkingDetailsActivity::class.java)
+            val parking = list[position]
             Log.d("Parking details", parking.name)
             intent.putExtra("PARKING", parking)
+            intent.putExtra("POSITION", position)
             //intent.putExtra("NAME", parking.name)
             //intent.putExtra("NEWS", news)
             //intent.putExtra("TITLE",news.description)

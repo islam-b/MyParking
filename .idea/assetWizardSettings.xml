@@ -156,7 +156,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_arrow_forward_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/home/islam/T%C3%A9l%C3%A9chargements/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_close_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -166,8 +166,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_next" />
-                            <entry key="sourceFile" value="C:\Users\Amira Aiouez" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_close_black_24dp" />
+                            <entry key="sourceFile" value="/home/islam/C:\Users\Amira Aiouez" />
                           </map>
                         </option>
                       </PersistentState>
