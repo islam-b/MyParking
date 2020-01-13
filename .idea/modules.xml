@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Dev-MyParking.iml" filepath="$PROJECT_DIR$/Dev-MyParking.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/Dev-MyParking-app.iml" filepath="$PROJECT_DIR$/app/Dev-MyParking-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyParking.iml" filepath="$PROJECT_DIR$/MyParking.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/MyParking-app.iml" filepath="$PROJECT_DIR$/app/MyParking-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spacelib/MyParking-spacelib.iml" filepath="$PROJECT_DIR$/spacelib/MyParking-spacelib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/spacelib/spacelib.iml" filepath="$PROJECT_DIR$/spacelib/spacelib.iml" />
     </modules>

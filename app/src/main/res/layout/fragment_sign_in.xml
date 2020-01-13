@@ -17,10 +17,12 @@
             android:layout_height="280dp"
             android:layout_marginBottom="16dp"
             android:scaleType="fitXY"
-            android:src="@drawable/slide1_complet"
+            android:src="@drawable/slide4_complet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/image_desc"
+            />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/user_name_layout"
@@ -40,7 +42,7 @@
                 android:drawableLeft="@drawable/ic_user"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/inactiveDot"
-                android:hint="Nom utilisateur"
+                android:hint="@string/username_hint"
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +66,7 @@
                 android:drawableStart="@drawable/ic_password"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/inactiveDot"
-                android:hint="Mot de passe"
+                android:hint="@string/password_hint"
                 android:inputType="textPassword"
 
                 />
@@ -76,7 +78,7 @@
             android:layout_height="64dp"
             android:layout_margin="24dp"
             android:backgroundTint="@color/colorAccent"
-            android:text="Se connecter"
+            android:text="@string/connecter_bn"
             android:theme="@style/Widget.MaterialComponents.Button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,11 +89,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:text="Mot de passe oublié?"
+            android:focusable="true"
+            android:text="@string/forgotton_pwd_link"
             android:textColor="@color/info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login" />
+            app:layout_constraintTop_toBottomOf="@id/login"
+            />
 
         <LinearLayout
             android:id="@id/divider"
@@ -115,14 +119,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OU" />
+                android:text="@string/or" />
 
             <View
                 android:id="@+id/divider6"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
                 android:layout_weight="1"
                 android:background="?android:attr/listDivider" />
         </LinearLayout>
@@ -134,9 +138,8 @@
             android:layout_height="64dp"
             android:layout_margin="24dp"
             android:backgroundTint="@color/facebook"
-            android:text="Se connecter avec Facebook"
+            android:text="@string/connecter_fb_bn"
             app:icon="@drawable/logo_fb"
-            app:iconStartPadding="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
@@ -146,7 +149,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:text="Créer un compte."
+            android:focusable="true"
+            android:text="@string/create_account_link"
             android:textColor="@color/info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

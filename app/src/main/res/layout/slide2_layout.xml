@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/image_slide2"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="365dp"
         android:src="@drawable/slide2_complet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
             android:layout_marginLeft="56dp"
             android:layout_marginRight="56dp"
             android:layout_weight="1"
-            android:text="Guiage vers le parking"
+            android:text="@string/slide2_title"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/slider_description"

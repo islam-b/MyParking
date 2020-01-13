@@ -30,5 +30,7 @@ import android.view.View
     <dimen
         name="design_bottom_navigation_active_text_size"
         tools:override="true">10sp </dimen>
+
+    <dimen name="textSize_16sp">16sp</dimen>
 </resources>
 
