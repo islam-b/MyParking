@@ -9,7 +9,7 @@
     <color name="authorized">#69D682</color>
     <color name="info">#5F87FE</color>
     <color name="greyBg">#eaeaea</color>
-
+    <color name="filterBg">#d9d9d9</color>
     <color name="inactiveDot">#BEBEBE</color>
 
 </resources>
