@@ -156,7 +156,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/home/islam/T%C3%A9l%C3%A9chargements/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/hardware/ic_keyboard_arrow_left_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/home/islam/T%C3%A9l%C3%A9chargements/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_arrow_drop_down_circle_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -166,9 +166,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_arrow_left_black_24dp" />
-                            <entry key="sourceFile" value="/home/islam/C:\Users\Amira Aiouez" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_down_arrow" />
+                            <entry key="sourceFile" value="/home/islam/Téléchargements/down-arrow.svg" />
                           </map>
                         </option>
                       </PersistentState>

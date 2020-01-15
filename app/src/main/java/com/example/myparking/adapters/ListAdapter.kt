@@ -16,6 +16,7 @@ class ListAdapter<T>(val items : ArrayList<T>, listener : OnItemClickListener) :
     private val VIEW_TYPE_TARIFS_LIST = 2
     private val VIEW_TYPE_PAIEMENT_LIST = 3
     private val VIEW_TYPE_DURATION_LIST = 4
+    private val VIEW_TYPE_SERVICES_LIST = 5
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_PARKING_LIST){
@@ -53,7 +54,15 @@ class ListAdapter<T>(val items : ArrayList<T>, listener : OnItemClickListener) :
             durationHolder.duration_text2.text = duration.text2
             durationHolder.icon.setImageResource(duration.icon)
             durationHolder.mDuration = duration
-        } else { //equipement
+        } else if (getItemViewType(position) == VIEW_TYPE_SERVICES_LIST) {
+            val service = items[position] as Service
+            val serviceHolder = holder as ServiceViewHolder
+            serviceHolder.service_icon.setImageResource(service.icon)
+            serviceHolder.service_title.text = service.title
+            serviceHolder.initColors()
+            serviceHolder.mService = service
+        }
+        else { //equipement
             val equipement = items[position] as Equipement
             val equipementtholder = holder as EquipementViewHolder
             equipementtholder.left_text.text = equipement.type
@@ -76,6 +85,8 @@ class ListAdapter<T>(val items : ArrayList<T>, listener : OnItemClickListener) :
             return VIEW_TYPE_PAIEMENT_LIST
         } else if (items[position] is Duration) {
             return VIEW_TYPE_DURATION_LIST
+        }else if (items[position] is Service) {
+            return VIEW_TYPE_SERVICES_LIST
         }
         return 100000
     }
@@ -98,6 +109,9 @@ class ListAdapter<T>(val items : ArrayList<T>, listener : OnItemClickListener) :
         }else if (viewType == VIEW_TYPE_DURATION_LIST) {
             val vi = LayoutInflater.from(parent.context).inflate(R.layout.reservation_duration_layout, parent, false)
             return DurationViewHolder(vi, mListener)
+        }else if (viewType == VIEW_TYPE_SERVICES_LIST) {
+            val vi = LayoutInflater.from(parent.context).inflate(R.layout.service_item, parent, false)
+            return ServiceViewHolder(vi, mListener)
         } else {
             val vi = LayoutInflater.from(parent.context).inflate(R.layout.parking_details_item_type2, parent, false)
             return EquipementViewHolder(vi, mListener)
