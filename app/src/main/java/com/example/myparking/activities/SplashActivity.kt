@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import com.example.myparking.LoginActivity
 import com.example.myparking.Main2Activity
 import com.example.myparking.R
 
@@ -30,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun goToSliderActivity(){
-        val loginActivityIntent = Intent(applicationContext, LoginActivity::class.java)
+        val loginActivityIntent = Intent(applicationContext, SliderActivity::class.java)
         startActivity(loginActivityIntent)
         finish()
 

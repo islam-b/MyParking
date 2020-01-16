@@ -1,8 +1,14 @@
 package com.example.myparking.models
 
 import android.os.Parcelable
+import android.widget.ImageView
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.Glide
+import androidx.databinding.BindingAdapter
+
+
 
 @Parcelize
 data class Parking(val opened: String = "",val  capacity: String ="",  val name: String ="" ,val address: String ="",
@@ -11,5 +17,7 @@ data class Parking(val opened: String = "",val  capacity: String ="",  val name:
                    val paiements: ArrayList<Int>? = null,
                    val equipements: ArrayList<Int>? = null)
     : Parcelable {
+
+
 
 }

@@ -1,8 +1,9 @@
 package com.example.myparking.models
 
+import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
+import kotlinx.android.parcel.Parcelize
 
-class Duration(val text1:String, val text2:String,@DrawableRes val icon:Int) {
-
-}
+@Parcelize
+class Duration(val text1:String, val text2:String,@DrawableRes val icon:Int) : Parcelable

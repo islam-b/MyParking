@@ -1,5 +1,6 @@
 package com.example.myparking.fragements
 
+import com.example.myparking.databinding.FilterDialogBinding
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
@@ -13,11 +14,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
-import com.example.myparking.adapters.ListAdapter
+
+import com.example.myparking.adapters.MyAdapter
+import com.example.myparking.adapters.ServiceAdapter
 import com.example.myparking.models.Service
 import com.example.myparking.utils.AnimationUtils
 
@@ -26,7 +30,7 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
 
     val TAG1 = "FilterDialogFragment"
     private var toolbar: Toolbar? = null
-
+    private lateinit var  binding: FilterDialogBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,13 +38,15 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState);
-        val view = inflater.inflate(R.layout.filter_dialog,  container, false)
-        toolbar = view.findViewById<Toolbar>(R.id.filter_toolbar)
-        return view
+
+        binding = DataBindingUtil.inflate(inflater,R.layout.filter_dialog,container,false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbar = view.findViewById<Toolbar>(R.id.filter_toolbar)
         toolbar?.let {
 //            it.setNavigationOnClickListener { v -> dismiss() }
 //            it.setTitle("Some Title")
@@ -72,11 +78,11 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
             Service("Caméra", R.drawable.ic_cctv),
             Service("24/7", R.drawable.ic_timer)
         )
-        val adapter = ListAdapter(services, object : ListAdapter.OnItemClickListener {
-
-            override fun OnItemClick(item: Any) {
-                Log.d("AM HERE TO HANDLE CHECK EVENT", "BLA BLA")
+        val adapter = ServiceAdapter(services, object : MyAdapter.ItemAdapterListener<Service> {
+            override fun onItemClicked(item: Service) {
+                Log.d("AM ", "BLA BLA HERE TO HANDLE CHECK EVENT")
             }
+
 
         })
         services_list.adapter = adapter

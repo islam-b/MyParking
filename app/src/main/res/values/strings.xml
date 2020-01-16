@@ -33,10 +33,47 @@ Children of a CoordinatorLayout may have an anchor. This view id must correspond
 
 Children can specify insetEdge to describe how the view insets the CoordinatorLayout. Any child views which are set to dodge the same inset edges by dodgeInsetEdges will be moved appropriately so that the views do not overlap.</string>
 
+
+
+    <string name="my_preference">"com.abc.com.MyPref"</string>
+    <string name="my_preference_key">"com.abc.com.MyPrefKey"</string>
+
+
+    <!--slide texts-->
+    <string name="slide1_title">Recommandation intelligente</string>
+    <string name="slide2_title">Guidage vers le parking</string>
+    <string name="slide3_title">Réservation et garantie</string>
+
     <string name="slide2_description">ProPark vous guide vers votre destination en proposant le meilleur itinériare.</string>
     <string name="slide3_description">ProPark vous permet de réserver votre place parking à lavance afin de garantir la disponibilité</string>
     <string name="slide1_description">ProPark vous permet de trouvez les meilleures places parkings disponibles à proximité de votre destination.</string>
 
-    <string name="my_preference">"com.abc.com.MyPref"</string>
-    <string name="my_preference_key">"com.abc.com.MyPrefKey"</string>
+    <!-- Hints -->
+    <string name="username_hint">Nom d\'utilisateur</string>
+    <string name="lastname_hint">Nom</string>
+    <string name="firstname_hint">Prénom</string>
+    <string name="mail_hint">Email</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="password_confirm_hint">Confirmez le mot de passe</string>
+
+    <!-- Button -->
+    <string name="connecter_bn">Se connecter</string>
+    <string name="connecter_fb_bn">Se connecter</string>
+    <string name="create_account_bn">Creer un compte</string>
+    <string name="create_acc_fb_bn">S\'inscrire avec facebook</string>
+
+    <!-- Links -->
+    <string name="forgotton_pwd_link"><u>Mot de passe oublié?</u></string>
+    <string name="create_account_link"><u>Créer un compte</u></string>
+
+    <string name="or">OU</string>
+    <string name="image_desc">image</string>
+    <string name="contract_terms">J\'accepte les Termes et Conditions</string>
+    <string name="ignorer">IGNORER</string>
+    <string name="horaire">Horaire</string>
+    <string name="tarifs">Tarifs</string>
+    <string name="paiement">Paiement</string>
+    <string name="equipements">Equipements</string>
+    <string name="temps_total">Temps total</string>
+
 </resources>
