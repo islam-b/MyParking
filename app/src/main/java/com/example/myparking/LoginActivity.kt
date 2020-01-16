@@ -1,22 +1,18 @@
-package com.example.myparking.activities
+package com.example.myparking
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
-import com.example.myparking.R
 import com.example.myparking.adapters.SlideViewPagerAdapter
 import com.example.myparking.utils.SlideObject
 import kotlinx.android.synthetic.main.activity_login.*
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isEmpty
 import androidx.viewpager.widget.ViewPager
-import com.example.myparking.Main2Activity
 import com.example.myparking.utils.PreferenceManager
 
 
