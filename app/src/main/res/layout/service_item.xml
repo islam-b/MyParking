@@ -20,7 +20,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/service_icon_container"
-        android:background='@{checked ? "@drawable/service_icon_container_bg_activ" : "@drawable/service_icon_container_bg"}'
+        android:background="@{checked ? @drawable/service_icon_container_bg_activ : @drawable/service_icon_container_bg}"
 
         android:layout_width="64dp"
         android:layout_height="64dp"
@@ -35,7 +35,7 @@
 
         <ImageView
             android:id="@+id/service_icon"
-            android:backgroundTint="@color/colorPrimary"
+            android:tint="@{checked ? @color/colorPrimary : @color/inactiveDot}"
             android:layout_width="32dp"
             android:layout_height="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -56,7 +56,7 @@
         android:gravity="center"
         android:maxLines="2"
         android:text="@{service.title}"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@{checked ? @color/colorPrimary : @color/inactiveDot}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
