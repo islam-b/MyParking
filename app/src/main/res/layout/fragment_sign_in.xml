@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/image_slide4"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
+            android:layout_height="0dp"
             android:layout_marginBottom="16dp"
             android:scaleType="fitXY"
             android:src="@drawable/slide4_complet"
@@ -22,6 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/image_desc"
+            app:layout_constraintBottom_toTopOf="@id/user_name_layout"
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -31,7 +32,8 @@
             app:boxBackgroundColor="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_slide4">
+            app:layout_constraintTop_toBottomOf="@+id/image_slide4"
+            app:layout_constraintBottom_toTopOf="@id/user_password_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_name"
@@ -53,6 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/user_name_layout"
+            app:layout_constraintBottom_toTopOf="@id/login"
             app:passwordToggleContentDescription="Password"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/colorAccent">
@@ -76,13 +79,17 @@
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:layout_margin="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="24dp"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/connecter_bn"
             android:theme="@style/Widget.MaterialComponents.Button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_password_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/user_password_layout"
+            app:layout_constraintBottom_toTopOf="@id/forgotten_pwd"
+            />
 
         <TextView
             android:id="@+id/forgotten_pwd"
@@ -95,6 +102,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/login"
+            app:layout_constraintBottom_toTopOf="@+id/divider"
+            android:layout_marginTop="8dp"
             />
 
         <LinearLayout
@@ -102,10 +111,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="16dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/forgotten_pwd">
+            app:layout_constraintTop_toBottomOf="@id/forgotten_pwd"
+            app:layout_constraintBottom_toTopOf="@id/login_facebook">
 
             <View
                 android:id="@+id/divider5"
@@ -136,13 +146,17 @@
             android:id="@+id/login_facebook"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:layout_margin="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginBottom="8dp"
             android:backgroundTint="@color/facebook"
             android:text="@string/connecter_fb_bn"
             app:icon="@drawable/logo_fb"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider" />
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            app:layout_constraintBottom_toTopOf="@id/sign_up"/>
 
         <TextView
             android:id="@+id/sign_up"
@@ -154,7 +168,9 @@
             android:textColor="@color/info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login_facebook" />
+            app:layout_constraintTop_toBottomOf="@id/login_facebook"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
