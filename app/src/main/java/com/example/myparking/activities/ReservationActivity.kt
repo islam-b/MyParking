@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +19,7 @@ import com.example.myparking.models.Horaire
 import com.example.myparking.models.Tarif
 import com.example.myparking.utils.DataSource
 import kotlinx.android.synthetic.main.activity_reservation.*
+import kotlinx.android.synthetic.main.reservation_dialog.view.*
 
 class ReservationActivity : AppCompatActivity(){
 
@@ -32,6 +35,21 @@ class ReservationActivity : AppCompatActivity(){
 
         initTarifsLists()
         initDurationsList()
+        confirm_btn.setOnClickListener {
+            val mDialogView = LayoutInflater.from(this).inflate(R.layout.reservation_dialog, null)
+            val mBuilder = AlertDialog.Builder(this)
+                .setView(mDialogView)
+
+            val mAlertDialog = mBuilder.show()
+            mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            mDialogView.see_details_btn.setOnClickListener{
+                val reservationDetailsActivity = Intent(applicationContext, ReservationDetailsActivity::class.java)
+                startActivity(reservationDetailsActivity)
+                finish()
+
+            }
+
+        }
     }
 
     fun initTarifsLists() {
