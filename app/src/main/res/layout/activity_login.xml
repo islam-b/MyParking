@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.SliderActivity">
+
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/slider_viewPager"
@@ -36,7 +37,9 @@
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:contentDescription="@string/image_desc"
+        />
 
     <TextView
         style="?attr/buttonBarButtonStyle"
@@ -45,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="40dp"
-        android:text="IGNORER"
+        android:text="@string/ignorer"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

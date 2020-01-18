@@ -4,18 +4,21 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
-import com.example.myparking.adapters.ListAdapter
+import com.example.myparking.adapters.DurationAdapter
+import com.example.myparking.adapters.MyAdapter
+import com.example.myparking.adapters.TarifsAdapter
 import com.example.myparking.models.Duration
 import com.example.myparking.models.Horaire
 import com.example.myparking.models.Tarif
 import com.example.myparking.utils.DataSource
 import kotlinx.android.synthetic.main.activity_reservation.*
 
-class ReservationActivity : AppCompatActivity(), ListAdapter.OnItemClickListener {
+class ReservationActivity : AppCompatActivity(){
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +42,12 @@ class ReservationActivity : AppCompatActivity(), ListAdapter.OnItemClickListener
             Tarif("2 heure","200 DZD"),
             Tarif("3 heure","300 DZD")
         )
-        val adapter =
-            ListAdapter(list, this)
+        val adapter = TarifsAdapter(list, object : MyAdapter.ItemAdapterListener<Tarif> {
+            override fun onItemClicked(item: Tarif) {
+                Log.d("tarifs clicked", item.tarif_sum)
+            }
+
+        })
         recyclerView.adapter = adapter
     }
 
@@ -52,7 +59,11 @@ class ReservationActivity : AppCompatActivity(), ListAdapter.OnItemClickListener
             Duration("Entrée","12:30", R.drawable.ic_hourglass_full),
             Duration("Sortie","14:30", R.drawable.ic_hourglass_empty)
         )
-        val adapter = ListAdapter(list, this)
+        val adapter = DurationAdapter(list, object: MyAdapter.ItemAdapterListener<Duration> {
+            override fun onItemClicked(item: Duration) {
+                Log.d("Duration clicked",item.text1)
+            }
+        })
         recyclerView.adapter = adapter
     }
 
@@ -60,8 +71,7 @@ class ReservationActivity : AppCompatActivity(), ListAdapter.OnItemClickListener
         super.onBackPressed()
     }
 
-    override fun OnItemClick(item: Any) {
-    }
+
 
     companion object {
         fun newIntent(context: Context): Intent {

@@ -28,7 +28,7 @@
             android:layout_marginLeft="56dp"
             android:layout_marginRight="56dp"
             android:layout_weight="1"
-            android:text="Recommandation intelligente"
+            android:text="@string/slide1_title"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/slider_description"

@@ -12,7 +12,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import com.example.myparking.adapters.ListAdapter
+
+
 import com.example.myparking.fragements.FilterDialogFragment
 import com.example.myparking.fragements.ParkingsList
 import com.example.myparking.fragements.ParkingsMap
@@ -29,7 +30,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 
 
 
-class Main2Activity : AppCompatActivity(), ListAdapter.OnItemClickListener, NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener{
+class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener{
 
 
 
@@ -81,14 +82,14 @@ class Main2Activity : AppCompatActivity(), ListAdapter.OnItemClickListener, Navi
         var fragment: Fragment
         when (itemIndex) {
             0-> {
-                fragment = ParkingsList.newInstance("","")
+                fragment = ParkingsList()
 
             }
             1-> {
                 fragment = ParkingsMap.newInstance()
             }
             else -> {
-                fragment = ParkingsList.newInstance("","")
+                fragment = ParkingsList()
             }
         }
         supportFragmentManager.beginTransaction().replace(R.id.nav_host,fragment).commit()
@@ -119,9 +120,6 @@ class Main2Activity : AppCompatActivity(), ListAdapter.OnItemClickListener, Navi
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main2, menu)
         return true
-    }
-
-    override fun OnItemClick(item: Any) {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

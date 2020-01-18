@@ -1,258 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activities.ParkingDetailsActivity"
-    tools:showIn="@layout/activity_parking_details"
-    android:background="@color/greyBg"
-   >
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="parking"
+            type="com.example.myparking.models.Parking" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/greyBg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".activities.ParkingDetailsActivity"
+        tools:showIn="@layout/activity_parking_details">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/parking_main_info"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="4dp"
-            app:cardCornerRadius="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/horaire"
-            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            android:layout_height="wrap_content">
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/parking_main_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:orientation="vertical"
-                android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/horaire"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="2"
-                    android:text="Metropolis at Metrotown"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/parking_address"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:text="4700 kingsway Burnaby, BC V5H 2C3"
-                    android:textSize="14sp" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/topper"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-
-                    >
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/opened"
+                        android:id="@+id/name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Ouvert"
-                        android:textColor="@color/authorized"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/capacity"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:text="@{parking.name}"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/capacity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="80dp"
-                        android:layout_weight="2"
-                        android:text=" - 50%"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/distance"
-                        app:layout_constraintStart_toEndOf="@+id/opened"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/distance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="0,5 Km"
-                        android:textColor="@color/info"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/opened"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/walk_time"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/parking_address"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text=" - 5 min de marche"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toEndOf="@+id/distance"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
+                        android:text="@{parking.address}"
+                        android:textSize="14sp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/topper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        >
+
+                        <TextView
+                            android:id="@+id/opened"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@{parking.opened}"
+                            android:textColor="@color/authorized"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/capacity"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/capacity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="80dp"
+                            android:layout_weight="2"
+                            android:text="@{parking.capacity}"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/distance"
+                            app:layout_constraintStart_toEndOf="@+id/opened"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="@{parking.distance}"
+                            android:textColor="@color/info"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/opened"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/walk_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="@{parking.walk_time}"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toEndOf="@+id/distance"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
 
-        </com.google.android.material.card.MaterialCardView> <!-- general info -->
+            </com.google.android.material.card.MaterialCardView> <!-- general info -->
 
-        <TextView
-            android:id="@+id/horaire"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Horaire"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/parking_horaire_info"
-            app:layout_constraintTop_toBottomOf="@+id/parking_main_info"
-            app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/horaire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/horaire"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/parking_horaire_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/parking_main_info" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/parking_horaire_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/tarifs"
-            app:layout_constraintTop_toBottomOf="@+id/horaire"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/horaire_list"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/parking_horaire_info"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-
-        </com.google.android.material.card.MaterialCardView> <!-- horaire card -->
-
-        <TextView
-            android:id="@+id/tarifs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Tarifs"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/parking_tarifs_info"
-            app:layout_constraintTop_toBottomOf="@+id/parking_horaire_info"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/parking_tarifs_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/paiement"
-            app:layout_constraintTop_toBottomOf="@+id/tarifs"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/tarifs"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horaire">
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tarifs_list"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/horaire_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+            </com.google.android.material.card.MaterialCardView> <!-- horaire card -->
+
+            <TextView
+                android:id="@+id/tarifs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/tarifs"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/parking_tarifs_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/parking_horaire_info" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/parking_tarifs_info"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-
-        </com.google.android.material.card.MaterialCardView> <!-- tarifs card -->
-
-        <TextView
-            android:id="@+id/paiement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Paiement"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/parking_paiement_info"
-            app:layout_constraintTop_toBottomOf="@+id/parking_tarifs_info"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/parking_paiement_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@id/equipement"
-            app:layout_constraintTop_toBottomOf="@+id/paiement"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/paiement"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tarifs">
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/paiement_list"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/tarifs_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+            </com.google.android.material.card.MaterialCardView> <!-- tarifs card -->
+
+            <TextView
+                android:id="@+id/paiement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/paiement"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/parking_paiement_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/parking_tarifs_info" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/parking_paiement_info"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-
-        </com.google.android.material.card.MaterialCardView> <!-- paiement card -->
-
-
-        <TextView
-            android:id="@+id/equipement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Equipements"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/parking_equipement_info"
-            app:layout_constraintTop_toBottomOf="@+id/parking_paiement_info"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/parking_equipement_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/equipement"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="56dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toTopOf="@id/equipement"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paiement">
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/equipement_list"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/paiement_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+            </com.google.android.material.card.MaterialCardView> <!-- paiement card -->
+
+
+            <TextView
+                android:id="@+id/equipement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/equipements"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/parking_equipement_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/parking_paiement_info" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/parking_equipement_info"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="56dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/equipement">
 
-            </androidx.recyclerview.widget.RecyclerView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/equipement_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
 
 
-        </com.google.android.material.card.MaterialCardView> <!-- equipement card -->
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+            </com.google.android.material.card.MaterialCardView> <!-- equipement card -->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

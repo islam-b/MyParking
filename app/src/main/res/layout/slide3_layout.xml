@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/image_slide3"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="363dp"
         android:src="@drawable/slide3_complet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
             android:layout_marginLeft="56dp"
             android:layout_marginRight="56dp"
             android:layout_weight="1"
-            android:text="Réservation et garantie"
+            android:text="@string/slide3_title"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/slider_description"

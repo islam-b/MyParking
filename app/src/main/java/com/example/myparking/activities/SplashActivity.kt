@@ -29,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun goToSliderActivity(){
-        val loginActivityIntent = Intent(applicationContext, LoginActivity::class.java)
+        val loginActivityIntent = Intent(applicationContext, SliderActivity::class.java)
         startActivity(loginActivityIntent)
         finish()
 
