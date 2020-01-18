@@ -33,10 +33,15 @@
                 android:icon="@drawable/ic_event"
                 android:iconTint="@color/colorPrimary"
                 android:title="Mes réservations" />
+
             <item
-                android:id="@+id/nav_notifs"
-                android:icon="@drawable/ic_notifications"
-                android:title="Notifications" />
+                android:id="@+id/nav_fav"
+                android:icon="@drawable/ic_favorite_w"
+                android:title="Parking favoris"/>
+<!--            <item-->
+<!--                android:id="@+id/nav_notifs"-->
+<!--                android:icon="@drawable/ic_notifications"-->
+<!--                android:title="Notifications" />-->
             <item
                 android:id="@+id/nav_find_my_car"
                 android:icon="@drawable/ic_my_location"

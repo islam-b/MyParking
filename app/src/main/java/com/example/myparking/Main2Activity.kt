@@ -12,6 +12,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import com.example.myparking.activities.FavoriteParkingsActivity
 
 
 import com.example.myparking.fragements.FilterDialogFragment
@@ -112,6 +113,14 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_fav -> {
+                val intent= FavoriteParkingsActivity.newIntent(this)
+                startActivity(intent)
+                finish()
+            }
+
+        }
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
