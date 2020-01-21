@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,9 +43,11 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
 
    // private lateinit var binding: FragmentParkingsMapBinding
     private lateinit var carousel: DiscreteScrollView
+    private lateinit var infiniteAdapter : InfiniteScrollAdapter<VH>
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
     private var parkings:ArrayList<ParkingModel> = arrayListOf()
+    private var markers: ArrayList<Marker> = arrayListOf()
 
 
 
@@ -75,6 +78,7 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
                             R.color.colorPrimary,"10%")
                     )))
             pin.tag = it
+            markers.add(pin)
             r++
         }
 
@@ -84,7 +88,9 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
         Log.d("dialod not ", "not")
         //val parking = p0?.tag as ParkingModel
 //        ParkingBottomSheet.newInstance(parking).show(activity?.supportFragmentManager,"ActionBottomDialog")
-        carousel.smoothScrollToPosition(2) // modify this later
+        val target = parkings.indexOf(p0?.tag as ParkingModel)
+        carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(target))
+
         return false
     }
 
@@ -212,8 +218,9 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
         carousel = view.findViewById<DiscreteScrollView>(R.id.carousel)
 
         carousel.setOffscreenItems(1)
-
-        carousel.adapter = InfiniteScrollAdapter.wrap(PAD(DataSource.getParkings()))
+        carousel.setSlideOnFling(true)
+        infiniteAdapter = InfiniteScrollAdapter.wrap(PAD(parkings))
+        carousel.adapter = infiniteAdapter
         carousel.setItemTransformer(
             ScaleTransformer.Builder()
                 .setMaxScale(1f)
@@ -223,9 +230,25 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 .build()
         )
 
+        carousel.addOnItemChangedListener { p0, p1 ->
+            val realPos = infiniteAdapter.getRealPosition(p1)
+            Log.d("position", realPos.toString())
+            val marker = markers[realPos]
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.position), 500,object: GoogleMap.CancelableCallback {
+                override fun onFinish() {
+                    marker.showInfoWindow()
+                }
+
+                override fun onCancel() {
+
+                }
+
+            })
+        }
     }
 
-    inner class PAD(val list: ArrayList<Parking>) : RecyclerView.Adapter<VH>() {
+    inner class PAD(val list: ArrayList<ParkingModel>) : RecyclerView.Adapter<VH>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
             val v = LayoutInflater.from(parent.context).inflate(R.layout.parking_carousel_item,parent,false)
             return VH(v)
