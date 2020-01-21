@@ -13,6 +13,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.myparking.activities.FavoriteParkingsActivity
+import com.example.myparking.activities.MesReservationsActivity
+import com.example.myparking.activities.ReservationDetailsActivity
 
 
 import com.example.myparking.fragements.FilterDialogFragment
@@ -116,6 +118,11 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         when (item.itemId) {
             R.id.nav_fav -> {
                 val intent= FavoriteParkingsActivity.newIntent(this)
+                startActivity(intent)
+                finish()
+            }
+            R.id.nav_reservations ->{
+                val intent = Intent(applicationContext, MesReservationsActivity::class.java)
                 startActivity(intent)
                 finish()
             }

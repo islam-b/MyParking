@@ -23,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ReservationDetailsActivity"></activity>
+        <activity android:name=".activities.MesReservationsActivity"></activity>
+        <activity android:name=".activities.ReservationDetailsActivity" />
         <activity
             android:name=".activities.FavoriteParkingsActivity"
             android:parentActivityName=".Main2Activity" />
