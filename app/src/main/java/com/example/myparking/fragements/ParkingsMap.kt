@@ -10,8 +10,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
+import com.example.myparking.adapters.MyAdapter
+
+import com.example.myparking.models.Parking
 import com.example.myparking.models.ParkingModel
+import com.example.myparking.utils.DataSource
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.*
@@ -22,8 +29,10 @@ import com.example.myparking.utils.MapsUtils
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-
-
+import com.yarolegovich.discretescrollview.DiscreteScrollView
+import com.yarolegovich.discretescrollview.InfiniteScrollAdapter
+import com.yarolegovich.discretescrollview.transform.Pivot
+import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 
 
 private const val ARG_PARAM1 = "param1"
@@ -31,6 +40,8 @@ private const val ARG_PARAM1 = "param1"
 class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickListener, OnLocationListener {
 
 
+   // private lateinit var binding: FragmentParkingsMapBinding
+    private lateinit var carousel: DiscreteScrollView
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
     private var parkings:ArrayList<ParkingModel> = arrayListOf()
@@ -71,8 +82,9 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
 
     override fun onMarkerClick(p0: Marker?): Boolean {
         Log.d("dialod not ", "not")
-        val parking = p0?.tag as ParkingModel
-        ParkingBottomSheet.newInstance(parking).show(activity?.supportFragmentManager,"ActionBottomDialog")
+        //val parking = p0?.tag as ParkingModel
+//        ParkingBottomSheet.newInstance(parking).show(activity?.supportFragmentManager,"ActionBottomDialog")
+        carousel.smoothScrollToPosition(2) // modify this later
         return false
     }
 
@@ -170,7 +182,10 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_parkings_map, container, false)
 
-        mMapView = rootView.findViewById(R.id.mapV) as MapView
+//        binding =
+//            DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
+        //val rootView = binding.root
+        mMapView = rootView.findViewById<MapView>(R.id.mapV)
  //       val options = GoogleMapOptions()
 //        options.mapType(GoogleMap.MAP_TYPE_NORMAL)
 //            .compassEnabled(false)
@@ -193,9 +208,43 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
         return rootView
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        carousel = view.findViewById<DiscreteScrollView>(R.id.carousel)
 
+        carousel.setOffscreenItems(1)
 
-    // TODO: Rename method, update argument and hook method into UI event
+        carousel.adapter = InfiniteScrollAdapter.wrap(PAD(DataSource.getParkings()))
+        carousel.setItemTransformer(
+            ScaleTransformer.Builder()
+                .setMaxScale(1f)
+                .setMinScale(0.95f)
+                .setPivotX(Pivot.X.CENTER)
+                .setPivotY(Pivot.Y.BOTTOM)
+                .build()
+        )
+
+    }
+
+    inner class PAD(val list: ArrayList<Parking>) : RecyclerView.Adapter<VH>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.parking_carousel_item,parent,false)
+            return VH(v)
+        }
+
+        override fun getItemCount(): Int {
+           return list.size
+        }
+
+        override fun onBindViewHolder(holder: VH, position: Int) {
+
+        }
+
+    }
+    inner class VH(view: View) : RecyclerView.ViewHolder(view) {
+
+    }
+
+    // TODO: Rename method, update argument and hook Rmethod into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
     }
