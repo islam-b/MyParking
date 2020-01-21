@@ -2,6 +2,7 @@ package com.example.myparking.adapters
 
 
 
+import androidx.core.content.ContextCompat
 import com.example.myparking.databinding.ReservationDurationLayoutBinding
 import com.example.myparking.R
 import com.example.myparking.models.Duration
@@ -13,10 +14,13 @@ class DurationAdapter(val durationList:ArrayList<Duration>, val listener:ItemAda
         R.layout.reservation_duration_layout,listener) {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.binding.duration = durationList[position]
+        val d =  durationList[position]
+        holder.binding.duration = d
         holder.binding.root.dure_icon.setImageResource(durationList[position].icon)
-        holder.binding.root.setOnClickListener {
-            listener.onItemClicked(durationList[position])
+        if (d.clickable) {
+            holder.binding.root.setOnClickListener {
+                listener.onItemClicked(d)
+            }
         }
     }
 
