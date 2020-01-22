@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.example.myparking.Main2Activity
+import com.example.myparking.MainActivity
 import com.example.myparking.R
 
 class SignUpFragment : Fragment() {
@@ -19,7 +19,7 @@ class SignUpFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sign_up, container, false)
         view.findViewById<Button>(R.id.create_account)?.setOnClickListener{
-            val mainActivityIntent = Intent(activity, Main2Activity::class.java)
+            val mainActivityIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainActivityIntent)
         }
         return view

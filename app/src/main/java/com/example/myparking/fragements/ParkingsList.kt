@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.models.Parking
 import androidx.databinding.DataBindingUtil
 import com.example.myparking.utils.DataSource
-import com.example.myparking.activities.ParkingDetailsActivity
+
 import com.example.myparking.R
 
 import com.example.myparking.activities.ParkingsDetailsContainer
 
 
 import com.example.myparking.adapters.MyAdapter
-import com.example.myparking.adapters.ParksListAdapter
+import com.example.myparking.adapters.ParkingsListAdapter
 
 
 
@@ -51,7 +51,7 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
     fun initParkings() {
         val recyclerview = binding.parkingsList
         recyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        val adapter = ParksListAdapter(DataSource.getParkings(), this)
+        val adapter = ParkingsListAdapter(DataSource.getParkings(), this)
         recyclerview.adapter = adapter
     }
 

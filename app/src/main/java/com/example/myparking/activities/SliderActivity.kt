@@ -14,7 +14,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isEmpty
 import androidx.viewpager.widget.ViewPager
-import com.example.myparking.Main2Activity
+import com.example.myparking.MainActivity
 import com.example.myparking.utils.PreferenceManager
 
 
@@ -80,7 +80,7 @@ class SliderActivity : AppCompatActivity(){
     }
 
     private fun goToMainActivity() {
-        val mainActivityIntent = Intent(applicationContext, Main2Activity::class.java)
+        val mainActivityIntent = Intent(applicationContext, MainActivity::class.java)
         startActivity(mainActivityIntent)
         finish()
     }

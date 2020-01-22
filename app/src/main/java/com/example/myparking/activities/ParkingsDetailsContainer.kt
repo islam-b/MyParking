@@ -12,7 +12,7 @@ import com.example.myparking.utils.DataSource
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.PagerAdapter
 import com.example.myparking.adapters.ParkingsPagerAdapter
-import com.example.myparking.fragements.ParkindDetailFragment
+import com.example.myparking.fragements.ParkingDetailFragment
 
 
 class ParkingsDetailsContainer : AppCompatActivity() {
@@ -38,7 +38,7 @@ class ParkingsDetailsContainer : AppCompatActivity() {
 
         val fragmentsList= ArrayList<Fragment>()
         parkingsList.forEach {
-            fragmentsList.add(ParkindDetailFragment.newInstance(it))
+            fragmentsList.add(ParkingDetailFragment.newInstance(it))
         }
 
         val pagerAdapter = ParkingsPagerAdapter(supportFragmentManager,fragmentsList)

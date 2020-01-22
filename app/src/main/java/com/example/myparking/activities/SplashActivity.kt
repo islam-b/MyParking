@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import com.example.myparking.Main2Activity
+import com.example.myparking.MainActivity
 import com.example.myparking.R
 
 class SplashActivity : AppCompatActivity() {
@@ -23,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun goToMainActivity() {
-        val mainActivityIntent = Intent(applicationContext, Main2Activity::class.java)
+        val mainActivityIntent = Intent(applicationContext, MainActivity::class.java)
         startActivity(mainActivityIntent)
         finish()
     }

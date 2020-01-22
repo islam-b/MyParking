@@ -40,8 +40,6 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.fragment_parkings_map.view.*
 
 
-private const val ARG_PARAM1 = "param1"
-
 class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
     OnLocationListener {
 
@@ -270,7 +268,7 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 
 }
-
 interface OnLocationListener {
     fun onLocationReady(location: Location)
 }
+

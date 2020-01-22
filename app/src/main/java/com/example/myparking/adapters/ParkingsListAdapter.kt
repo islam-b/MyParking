@@ -6,7 +6,7 @@ import com.example.myparking.models.Parking
 import com.example.myparking.utils.loadImage
 import kotlinx.android.synthetic.main.parking_item.view.*
 
-class ParksListAdapter(val parkingsList : ArrayList<Parking>,
+class ParkingsListAdapter(val parkingsList : ArrayList<Parking>,
                        val listener: ItemAdapterListener<Parking>
                        ): MyAdapter<Parking, ParkingItemBinding>(parkingsList, R.layout.parking_item, listener)
 {

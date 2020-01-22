@@ -23,21 +23,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".activities.FavoriteParkingsActivity"
-            android:parentActivityName=".Main2Activity"/>
-        <activity android:name=".activities.ParkingsDetailsContainer"></activity>
-        <activity android:name=".activities.ReservationActivity" android:parentActivityName=".Main2Activity"/>
+        <activity android:name=".activities.MesReservationsActivity"></activity>
+        <activity android:name=".activities.ReservationDetailsActivity" />
         <activity
-            android:name=".Main2Activity"
+            android:name=".activities.FavoriteParkingsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".activities.ParkingsDetailsContainer" />
+        <activity
+            android:name=".activities.ReservationActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/app_name" />
         <activity android:name=".activities.LoginActivity" />
-
-
-
         <activity android:name=".activities.SliderActivity" />
-
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -70,10 +70,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
-
-
-        <activity android:name=".activities.ParkingDetailsActivity" />
     </application>
 
 </manifest>

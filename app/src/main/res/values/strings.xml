@@ -34,7 +34,6 @@ Children of a CoordinatorLayout may have an anchor. This view id must correspond
 Children can specify insetEdge to describe how the view insets the CoordinatorLayout. Any child views which are set to dodge the same inset edges by dodgeInsetEdges will be moved appropriately so that the views do not overlap.</string>
 
 
-
     <string name="my_preference">"com.abc.com.MyPref"</string>
     <string name="my_preference_key">"com.abc.com.MyPrefKey"</string>
 
@@ -58,7 +57,7 @@ Children can specify insetEdge to describe how the view insets the CoordinatorLa
 
     <!-- Button -->
     <string name="connecter_bn">Se connecter</string>
-    <string name="connecter_fb_bn">Se connecter</string>
+    <string name="connecter_fb_bn">Se connecter avec facebook</string>
     <string name="create_account_bn">Creer un compte</string>
     <string name="create_acc_fb_bn">S\'inscrire avec facebook</string>
 
@@ -75,5 +74,8 @@ Children can specify insetEdge to describe how the view insets the CoordinatorLa
     <string name="paiement">Paiement</string>
     <string name="equipements">Equipements</string>
     <string name="temps_total">Temps total</string>
+    <string name="success_message">Vous avez réserver une place de stationnement avec succès !</string>
+    <string name="congrats">Félicitations</string>
+    <string name="see_more">Voir details</string>
 
 </resources>
