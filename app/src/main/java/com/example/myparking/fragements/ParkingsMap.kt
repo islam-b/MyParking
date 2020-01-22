@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
 import com.example.myparking.adapters.MyAdapter
+import com.example.myparking.adapters.ParkingCarouselAdapter
+import com.example.myparking.databinding.FragmentParkingsMapBinding
+import com.example.myparking.databinding.ParkingCarouselItemBinding
 
 import com.example.myparking.models.Parking
 import com.example.myparking.models.ParkingModel
@@ -34,49 +37,57 @@ import com.yarolegovich.discretescrollview.DiscreteScrollView
 import com.yarolegovich.discretescrollview.InfiniteScrollAdapter
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
+import kotlinx.android.synthetic.main.fragment_parkings_map.view.*
 
 
 private const val ARG_PARAM1 = "param1"
 
-class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickListener, OnLocationListener {
+class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
+    OnLocationListener {
 
 
-   // private lateinit var binding: FragmentParkingsMapBinding
     private lateinit var carousel: DiscreteScrollView
-    private lateinit var infiniteAdapter : InfiniteScrollAdapter<VH>
+    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<ParkingModel, ParkingCarouselItemBinding>.MyViewHolder>
+
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
-    private var parkings:ArrayList<ParkingModel> = arrayListOf()
+    private var parkings: ArrayList<ParkingModel> = arrayListOf()
     private var markers: ArrayList<Marker> = arrayListOf()
 
+    private lateinit var binding: FragmentParkingsMapBinding
 
 
     fun requestLocation() {
         val listener = this
-        MapsUtils.getLastLocation(context!!, object:LocationCallback() {
+        MapsUtils.getLastLocation(context!!, object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult?) {
                 listener.onLocationReady(p0?.lastLocation!!)
             }
-        },this)
+        }, this)
     }
 
     override fun onMapReady(p0: GoogleMap) {
-        Log.d("htest","hhh here")
+        Log.d("htest", "hhh here")
         mMap = p0
         this.requestLocation()
         mMap.setOnMarkerClickListener(this)
         mMap.setMinZoomPreference(10.0f)
         mMap.setMaxZoomPreference(20.0f)
-        var r=0
+        var r = 0
         parkings.forEach {
-            val pin=mMap.addMarker(
+            val pin = mMap.addMarker(
                 MarkerOptions()
-                    .position(LatLng(it.lat,it.long))
+                    .position(LatLng(it.lat, it.long))
                     .title(it.name)
-                    .icon(BitmapDescriptorFactory.fromBitmap(
-                        MapsUtils.createCustomMarker(context!!,mMapView,
-                            R.color.colorPrimary,"10%")
-                    )))
+                    .icon(
+                        BitmapDescriptorFactory.fromBitmap(
+                            MapsUtils.createCustomMarker(
+                                context!!, mMapView,
+                                R.color.colorPrimary, "10%"
+                            )
+                        )
+                    )
+            )
             pin.tag = it
             markers.add(pin)
             r++
@@ -90,20 +101,18 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
 //        ParkingBottomSheet.newInstance(parking).show(activity?.supportFragmentManager,"ActionBottomDialog")
         val target = parkings.indexOf(p0?.tag as ParkingModel)
         carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(target))
-
         return false
     }
 
 
     override fun onLocationReady(location: Location) {
-        Log.d("here","mylocation")
+        Log.d("here", "mylocation")
         mMap.isMyLocationEnabled = true
-        val myLocation = LatLng(location.latitude,location.longitude)
+        val myLocation = LatLng(location.latitude, location.longitude)
         //mMap.addMarker(MarkerOptions().position(myLocation).title("Marker in my location"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation))
         mMap.moveCamera(CameraUpdateFactory.zoomTo(13.0f))
     }
-
 
 
     override fun onRequestPermissionsResult(
@@ -112,7 +121,7 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("PERMIH","PERM")
+        Log.d("PERMIH", "PERM")
         if (requestCode == MapsUtils.PERMISSION_ID) {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 this.requestLocation()
@@ -127,8 +136,6 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
 
-
-    private var listener: OnFragmentInteractionListener? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,34 +155,34 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
 //        {'id_parking': 'ChIJo1-bR81RjhIRnSAl4fxq4xQ', 'name': 'Parking Marche', 'location': [36.7169083, 3.1875255], 'places': 13},
 //        {'id_parking': 'ChIJMYWLDY1RjhIRqzl9svJjJ2I', 'name': 'Parking au visiteurs', 'location': [36.7158669, 3.1865293], 'places': 18}
 //        ]
-        parkings.addAll(listOf(
-            ParkingModel(
-                "ChIJwa_rIPhRjhIRWG5EvXi9l6s",
-                "Parking de carrfour Alger",
-                36.7289608,
-                3.1794445
-            ),
-            ParkingModel(
-                "ChIJn365GQ1SjhIRusvV1OXvFJQ",
-                "Parking Safex Public",
-                36.7315206,
-                3.1593492
-            ),
-            ParkingModel(
-                "ChIJZzTFn3VSjhIR-G7-af43cBU",
-                "Parking ABC Tower",
-                36.7390456,
-                3.1553383
-            ),
-            ParkingModel(
-                "ChIJicmhtXZSjhIR2rBuhVj-B2c",
-                "Parking Safex Public 2",
-                36.7351639,
-                3.1516975
+        parkings.addAll(
+            listOf(
+                ParkingModel(
+                    "ChIJwa_rIPhRjhIRWG5EvXi9l6s",
+                    "Parking de carrfour Alger",
+                    36.7289608,
+                    3.1794445
+                ),
+                ParkingModel(
+                    "ChIJn365GQ1SjhIRusvV1OXvFJQ",
+                    "Parking Safex Public",
+                    36.7315206,
+                    3.1593492
+                ),
+                ParkingModel(
+                    "ChIJZzTFn3VSjhIR-G7-af43cBU",
+                    "Parking ABC Tower",
+                    36.7390456,
+                    3.1553383
+                ),
+                ParkingModel(
+                    "ChIJicmhtXZSjhIR2rBuhVj-B2c",
+                    "Parking Safex Public 2",
+                    36.7351639,
+                    3.1516975
+                )
             )
-        ))
-
-
+        )
 
 
     }
@@ -186,13 +193,15 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_parkings_map, container, false)
-
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
+        //val rootView = inflater.inflate(R.layout.fragment_parkings_map, container, false)
+        val rootView = binding.root
 //        binding =
 //            DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
         //val rootView = binding.root
         mMapView = rootView.findViewById<MapView>(R.id.mapV)
- //       val options = GoogleMapOptions()
+        //       val options = GoogleMapOptions()
 //        options.mapType(GoogleMap.MAP_TYPE_NORMAL)
 //            .compassEnabled(false)
 //            .rotateGesturesEnabled(false)
@@ -215,11 +224,19 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        carousel = view.findViewById<DiscreteScrollView>(R.id.carousel)
+        carousel = binding.root.carousel
 
         carousel.setOffscreenItems(1)
         carousel.setSlideOnFling(true)
-        infiniteAdapter = InfiniteScrollAdapter.wrap(PAD(parkings))
+        val listener = object : MyAdapter.ItemAdapterListener<ParkingModel> {
+            override fun onItemClicked(item: ParkingModel) {
+                Log.d("Parking Model clicked", item.name)
+            }
+
+        }
+        infiniteAdapter = InfiniteScrollAdapter.wrap(
+            ParkingCarouselAdapter(parkings, listener)
+        )
         carousel.adapter = infiniteAdapter
         carousel.setItemTransformer(
             ScaleTransformer.Builder()
@@ -235,74 +252,25 @@ class ParkingsMap : Fragment() , OnMapReadyCallback, GoogleMap.OnMarkerClickList
             Log.d("position", realPos.toString())
             val marker = markers[realPos]
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.position), 500,object: GoogleMap.CancelableCallback {
-                override fun onFinish() {
-                    marker.showInfoWindow()
-                }
+            mMap.animateCamera(
+                CameraUpdateFactory.newLatLng(marker.position),
+                500,
+                object : GoogleMap.CancelableCallback {
+                    override fun onFinish() {
+                        marker.showInfoWindow()
+                    }
 
-                override fun onCancel() {
+                    override fun onCancel() {
 
-                }
+                    }
 
-            })
+                })
         }
     }
 
-    inner class PAD(val list: ArrayList<ParkingModel>) : RecyclerView.Adapter<VH>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-            val v = LayoutInflater.from(parent.context).inflate(R.layout.parking_carousel_item,parent,false)
-            return VH(v)
-        }
-
-        override fun getItemCount(): Int {
-           return list.size
-        }
-
-        override fun onBindViewHolder(holder: VH, position: Int) {
-
-        }
-
-    }
-    inner class VH(view: View) : RecyclerView.ViewHolder(view) {
-
-    }
-
-    // TODO: Rename method, update argument and hook Rmethod into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-//        if (context is OnFragmentInteractionListener) {
-//            listener = context
-//        } else {
-//            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-//        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = ParkingsMap().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
-    }
 
 }
+
 interface OnLocationListener {
     fun onLocationReady(location: Location)
 }

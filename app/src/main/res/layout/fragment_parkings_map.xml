@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapV"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        android:layout_height="match_parent">
 
-    <com.yarolegovich.discretescrollview.DiscreteScrollView
-        android:id="@+id/carousel"
-        android:layout_gravity="bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        app:dsv_orientation="horizontal" />
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <com.yarolegovich.discretescrollview.DiscreteScrollView
+            android:id="@+id/carousel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="30dp"
+            app:dsv_orientation="horizontal"
+            />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

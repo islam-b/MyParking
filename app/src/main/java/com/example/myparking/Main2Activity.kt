@@ -87,7 +87,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
             }
             1-> {
-                fragment = ParkingsMap.newInstance()
+                fragment = ParkingsMap()
             }
             else -> {
                 fragment = ParkingsList()
