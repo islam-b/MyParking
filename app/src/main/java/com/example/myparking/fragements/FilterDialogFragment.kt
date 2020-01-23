@@ -9,11 +9,13 @@ import android.view.*
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,9 @@ import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.ServiceAdapter
 import com.example.myparking.models.Service
 import com.example.myparking.utils.AnimationUtils
+import net.cachapa.expandablelayout.ExpandableLayout
+import android.view.View.FOCUS_DOWN
+import android.widget.ScrollView
 
 
 class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
@@ -53,19 +58,20 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
             it.inflateMenu(R.menu.filter_dialog_menu)
             it.setOnMenuItemClickListener(this)
         }
+
+        val scroll_filters = view.findViewById<NestedScrollView>(R.id.scroll_filters)
+
+
         val check_distance= view.findViewById<CheckBox>(R.id.distance_check)
-        val distance_container= view.findViewById<ConstraintLayout>(R.id.distance_container)
-        AnimationUtils.collapse(distance_container)
+        val distance_container= view.findViewById<ExpandableLayout>(R.id.distance_container)
         check_distance.setOnCheckedChangeListener { compoundButton, b ->
-            if(b) AnimationUtils.expand(distance_container)
-            else AnimationUtils.collapse(distance_container)
+            distance_container.toggle()
         }
         val check_price= view.findViewById<CheckBox>(R.id.price_check)
-        val price_container= view.findViewById<ConstraintLayout>(R.id.price_container)
-        AnimationUtils.collapse(price_container)
+        val price_container= view.findViewById<ExpandableLayout>(R.id.price_container)
+        //AnimationUtils.collapse(price_container)
         check_price.setOnCheckedChangeListener { compoundButton, b ->
-            if(b) AnimationUtils.expand(price_container)
-            else AnimationUtils.collapse(price_container)
+            price_container.toggle()
         }
 
 
@@ -88,19 +94,45 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
         services_list.adapter = adapter
 
         val check_service= view.findViewById<CheckBox>(R.id.service_check)
-        val service_container= view.findViewById<LinearLayout>(R.id.service_container2)
-        //AnimationUtils.collapse(service_container)
+        val service_container= view.findViewById<ExpandableLayout>(R.id.service_container)
+
+
+        service_container.setOnExpansionUpdateListener { expansionFraction, state ->
+                val expansionFr = state
+                if (state==3) {
+                    scroll_filters.smoothScrollTo(0, scroll_filters.bottom)
+                }
+        }
+
         check_service.setOnCheckedChangeListener { compoundButton, b ->
-            if(b) {
-                AnimationUtils.expand(service_container)
-                val services_list = view.findViewById<RecyclerView>(R.id.services_list)
-                services_list.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
-                services_list.adapter = adapter
-            }
-            else AnimationUtils.collapse(service_container)
+            service_container.toggle()
+        }
+
+        sort_toggle_price = view.findViewById<TextView>(R.id.toggle_price)
+        sort_toggle_price.setOnClickListener {
+            toggleSort(false)  //false for price
+        }
+        sort_toggle_distance = view.findViewById<TextView>(R.id.toggle_distance)
+        sort_toggle_distance.setOnClickListener {
+            toggleSort(true)  //true for distance
         }
 
     }
+    private lateinit var sort_toggle_price: TextView
+    private lateinit var sort_toggle_distance: TextView
+
+    fun toggleSort(b : Boolean) {
+        val checkedV = if (b) { sort_toggle_distance } else { sort_toggle_price}
+        val uncheckedV = if (b) { sort_toggle_price } else { sort_toggle_distance}
+        val checkedIdRes = if (b) {R.drawable.checked_distance_btn} else {R.drawable.checked_price_btn}
+        val uncheckedIdRes = if (b) {R.drawable.unchecked_price_btn} else {R.drawable.unchecked_distance_btn}
+        checkedV.setTextColor(ContextCompat.getColor(context!!,R.color.white))
+        checkedV.setBackgroundResource(checkedIdRes)
+
+        uncheckedV.setTextColor(ContextCompat.getColor(context!!,R.color.colorPrimary))
+        uncheckedV.setBackgroundResource(uncheckedIdRes)
+    }
+
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.dismiss_btn -> {

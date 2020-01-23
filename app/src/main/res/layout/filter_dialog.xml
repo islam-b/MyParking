@@ -49,6 +49,7 @@
         app:fel_size_bottom="80dp">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_filters"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
@@ -62,6 +63,79 @@
             android:paddingTop="32dp"
             android:paddingBottom="16dp"
             android:orientation="vertical">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Trier par :"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView2"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/toggle_distance"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+
+                        android:background="@drawable/checked_distance_btn"
+                        android:gravity="center"
+                        android:text="DISTANCE"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/toggle_price"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+
+                        android:background="@drawable/unchecked_price_btn"
+                        android:gravity="center"
+
+                        android:text="PRIX"
+                        android:textColor="@color/colorPrimary" />
+
+
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize_16sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="32dp"
+                android:text="Filtrer:"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,7 +165,7 @@
 
                     </CheckBox>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <net.cachapa.expandablelayout.ExpandableLayout
                         android:id="@+id/distance_container"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -100,10 +174,18 @@
                         android:layout_marginEnd="16dp"
                         android:paddingHorizontal="16dp"
                         android:paddingVertical="4dp"
+                        app:el_duration="700"
+                        app:el_expanded="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/distance_check">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
 
                         <com.appyvet.materialrangebar.RangeBar
                             android:id="@+id/seekBar2"
@@ -145,6 +227,7 @@
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    </net.cachapa.expandablelayout.ExpandableLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
@@ -177,7 +260,7 @@
 
                     </CheckBox>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <net.cachapa.expandablelayout.ExpandableLayout
                         android:id="@+id/price_container"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -186,10 +269,22 @@
                         android:layout_marginEnd="16dp"
                         android:paddingHorizontal="16dp"
                         android:paddingVertical="4dp"
+                        app:el_duration="700"
+                        app:el_expanded="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/price_check">
+                        app:layout_constraintTop_toBottomOf="@+id/price_check"
+                        >
+
+
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
 
                         <com.appyvet.materialrangebar.RangeBar
                             android:id="@+id/seekBar3"
@@ -228,6 +323,7 @@
                             app:mrb_tickLabelSize="4sp"
                             app:mrb_tickStart="1" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    </net.cachapa.expandablelayout.ExpandableLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
@@ -260,15 +356,25 @@
 
                     </CheckBox>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <net.cachapa.expandablelayout.ExpandableLayout
                         android:id="@+id/service_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
+                        app:el_duration="700"
+                        app:el_expanded="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/service_check">
+                        app:layout_constraintTop_toBottomOf="@+id/service_check"
+                        >
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        >
 
                         <LinearLayout
                             android:id="@+id/service_container2"
@@ -295,6 +401,8 @@
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </net.cachapa.expandablelayout.ExpandableLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
