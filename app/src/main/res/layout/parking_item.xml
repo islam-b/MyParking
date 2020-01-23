@@ -10,129 +10,176 @@
             type="com.example.myparking.models.Parking" />
     </data>
 
-    <LinearLayout
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        app:dragEdge="right"
+        app:mode="same_level">
+        <!--second layout -->
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/img_c"
-                app:cardCornerRadius="16dp"
-                android:layout_width="125dp"
-                android:layout_height="128dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-
-            <ImageButton
-                android:id="@+id/image"
-                android:layout_height="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/paking1"
-                 />
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/white"
+            >
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="204dp"
-                android:layout_height="108dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/img_c"
-                app:layout_constraintTop_toTopOf="parent">
+                <ImageButton
+                    android:id="@+id/add_fav_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/circle_btn"
+                    android:backgroundTint="@color/greyBg"
+                    android:elevation="8dp"
+                    android:src="@drawable/ic_favorite_dark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/start_itin_btn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:id="@+id/topper"
-                    android:layout_width="wrap_content"
+                <ImageButton
+                    android:id="@+id/start_itin_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/circle_btn"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:elevation="8dp"
+                    android:src="@drawable/ic_directions_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/add_fav_btn"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+
+        <!--Main layout -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:id="@+id/main_layout_parking_item"
+                    >
 
-                    <TextView
-                        android:id="@+id/opened"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@{parking.opened}"
-                        android:textColor="@color/authorized"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/capacity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="@{parking.capacity}"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="@{parking.name}"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/parking_address"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:text="@{parking.address}"
-                    android:textSize="14sp" />
-
-                <LinearLayout
-                    android:id="@+id/bottom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/distance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@{parking.distance}"
-                        android:textColor="@color/info"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/walk_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="@{parking.walk_time}"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/img_c"
+                        android:layout_width="125dp"
+                        android:layout_height="128dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="10dp"
+                        app:cardCornerRadius="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
 
-            </LinearLayout>
+                        <ImageButton
+                            android:id="@+id/image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:clickable="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/paking1" />
+                    </com.google.android.material.card.MaterialCardView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="204dp"
+                        android:layout_height="108dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/img_c"
+                        app:layout_constraintTop_toTopOf="parent">
 
+                        <LinearLayout
+                            android:id="@+id/topper"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/opened"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@{parking.opened}"
+                                android:textColor="@color/authorized"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/capacity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@{parking.capacity}"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="@{parking.name}"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/parking_address"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:text="@{parking.address}"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:id="@+id/bottom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/distance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@{parking.distance}"
+                                android:textColor="@color/info"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/walk_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@{parking.walk_time}"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
-
-    </LinearLayout>
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
 </layout>

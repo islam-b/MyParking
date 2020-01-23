@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="reservation"
             type="com.example.myparking.models.Reservation" />
@@ -23,7 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="Détails de Réservation"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -32,8 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="56dp"
-            android:background="@color/greyBg"
-           >
+            android:background="@color/greyBg">
 
             <LinearLayout
 
@@ -42,6 +44,38 @@
 
                 android:background="@color/greyBg"
                 android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@{reservation.parking.name}"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/parking_address"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="@{reservation.parking.address}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -159,8 +193,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
                     android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="64dp"
                     android:elevation="8dp"
@@ -245,8 +279,7 @@
             android:layout_marginBottom="8dp"
             android:orientation="horizontal"
             app:layout_anchor="@id/reservation_container"
-            app:layout_anchorGravity="bottom"
-            >
+            app:layout_anchorGravity="bottom">
 
             <Button
                 android:id="@+id/cancel_reservation"

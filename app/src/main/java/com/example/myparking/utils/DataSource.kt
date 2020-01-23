@@ -70,7 +70,7 @@ object DataSource {
         val parking5 = Parking(
             "Ouvert",
             " - 15%",
-            "Exposition Park",
+            "Exposition Park2",
             "243 Exposition Park Dr Los Angelos, CA 90037, US",
             "1,0 Km",
             " - 10 min de marche",

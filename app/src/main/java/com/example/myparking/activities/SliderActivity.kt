@@ -25,7 +25,7 @@ class SliderActivity : AppCompatActivity(){
     //private var dots= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PreferenceManager(this).clearreference()  // remove this to show slider again
+        //PreferenceManager(this).clearreference()  // remove this to show slider again
         if(PreferenceManager(this).checkPreference())
         {
             goToMainActivity()
