@@ -6,15 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/image_slide2"
         android:layout_width="match_parent"
-        android:layout_height="365dp"
-        android:src="@drawable/slide2_complet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/slide2_complet"
         app:layout_constraintTop_toTopOf="parent"
-        android:scaleType="fitXY"/>
+        android:layout_height="363dp">
+
+
+        <ImageView
+
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+
+            android:layout_marginTop="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/slider_img2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView

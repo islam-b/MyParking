@@ -5,15 +5,29 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/image_slide3"
         android:layout_width="match_parent"
-        android:layout_height="363dp"
-        android:src="@drawable/slide3_complet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/slide3_complet"
         app:layout_constraintTop_toTopOf="parent"
-        android:scaleType="fitXY"/>
+        android:layout_height="363dp">
+
+
+        <ImageView
+
+            android:layout_width="270dp"
+            android:layout_height="270dp"
+
+            android:layout_marginTop="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/slider_img3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView
