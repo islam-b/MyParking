@@ -1,6 +1,8 @@
 package com.example.myparking
 
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import androidx.drawerlayout.widget.DrawerLayout
@@ -14,13 +16,13 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.myparking.activities.FavoriteParkingsActivity
 import com.example.myparking.activities.MesReservationsActivity
-import com.example.myparking.activities.ReservationDetailsActivity
 
 
 import com.example.myparking.fragements.FilterDialogFragment
 import com.example.myparking.fragements.ParkingsList
 import com.example.myparking.fragements.ParkingsMap
 import com.example.myparking.utils.MapsUtils
+import com.example.myparking.utils.NetworkReceiver
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -39,9 +41,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
+    val br = NetworkReceiver()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //NetworkUtil.registerConnectivityNetworkMonitor(this)
+
+        registerReceiver(br, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
+
         setContentView(R.layout.activity_main2)
         MapsUtils.initLocationProvider(this)
         Places.initialize(applicationContext, "AIzaSyCDbn_Le90eo8Ry1UEb5GFYIz80Dv4INdY")
@@ -177,6 +185,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        }
+    }
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            return intent
         }
     }
 
