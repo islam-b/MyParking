@@ -1,129 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    tools:context=".activities.ReservationActivity"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-    <!--        android:id="@+id/nav_view"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="0dp"-->
-    <!--        android:layout_marginEnd="0dp"-->
-    <!--        android:background="?android:attr/windowBackground"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        app:layout_constraintRight_toRightOf="parent"-->
-    <!--        app:menu="@menu/bottom_nav_menu" />-->
+    <data>
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        <variable
+            name="parking"
+            type="com.example.myparking.models.Parking" />
+    </data>
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <ScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
-        android:layout_gravity="top"
-        android:background="@color/greyBg"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        tools:context=".activities.ReservationActivity">
 
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+
+                app:title="Réserver une place" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="top"
+            android:layout_marginTop="56dp"
+            android:background="@color/greyBg"
+            android:fitsSystemWindows="true">
 
-            android:orientation="vertical" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@{parking.name}"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/parking_address"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="@{parking.address}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                     <TextView
-                        android:layout_marginTop="16dp"
-                        android:textColor="#000000"
-                        android:textSize="18sp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginBottom="8dp"
                         android:layout_width="wrap_content"
-                        android:text="Tarifs"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Horaires"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_marginBottom="24dp"
-                        android:layout_marginHorizontal="24sp"
-                        android:layout_marginTop="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="24dp"
                         android:elevation="8dp"
-                        app:cardCornerRadius="4dp"
-                        android:layout_height="wrap_content">
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_width="match_parent"
+                        app:cardCornerRadius="8dp">
 
-                            android:id="@+id/tarifs_container"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/duration_container"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                         </androidx.recyclerview.widget.RecyclerView>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_marginTop="16dp"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_width="wrap_content"
-                    android:text="Résumé de la réservation"
-                    android:layout_height="wrap_content"/>
-                <com.google.android.material.card.MaterialCardView
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginHorizontal="24sp"
-                    android:layout_marginTop="0dp"
-                    app:cardCornerRadius="4dp"
-                    android:elevation="8dp"
-                    android:layout_height="wrap_content">
-                    <androidx.recyclerview.widget.RecyclerView
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Details de paiement"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:id="@+id/duration_container"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="24dp"
+                        android:elevation="8dp"
+                        app:cardCornerRadius="8dp">
 
-                    </androidx.recyclerview.widget.RecyclerView>
-                </com.google.android.material.card.MaterialCardView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="56dp"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="start|center_vertical"
+                                    android:padding="16dp"
+                                    android:text="Mode de paiement" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="end|center_vertical"
+                                    android:padding="16dp"
+                                    android:text="Sélectionner"
+                                    android:textColor="@color/info" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/divider"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="?android:attr/listDivider" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="56dp"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="start|center_vertical"
+                                    android:padding="16dp"
+                                    android:text="Prix Total" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="end|center_vertical"
+                                    android:padding="16dp"
+                                    android:text="100.00 DZD" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
             </LinearLayout>
+        </ScrollView>
 
-        </LinearLayout>
-    </ScrollView>
-    <Button
-        android:id="@+id/confirm_btn"
-        android:theme="@style/Widget.MaterialComponents.Button"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:text="CONFIRMER"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="4dp"
+        <Button
+            android:id="@+id/confirm_btn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="4dp"
+            android:text="CONFIRMER"
+            android:theme="@style/Widget.MaterialComponents.Button"
 
-        />
+            />
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -1,5 +1,7 @@
 package com.example.myparking.activities
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -15,8 +17,19 @@ class ReservationDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_reservation_details)
-        binding.reservation = Reservation("DZ - 12458647", "Lun, déc 16 12.40", " Lun, déc 16 13.40")
+        val bundle = intent.extras
+        bundle?.let {
+            bundle.apply {
+                binding.reservation = getParcelable<Reservation>("RESERVATION") as Reservation
+            }
+        }
+    }
 
-
+    companion object {
+        fun newIntent(context: Context, reservation: Reservation): Intent {
+            val intent = Intent(context, ReservationDetailsActivity::class.java)
+            intent.putExtra("RESERVATION", reservation)
+            return intent
+        }
     }
 }
