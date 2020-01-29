@@ -27,7 +27,7 @@ class SignInFragment : Fragment() {
             startActivity(mainActivityIntent)
         }
 
-        view.findViewById<TextView>(R.id.sign_up)?.setOnClickListener {
+        view.findViewById<Button>(R.id.sign_up)?.setOnClickListener {
             val fragment = SignUpFragment()
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.login_container, fragment)?.commit()

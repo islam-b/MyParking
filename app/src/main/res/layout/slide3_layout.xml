@@ -9,11 +9,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/image_slide3"
         android:layout_width="match_parent"
+        android:layout_height="351dp"
+        android:background="@drawable/slide_3bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/slide3_complet"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="363dp">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <ImageView

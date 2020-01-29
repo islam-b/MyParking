@@ -22,6 +22,13 @@ class SignUpFragment : Fragment() {
             val mainActivityIntent = Intent(activity, MainActivity::class.java)
             startActivity(mainActivityIntent)
         }
+
+        view.findViewById<Button>(R.id.sign_in)?.setOnClickListener {
+            val fragment = SignInFragment()
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.login_container, fragment)?.commit()
+        }
+
         return view
     }
 
