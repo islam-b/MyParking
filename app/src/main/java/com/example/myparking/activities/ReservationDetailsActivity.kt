@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.example.myparking.R
 import com.example.myparking.databinding.ActivityReservationDetailsBinding
@@ -16,6 +17,10 @@ class ReservationDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_reservation_details)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar2)
+        setSupportActionBar(toolbar)
+       // supportActionBar?.title = "Details de réservation"
         binding = DataBindingUtil.setContentView(this, R.layout.activity_reservation_details)
         val bundle = intent.extras
         bundle?.let {

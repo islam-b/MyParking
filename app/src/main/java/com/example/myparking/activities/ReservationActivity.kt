@@ -40,10 +40,11 @@ class ReservationActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.toolbar1)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.title = "Réserver une place"
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_reservation)
         val bundle = intent.extras

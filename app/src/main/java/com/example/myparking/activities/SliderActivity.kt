@@ -3,6 +3,7 @@ package com.example.myparking.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import com.example.myparking.R
 import com.example.myparking.adapters.SlideViewPagerAdapter
@@ -36,13 +37,14 @@ class SliderActivity : AppCompatActivity(){
 
         slider_viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
-
+                Log.d("scroll state", state.toString())
             }
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
+                if (position == layouts.size-1)   goToLoginActivity()
 
             }
             override fun onPageSelected(position: Int) {

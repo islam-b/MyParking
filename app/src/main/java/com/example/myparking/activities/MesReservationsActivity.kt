@@ -31,4 +31,5 @@ class MesReservationsActivity : AppCompatActivity(), MyAdapter.ItemAdapterListen
         val adapter = ReservationAdapter(DataSource.getReservations(), this)
         recyclerview.adapter = adapter
     }
+
 }
