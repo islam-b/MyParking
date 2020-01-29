@@ -37,14 +37,14 @@ class SliderActivity : AppCompatActivity(){
 
         slider_viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
-
+                Log.d("scroll state", state.toString())
             }
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
-                if (position == layouts.size-1) Log.d("slide last", "done")
+                if (position == layouts.size-1)   goToLoginActivity()
 
             }
             override fun onPageSelected(position: Int) {
