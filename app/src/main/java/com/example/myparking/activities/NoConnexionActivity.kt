@@ -19,9 +19,10 @@ class NoConnexionActivity : AppCompatActivity() {
         val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         try_again.setOnClickListener {
             if (NetworkReceiver.checkNetworkState(connectivityManager!!)) {
-                startActivity(MainActivity.newIntent(this).apply {
+               finish()
+               /* startActivity(MainActivity.newIntent(this).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                })
+                })*/
             }
         }
     }
@@ -29,6 +30,7 @@ class NoConnexionActivity : AppCompatActivity() {
     companion object {
         fun newIntent(context: Context): Intent {
             val intent = Intent(context, NoConnexionActivity::class.java)
+           // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             return intent
         }
     }

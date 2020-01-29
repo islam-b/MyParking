@@ -2,6 +2,7 @@ package com.example.myparking
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
+    private  var currentItem = 0
     val br = NetworkReceiver()
 
 
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
+
         toolbar.setNavigationIcon(R.drawable.ic_menu)
 
         val spaceNavigationView = nav_view as SpaceNavigationView
@@ -78,6 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         spaceNavigationView.addSpaceItem(SpaceItem(1,"Carte", R.drawable.map_view))
         spaceNavigationView.setCentreButtonIconColorFilterEnabled(false)
         spaceNavigationView.setSpaceOnClickListener(this)
+
         onItemClick(0,"Liste")
 
     }
@@ -91,10 +95,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onItemClick(itemIndex: Int, itemName: String?) {
         var fragment: Fragment
+        currentItem = itemIndex
         when (itemIndex) {
             0-> {
                 fragment = ParkingsList()
-
             }
             1-> {
                 fragment = ParkingsMap()
@@ -118,7 +122,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            val spaceNavigationView = nav_view as SpaceNavigationView
+            if (currentItem == 1)
+            spaceNavigationView.changeCurrentItem(0)
+            else super.onBackPressed()
         }
     }
 
@@ -127,12 +134,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_fav -> {
                 val intent= FavoriteParkingsActivity.newIntent(this)
                 startActivity(intent)
-                finish()
             }
             R.id.nav_reservations ->{
                 val intent = Intent(applicationContext, MesReservationsActivity::class.java)
+                intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
-                finish()
             }
 
         }

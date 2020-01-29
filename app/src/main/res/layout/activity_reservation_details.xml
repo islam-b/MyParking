@@ -21,12 +21,14 @@
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbar2"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:title="Détails de Réservation"/>
+                app:title="Détails de Réservation"
+                app:navigationIcon="@drawable/ic_back_toolbar"
+                />
 
         </com.google.android.material.appbar.AppBarLayout>
 

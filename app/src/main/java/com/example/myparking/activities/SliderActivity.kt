@@ -3,6 +3,7 @@ package com.example.myparking.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import com.example.myparking.R
 import com.example.myparking.adapters.SlideViewPagerAdapter
@@ -43,6 +44,7 @@ class SliderActivity : AppCompatActivity(){
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
+                if (position == layouts.size-1) Log.d("slide last", "done")
 
             }
             override fun onPageSelected(position: Int) {
