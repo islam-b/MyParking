@@ -45,6 +45,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private  var currentItem = 0
     val br = NetworkReceiver()
 
+    /**
+     * @author BOUAYACHE
+     * This function initialize the main activity
+     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

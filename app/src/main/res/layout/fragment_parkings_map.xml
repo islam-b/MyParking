@@ -12,14 +12,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center" />
 
-        <com.yarolegovich.discretescrollview.DiscreteScrollView
-            android:id="@+id/carousel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="30dp"
-            app:dsv_orientation="horizontal"
-            />
+        <include layout="@layout/bottom_sheet_layout"
+             />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

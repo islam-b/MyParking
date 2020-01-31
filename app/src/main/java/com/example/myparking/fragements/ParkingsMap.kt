@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -33,18 +34,21 @@ import com.example.myparking.utils.MapsUtils
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.yarolegovich.discretescrollview.DiscreteScrollView
 import com.yarolegovich.discretescrollview.InfiniteScrollAdapter
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
+import kotlinx.android.synthetic.main.bottom_sheet_layout.view.*
 import kotlinx.android.synthetic.main.fragment_parkings_map.view.*
 
 
-class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
+class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener ,GoogleMap.OnMapClickListener,
     OnLocationListener {
 
 
     private lateinit var carousel: DiscreteScrollView
+    private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
     private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<ParkingModel, ParkingCarouselItemBinding>.MyViewHolder>
 
     private lateinit var mMap: GoogleMap
@@ -69,6 +73,7 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         mMap = p0
         this.requestLocation()
         mMap.setOnMarkerClickListener(this)
+        mMap.setOnMapClickListener(this)
         mMap.setMinZoomPreference(10.0f)
         mMap.setMaxZoomPreference(20.0f)
         var r = 0
@@ -98,9 +103,19 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         //val parking = p0?.tag as ParkingModel
 //        ParkingBottomSheet.newInstance(parking).show(activity?.supportFragmentManager,"ActionBottomDialog")
         val target = parkings.indexOf(p0?.tag as ParkingModel)
-        carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(target))
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(target))
+        }else {
+            carousel.scrollToPosition(infiniteAdapter.getClosestPosition(target))
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
         return false
     }
+
+    override fun onMapClick(p0: LatLng?) {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
 
 
     override fun onLocationReady(location: Location) {
@@ -198,7 +213,16 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 //        binding =
 //            DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
         //val rootView = binding.root
+        val llBottomSheet =  rootView.findViewById<LinearLayout>(R.id.bottom_sheet)
+
+// init the bottom sheet behavior
+
+        bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet)
+
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
         mMapView = rootView.findViewById<MapView>(R.id.mapV)
+
         //       val options = GoogleMapOptions()
 //        options.mapType(GoogleMap.MAP_TYPE_NORMAL)
 //            .compassEnabled(false)
