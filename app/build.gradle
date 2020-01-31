@@ -27,7 +27,7 @@ android {
         enabled = true
     }
     dokka {
-        outputFormat = 'gfm'
+        outputFormat = 'html'
         outputDirectory = "docs"
     }
     //$buildDir/dokka
