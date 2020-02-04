@@ -25,10 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:title="Détails de Réservation"
                 app:navigationIcon="@drawable/ic_back_toolbar"
-                />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="Détails de Réservation" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -55,26 +54,42 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:id="@+id/name"
-                            android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical|center_horizontal">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_weight="0.45"
                             android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@{reservation.parking.name}"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/parking_address"
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@{reservation.parking.address}"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                        <com.google.android.material.chip.Chip
                             android:layout_weight="1"
-                            android:text="@{reservation.parking.name}"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/parking_address"
-                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:text="@{reservation.parking.address}"
-                            android:textSize="14sp" />
+                            android:layout_width="match_parent"
+                            android:text="@{reservation.state}"
+                            android:backgroundTint="@color/authorized"
+                            android:textColor="@color/white"
+                            android:layout_margin="16dp"
+                            app:textEndPadding="0dp"/>
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
@@ -145,7 +160,40 @@
 
 
                 </com.google.android.material.card.MaterialCardView> <!-- code QR -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Place de stationnement"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="24dp"
+                    android:elevation="8dp"
+                    app:cardCornerRadius="8dp">
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingStart="16dp"
+                            android:text="@{reservation.place}"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView> <!-- etage et place -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

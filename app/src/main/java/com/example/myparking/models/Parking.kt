@@ -15,7 +15,8 @@ data class Parking(val opened: String = "",val  capacity: String ="",  val name:
                    val distance: String ="",val walk_time: String ="", val image: String ="", val horaire :  @RawValue ArrayList<Horaire>? = null,
                    val tarifs :  @RawValue ArrayList<Tarif>? = null,
                    val paiements: ArrayList<Int>? = null,
-                   val equipements: ArrayList<Int>? = null)
+                   val equipements: ArrayList<Int>? = null,
+                   val termes : ArrayList<String>? = null)
     : Parcelable {
 
 

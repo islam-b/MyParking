@@ -19,6 +19,11 @@ object DataSource {
         val paiements = ArrayList<Int>()
         paiements.add(1)
         paiements.add(2)
+
+        val terms = ArrayList<String>()
+        terms.add("Le fait de laisser une voiture dans le parking implique l’acceptation pleine et entière par l’Usager des conditions du présent règlement dont unexemplaire sera affiché visiblement à l’entrée")
+        terms.add("L'Usager aura accès au parking pendant les heures d'ouverture de celui-ci sauf dispositions contraires prévues dans la convention liant l'Usagerabonné au gestionnaire")
+        terms.add("L’utilisation  du  parking  est  soumise au paiement d’une redevance dont le montant est fixé")
         var parking1 = Parking(
             "Ouvert",
             " - 50%",
@@ -30,7 +35,8 @@ object DataSource {
             list,
             tarifs,
             paiements,
-            paiements
+            paiements,
+            terms
         )
         val parking2 = Parking(
             "Ouvert",
@@ -43,7 +49,8 @@ object DataSource {
             null,
             tarifs,
             arrayListOf(2, 3),
-            arrayListOf(1, 2, 3)
+            arrayListOf(1, 2, 3),
+            terms
         )
         val parking3 = Parking(
             "Ouvert",
@@ -54,7 +61,7 @@ object DataSource {
             " - 10 min de marche",
             "https://fastly.4sqi.net/img/general/200x200/57514184_AJ0MhpiJ4fYLsflNcSXVypv51JLQeRftM-WqFSMc93Y.jpg",
             list,
-            tarifs
+            tarifs, null, null, terms
         )
         val parking4 = Parking(
             "Ouvert",
@@ -65,7 +72,7 @@ object DataSource {
             " - 10 min de marche",
             "https://fastly.4sqi.net/img/general/200x200/57514184_AJ0MhpiJ4fYLsflNcSXVypv51JLQeRftM-WqFSMc93Y.jpg",
             list,
-            tarifs
+            tarifs, null, null, terms
         )
         val parking5 = Parking(
             "Ouvert",
@@ -76,7 +83,7 @@ object DataSource {
             " - 10 min de marche",
             "https://fastly.4sqi.net/img/general/200x200/57514184_AJ0MhpiJ4fYLsflNcSXVypv51JLQeRftM-WqFSMc93Y.jpg",
             list,
-            tarifs
+            tarifs, null, null, terms
         )
 
 
@@ -174,5 +181,9 @@ object DataSource {
         list.add(reservation2)
         return list
 
+    }
+
+    fun getTerms(currentParking: Parking?): ArrayList<String> {
+        return currentParking?.termes!!
     }
 }

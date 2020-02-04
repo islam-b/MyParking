@@ -77,5 +77,6 @@ Children can specify insetEdge to describe how the view insets the CoordinatorLa
     <string name="success_message">Vous avez réserver une place de stationnement avec succès !</string>
     <string name="congrats">Félicitations</string>
     <string name="see_more">Voir details</string>
+    <string name="termes_et_conditions">Termes et Conditions</string>
 
 </resources>

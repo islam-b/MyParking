@@ -78,6 +78,7 @@ class ParkingDetailFragment : Fragment() {
         showTarifsList()
         showPaiementList()
         showEquipementList()
+        showTermsList()
 
         //reserve btn click listener
         reserver.setOnClickListener {
@@ -147,6 +148,21 @@ class ParkingDetailFragment : Fragment() {
 
     }
 
+    private fun showTermsList() {
+        val recyclerview = binding.root.terms_list
+        recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
+        val adapter = TermsAdapter(
+            DataSource.getTerms(currentParking),
+            object : MyAdapter.ItemAdapterListener<String> {
+                override fun onItemClicked(item: String) {
+                    Log.d("Term clicked", item)
+                }
+
+            }
+        )
+        recyclerview.adapter = adapter
+
+    }
 
     companion object {
         @JvmStatic

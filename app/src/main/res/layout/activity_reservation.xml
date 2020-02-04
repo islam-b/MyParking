@@ -27,9 +27,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:title="Réserver une place"
                 app:navigationIcon="@drawable/ic_back_toolbar"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="Réserver une place" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -44,7 +44,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="64dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -113,84 +114,138 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Details de paiement"
-                        android:textColor="#000000"
-                        android:textSize="18sp" />
-
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="24dp"
-                        android:elevation="8dp"
-                        app:cardCornerRadius="8dp">
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:orientation="horizontal">
 
-                        <LinearLayout
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:text="Paiement"
+                            android:textColor="#000000"
+                            android:textSize="18sp" />
+
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:gravity="end"
+                            android:text="Code de promo"
+                            android:textColor="@color/info" />
+                    </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="56dp"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:orientation="horizontal">
+                    <!--                    <com.google.android.material.card.MaterialCardView-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_margin="24dp"-->
+                    <!--                        android:elevation="8dp"-->
+                    <!--                        app:cardCornerRadius="8dp">-->
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="start|center_vertical"
-                                    android:padding="16dp"
-                                    android:text="Mode de paiement" />
+                    <HorizontalScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="false"
+                        android:scrollbars="none">
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="end|center_vertical"
-                                    android:padding="16dp"
-                                    android:text="Sélectionner"
-                                    android:textColor="@color/info" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="top"
+                           >
 
-                            </LinearLayout>
+                            <ImageView
+                                android:layout_width="300dp"
+                                android:layout_height="260dp"
+                                android:layout_marginStart="16dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/ic_master_card"
+                                app:cardElevation="8dp"/>
 
-                            <View
-                                android:id="@+id/divider"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="?android:attr/listDivider" />
+                            <ImageView
+                                android:layout_width="300dp"
+                                android:layout_height="260dp"
+                                android:layout_marginStart="16dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/ic_master_card_grey" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="56dp"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="start|center_vertical"
-                                    android:padding="16dp"
-                                    android:text="Prix Total" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="end|center_vertical"
-                                    android:padding="16dp"
-                                    android:text="100.00 DZD" />
-
-                            </LinearLayout>
 
                         </LinearLayout>
+                    </HorizontalScrollView>
 
-                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Sélectionner une autre méthode de paiement." />
+
+
+                    <!--   <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:orientation="vertical">
+
+                           <LinearLayout
+                               android:layout_width="match_parent"
+                               android:layout_height="56dp"
+                               android:gravity="center_vertical|center_horizontal"
+                               android:orientation="horizontal">
+
+                               <TextView
+                                   android:layout_width="match_parent"
+                                   android:layout_height="match_parent"
+                                   android:layout_weight="1"
+                                   android:gravity="start|center_vertical"
+                                   android:padding="16dp"
+                                   android:text="Taxe" />
+
+                               <TextView
+                                   android:layout_width="match_parent"
+                                   android:layout_height="match_parent"
+                                   android:layout_weight="1"
+                                   android:gravity="end|center_vertical"
+                                   android:padding="16dp"
+                                   android:text="Sélectionner"
+                                   android:textColor="@color/info" />
+
+                           </LinearLayout>
+
+                           <View
+                               android:id="@+id/divider"
+                               android:layout_width="match_parent"
+                               android:layout_height="1dp"
+                               android:background="?android:attr/listDivider" />
+
+                           <LinearLayout
+                               android:layout_width="match_parent"
+                               android:layout_height="56dp"
+                               android:gravity="center_vertical|center_horizontal"
+                               android:orientation="horizontal">
+
+                               <TextView
+                                   android:layout_width="match_parent"
+                                   android:layout_height="match_parent"
+                                   android:layout_weight="1"
+                                   android:gravity="start|center_vertical"
+                                   android:padding="16dp"
+                                   android:text="Prix Total" />
+
+                               <TextView
+                                   android:layout_width="match_parent"
+                                   android:layout_height="match_parent"
+                                   android:layout_weight="1"
+                                   android:gravity="end|center_vertical"
+                                   android:padding="16dp"
+                                   android:text="100.00 DZD" />
+
+                           </LinearLayout>
+
+                       </LinearLayout>-->
+
+                    <!--                    </com.google.android.material.card.MaterialCardView>-->
 
                 </LinearLayout>
 
@@ -205,7 +260,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="4dp"
-            android:text="CONFIRMER"
+            android:text="Payer 100.00 DZD"
             android:theme="@style/Widget.MaterialComponents.Button"
 
             />

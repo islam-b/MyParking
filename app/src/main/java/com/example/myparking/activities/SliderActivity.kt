@@ -32,9 +32,8 @@ class SliderActivity : AppCompatActivity(){
             goToMainActivity()
         }
         setContentView(R.layout.activity_login)
-        slider_viewPager.adapter = SlideViewPagerAdapter(layouts, this)
+        slider_viewPager?.adapter = SlideViewPagerAdapter(layouts, this)
         createDots(0)
-
         slider_viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
                 Log.d("scroll state", state.toString())
@@ -44,7 +43,9 @@ class SliderActivity : AppCompatActivity(){
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
-                if (position == layouts.size-1)   goToLoginActivity()
+            /*    Log.d("positionoffset", positionOffset.toString())
+                Log.d("positionoffsetPixels", positionOffsetPixels.toString())
+                if (position == layouts.size-1)   goToLoginActivity()*/
 
             }
             override fun onPageSelected(position: Int) {
