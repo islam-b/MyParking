@@ -68,6 +68,9 @@
 
 ##### [com.example.myparking.MainActivity](../com.example.myparking/-main-activity/index.md)
 
+Main activity
+This activity contains two view: Map view and List view*
+
 
 |
 

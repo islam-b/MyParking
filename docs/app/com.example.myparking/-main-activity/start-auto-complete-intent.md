@@ -3,3 +3,6 @@
 # startAutoCompleteIntent
 
 `fun startAutoCompleteIntent(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Request an intent to show the search bar from googla maps SDK
+
