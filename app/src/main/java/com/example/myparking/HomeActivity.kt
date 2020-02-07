@@ -9,10 +9,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myparking.adapters.HomeFavoriteParkingAdapter
 import com.example.myparking.adapters.HomeParkingAdapter
+import com.example.myparking.adapters.HomeReservationAdapter
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.databinding.ActivityHomeBinding
 import com.example.myparking.models.Parking
+import com.example.myparking.models.Reservation
 import com.example.myparking.utils.DataSource
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -47,10 +50,16 @@ class HomeActivity : AppCompatActivity() {
         binding.searchInput.setOnClickListener {
             startAutoCompleteIntent()
         }
+
         initNearParkings()
+        initReservations()
+        initFavoriteParkings()
 
 
     }
+
+
+
 
     /**
      * This function create the options for the toolbar menu
@@ -71,6 +80,26 @@ class HomeActivity : AppCompatActivity() {
 
         })
     }
+    fun initReservations() {
+        home_reservations_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+        home_reservations_list.adapter = HomeReservationAdapter(DataSource.getReservations(),object:MyAdapter.ItemAdapterListener<Reservation> {
+            override fun onItemClicked(item: Reservation) {
+
+            }
+
+        })
+    }
+    fun initFavoriteParkings() {
+        home_favorites_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
+        home_favorites_list.adapter = HomeFavoriteParkingAdapter(DataSource.getParkings(),object:MyAdapter.ItemAdapterListener<Parking> {
+            override fun onItemClicked(item: Parking) {
+
+            }
+
+        })
+
+    }
+
 
     val AUTOCOMPLETE_REQUEST_CODE = 1
     /**

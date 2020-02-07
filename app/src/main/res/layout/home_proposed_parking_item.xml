@@ -15,8 +15,30 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="80dp"
+        android:translationY="22dp"
+        android:translationX="4dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|start"
+        android:translationZ="5dp"
+        android:background= "@drawable/banner_red">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Le plus prés"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.cardview.widget.CardView
-        android:layout_width="150dp"
+        android:layout_width="155dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -112,6 +134,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
