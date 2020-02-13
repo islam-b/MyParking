@@ -23,7 +23,14 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import kotlinx.android.synthetic.main.activity_home.*
-
+import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+import android.os.Build.VERSION_CODES.KITKAT
+import android.os.Build.VERSION.SDK_INT
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.os.Build
+import android.view.View
+import android.view.WindowManager
 
 
 class HomeActivity : AppCompatActivity() {
@@ -40,6 +47,15 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+
+        if (SDK_INT >= KITKAT) {
+            val w = window
+            w.setFlags(
+                FLAG_LAYOUT_NO_LIMITS,
+                FLAG_LAYOUT_NO_LIMITS
+            )
+
+        }
 
         setSupportActionBar(toolbar_home)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
