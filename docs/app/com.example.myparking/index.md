@@ -6,4 +6,4 @@
 
 | Name | Summary |
 |---|---|
-| [MainActivity](-main-activity/index.md) | `class MainActivity : AppCompatActivity, OnNavigationItemSelectedListener, SpaceOnClickListener` |
+| [MainActivity](-main-activity/index.md) | Main activity This activity contains two view: Map view and List view*`class MainActivity : AppCompatActivity, OnNavigationItemSelectedListener, SpaceOnClickListener` |

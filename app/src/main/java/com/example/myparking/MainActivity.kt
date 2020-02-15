@@ -34,7 +34,15 @@ import com.luseen.spacenavigation.SpaceOnClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.android.libraries.places.widget.AutocompleteActivity
 
-
+/**
+ * Main activity
+ * This activity contains two view: Map view and List view*
+ * @author BOUAYACHE
+ * @property drawer the drawer layout of tha main activity
+ * @property toggle the Toggle action of the drawer layout
+ * @property currentItem the current index of the view (0 or 1)
+ * @property networkReceiver the Broadcast Receiver, it receives the connectivity state
+ */
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener{
 
@@ -43,18 +51,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private  var currentItem = 0
-    val br = NetworkReceiver()
+    val networkReceiver = NetworkReceiver()
 
     /**
-     * @author BOUAYACHE
-     * This function initialize the main activity
+     * This function initialize the main activity:
+     * - Initializing Google Maps Configuratino
+     * - Initializing Toolbars and navigation
+     * - Starting the activity as List view
      */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //NetworkUtil.registerConnectivityNetworkMonitor(this)
 
-        registerReceiver(br, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
+        registerReceiver(networkReceiver, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
 
         setContentView(R.layout.activity_main2)
         MapsUtils.initLocationProvider(this)
@@ -90,13 +100,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-
+    /**
+     * This function opens the filter dialog, it is triggered when the user click on the filter button
+     */
     override fun onCentreButtonClick() {
         val dialog = FilterDialogFragment()
         dialog.show(supportFragmentManager, dialog.TAG1)
 
     }
 
+    /**
+     * This function opens one of the views (list or map) depending on the clicked item
+     * @param itemIndex the index of the view selected
+     * @param itemName the name (tag) of the view selected
+     */
     override fun onItemClick(itemIndex: Int, itemName: String?) {
         var fragment: Fragment
         currentItem = itemIndex
@@ -119,8 +136,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-
-
+    /**
+     * This function allows to return to previous activity
+     */
 
     override fun onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -133,6 +151,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    /**
+     * This function manage the drawer layout navigation, it perform actions according to selected items from the drawer navigation
+     * @param item the item selected
+     * @return boolean value representing success or failure
+     */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_fav -> {
@@ -150,12 +173,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    /**
+     * This function create the options for the toolbar menu
+     * @return boolean value representing success or failure
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main2, menu)
         return true
     }
 
+    /**
+     * This function manage menu items actions, it perform actions according to selected items from the toolbar menu
+     * @return boolean value representing success or failure of the action
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_search -> {
@@ -168,13 +199,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     val AUTOCOMPLETE_REQUEST_CODE = 1
+    /**
+     * Request an intent to show the search bar from googla maps SDK
+     */
     fun startAutoCompleteIntent() {
 
-// Set the fields to specify which types of place data to
-// return after the user has made a selection.
-        val fields = listOf(Place.Field.ID, Place.Field.NAME);
+    // Set the fields to specify which types of place data to
+    // return after the user has made a selection.
+        val fields = listOf(Place.Field.ID, Place.Field.NAME)
 
-// Start the autocomplete intent.
+    // Start the autocomplete intent.
         val intent = Autocomplete.IntentBuilder(
             AutocompleteActivityMode.OVERLAY, fields)
             .build(this)
@@ -182,7 +216,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-
+    /**
+     * Handle the result of an intent request
+     * @param requestCode the code of the request
+     * @param resultCode the code of the result of the request
+     * @param data the data attached to the result
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
@@ -199,16 +238,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     companion object {
+        /**
+         * Create new intent to start the main activity
+         * @return new main activity intent
+         */
         fun newIntent(context: Context): Intent {
             val intent = Intent(context, MainActivity::class.java)
             return intent
         }
     }
 
-
-
-    //    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment)
-//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-//    }
 }

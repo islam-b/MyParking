@@ -23,7 +23,10 @@ class SignInFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
         view.findViewById<Button>(R.id.login)?.setOnClickListener {
-            val mainActivityIntent = Intent(activity, MainActivity::class.java)
+//            val mainActivityIntent = Intent(activity, MainActivity::class.java)
+//            mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//            startActivity(mainActivityIntent)
+            val mainActivityIntent = Intent(activity, HomeActivity::class.java)
             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(mainActivityIntent)
         }

@@ -42,7 +42,18 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.bottom_sheet_layout.view.*
 import kotlinx.android.synthetic.main.fragment_parkings_map.view.*
 
-
+/**
+ * The map fragment , containing a map with parking pins
+ * @author BOUAYACHE
+ * @property carousel A carousel of parkings (horizontal list)
+ * @property bottomSheetBehavior Behaviour of bottom sheet (Collapsed or Expanded)
+ * @property infiniteAdapter Adapter with inifinite behaviour
+ * @property mMap Map from Google Maps SDK
+ * @property mMapView The map view in the layout
+ * @property markers The list of pins of parkings
+ * @property parkings The List of parkings
+ * @property binding Binding data with the view
+ */
 class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener ,GoogleMap.OnMapClickListener,
     OnLocationListener {
 
@@ -58,7 +69,10 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     private lateinit var binding: FragmentParkingsMapBinding
 
-
+    /**
+     * Request location from Maps Util
+     * @see com.example.myparking.utils.MapsUtils.getLastLocation
+     */
     fun requestLocation() {
         val listener = this
         MapsUtils.getLastLocation(context!!, object : LocationCallback() {
@@ -68,6 +82,10 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }, this)
     }
 
+    /**
+     * Initialize the map view when map configuration is ready
+     * @param p0 Google Map (Parameters)
+     */
     override fun onMapReady(p0: GoogleMap) {
         Log.d("htest", "hhh here")
         mMap = p0
@@ -98,6 +116,11 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     }
 
+    /**
+     * Triggered when the user clickes on a parking marker
+     * @param p0 The marker (pin) of the parking
+     * @return boolean value representing the state of the action triggered (succeed or failed)
+     */
     override fun onMarkerClick(p0: Marker?): Boolean {
         Log.d("dialod not ", "not")
         //val parking = p0?.tag as ParkingModel
@@ -112,12 +135,20 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         return false
     }
 
+    /**
+     * Triggered when the user clicks on the map
+     * @param p0 Coordinates (Lat and Long)
+     */
     override fun onMapClick(p0: LatLng?) {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
 
-
+    /**
+     * Show the current position when the location is ready
+     * @see com.example.myparking.utils.MapsUtils.getLastLocation
+     * @param location Coordinates (Lat and Long)
+     */
     override fun onLocationReady(location: Location) {
         Log.d("here", "mylocation")
         mMap.isMyLocationEnabled = true
@@ -127,7 +158,12 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         mMap.moveCamera(CameraUpdateFactory.zoomTo(13.0f))
     }
 
-
+    /**
+     * Handle the result of the permission request
+     * @param requestCode Code of the request
+     * @param permissions List of permissions codes
+     * @param grantResults Result of permissions request (Granted or Refused)
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -142,6 +178,9 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
+    /**
+     * Triggered when the fragment is resumed
+     */
     override fun onResume() {
         super.onResume()
         this.requestLocation()
@@ -149,8 +188,9 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
 
-
-
+    /**
+     * This function initialize the map fragment properties
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -200,7 +240,12 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     }
 
-
+    /**
+     * This function initialize the map view fragment
+     * @param inflater The layout inflater, used to render the view
+     * @param container The parent view (holding the fragment)
+     * @return The view
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -245,6 +290,10 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         return rootView
     }
 
+    /**
+     * Triggered when the main view is created
+     * @param view The root view
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         carousel = binding.root.carousel
 
@@ -292,7 +341,15 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 
 }
+
+/**
+ * Interface: Represing a listener of the current location
+ */
 interface OnLocationListener {
+    /**
+     * Callback when the location is ready (provided)
+     * @param location Coordinates (Lat and Long)
+     */
     fun onLocationReady(location: Location)
 }
 
