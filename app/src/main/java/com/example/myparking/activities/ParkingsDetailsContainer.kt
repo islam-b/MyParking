@@ -52,7 +52,7 @@ class ParkingsDetailsContainer : AppCompatActivity() {
         fun newIntent(context: Context, list:ArrayList<Parking>, position: Int): Intent {
             val intent = Intent(context, ParkingsDetailsContainer::class.java)
             val parking = list[position]
-            Log.d("Parking details", parking.name)
+            Log.d("Parking details", parking.nom)
             intent.putExtra("PARKING", parking)
             intent.putExtra("POSITION", position)
             //intent.putExtra("NAME", parking.name)

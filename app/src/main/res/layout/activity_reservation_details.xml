@@ -69,7 +69,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="@{reservation.parking.name}"
+                                android:text="@{reservation.parking.nom}"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -78,7 +78,7 @@
                                 android:layout_width="150dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2"
-                                android:text="@{reservation.parking.address}"
+                                android:text="@{reservation.parking.adresse}"
                                 android:textSize="14sp" />
                         </LinearLayout>
                         <com.google.android.material.chip.Chip

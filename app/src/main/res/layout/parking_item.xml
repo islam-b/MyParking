@@ -116,7 +116,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="@{parking.opened}"
+                                android:text="@{parking.ouvert}"
                                 android:textColor="@color/authorized"
                                 android:textSize="14sp" />
 
@@ -125,7 +125,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2"
-                                android:text="@{parking.capacity}"
+                                android:text="@{parking.nbPlaces}"
                                 android:textSize="14sp" />
                         </LinearLayout>
 
@@ -134,7 +134,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="@{parking.name}"
+                            android:text="@{parking.nom}"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -143,7 +143,7 @@
                             android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
-                            android:text="@{parking.address}"
+                            android:text="@{parking.adresse}"
                             android:textSize="14sp" />
 
                         <LinearLayout
@@ -158,7 +158,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="@{parking.distance}"
+                                android:text="1.0 km"
                                 android:textColor="@color/info"
                                 android:textSize="14sp" />
 
@@ -167,7 +167,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2"
-                                android:text="@{parking.walk_time}"
+                                android:text="5 min"
                                 android:textSize="14sp" />
                         </LinearLayout>
 

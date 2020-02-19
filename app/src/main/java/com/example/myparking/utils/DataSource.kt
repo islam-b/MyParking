@@ -6,6 +6,7 @@ import com.example.myparking.models.*
 object DataSource {
     var parkingsList = ArrayList<Parking>()
 
+/*
     init {
         val list = ArrayList<Horaire>()
         list.add(Horaire("Dim - Jeu", "9h 21 h"))
@@ -94,6 +95,7 @@ object DataSource {
         parkingsList.add(parking5)
 
     }
+*/
 
     fun getParkings(): ArrayList<Parking> {
         return parkingsList
@@ -121,7 +123,7 @@ object DataSource {
         return list
     }
 
-    fun getPaiement(parking: Parking?): ArrayList<Paiement> {
+    /*fun getPaiement(parking: Parking?): ArrayList<Paiement> {
         var newList = ArrayList<Paiement>()
         val paiements = parking?.paiements
         paiements?.let {
@@ -139,8 +141,9 @@ object DataSource {
             }
         }
         return newList
-    }
+    }*/
 
+/*
     fun getEquipement(parking: Parking?): ArrayList<Equipement> {
         var newList = ArrayList<Equipement>()
         val equipements = parking?.equipements
@@ -170,6 +173,7 @@ object DataSource {
         }
         return newList
     }
+*/
 
     fun getReservations(): ArrayList<Reservation> {
         var list = ArrayList<Reservation>()
@@ -183,7 +187,7 @@ object DataSource {
 
     }
 
-    fun getTerms(currentParking: Parking?): ArrayList<String> {
+   /* fun getTerms(currentParking: Parking?): ArrayList<String> {
         return currentParking?.termes!!
-    }
+    }*/
 }

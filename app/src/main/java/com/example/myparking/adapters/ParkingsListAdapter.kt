@@ -9,17 +9,23 @@ import com.chauthai.swipereveallayout.ViewBinderHelper
 
 
 
-class ParkingsListAdapter(val parkingsList : ArrayList<Parking>,
+class ParkingsListAdapter(var parkingsList : ArrayList<Parking>,
                        val listener: ItemAdapterListener<Parking>
                        ): MyAdapter<Parking, ParkingItemBinding>(parkingsList, R.layout.parking_item, listener)
 {
     private val viewBinderHelper = ViewBinderHelper()
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.binding.parking = parkingsList[position]
-        loadImage(holder.binding.root.image, parkingsList[position].image)
+        loadImage(holder.binding.root.image, parkingsList[position].imageUrl)
       //  viewBinderHelper.bind(holder.swipeRevealLayout, parkingsList[position].name)
         holder.binding.root.main_layout_parking_item.setOnClickListener{
             listener.onItemClicked(parkingsList[position])
         }
+    }
+
+    fun updateList(list: ArrayList<Parking>) {
+        parkingsList.clear()
+        parkingsList.addAll(list)
+        super.notifyDataSetChanged()
     }
 }

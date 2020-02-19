@@ -2,8 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 <data>
     <variable
-        name="term"
-        type="String" />
+        name="terme"
+        type="com.example.myparking.models.Terme" />
 </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:paddingStart="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{term}"/>
+            android:text="@{terme.contenu}"/>
 
     </LinearLayout>
 </layout>

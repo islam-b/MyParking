@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Horaire (val horaire_days : String ="", val horaire_time : String ="") : Parcelable  {
-
-}
+data class Horaire (val idHoraire: Int,
+                    val Jours : String,
+                    val HeureOuverture: String,
+                    val HeureFermeture: String) : Parcelable

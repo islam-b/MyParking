@@ -80,7 +80,7 @@
                         android:id="@+id/textView14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{parking.name}"
+                        android:text="@{parking.nom}"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/textSize_16sp" />
 
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:requiresFadingEdge="horizontal"
-                        android:text="@{parking.address}" />
+                        android:text="@{parking.adresse}" />
                 </LinearLayout>
 
                 <ImageView

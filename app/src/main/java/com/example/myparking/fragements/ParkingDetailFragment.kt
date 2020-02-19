@@ -12,6 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -20,8 +22,8 @@ import com.example.myparking.activities.ReservationActivity
 import com.example.myparking.adapters.*
 import com.example.myparking.models.*
 
-import com.example.myparking.utils.DataSource
 import com.example.myparking.utils.loadBackground
+import com.example.myparking.viewmodels.ParkingListViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -35,6 +37,7 @@ class ParkingDetailFragment : Fragment() {
 
 
     private lateinit var binding: ActivityParkingDetailsBinding
+    private lateinit var mParkingListViewModel: ParkingListViewModel
     private var currentParking: Parking? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +46,7 @@ class ParkingDetailFragment : Fragment() {
             currentParking = it.getParcelable("PARKING")
         }
 
+
     }
 
     override fun onCreateView(
@@ -50,6 +54,12 @@ class ParkingDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        mParkingListViewModel = ViewModelProviders.of(this)
+            .get(ParkingListViewModel::class.java)
+       /* mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
+        {
+            mAdapter.notifyDataSetChanged()
+        })*/
 
         binding =
             DataBindingUtil.inflate(inflater, R.layout.activity_parking_details, container, false)
@@ -72,7 +82,7 @@ class ParkingDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        loadBackground(image_info_parking, currentParking?.image)
+        loadBackground(image_info_parking, currentParking?.imageUrl)
 
         showHoraireList()
         showTarifsList()
@@ -92,10 +102,10 @@ class ParkingDetailFragment : Fragment() {
         var recyclerview = binding.root.horaire_list
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter = HoraireAdapter(
-            DataSource.getHoraire(currentParking),
+            mParkingListViewModel.getHoraires(currentParking!!),
             object : MyAdapter.ItemAdapterListener<Horaire> {
                 override fun onItemClicked(item: Horaire) {
-                    Log.d("Horaire clicked", item.horaire_days)
+                    Log.d("Horaire clicked", item.Jours)
                 }
 
             })
@@ -107,10 +117,10 @@ class ParkingDetailFragment : Fragment() {
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter =
             TarifsAdapter(
-                DataSource.getTarifs(currentParking),
+               mParkingListViewModel.getTarifs(currentParking!!),
                 object : MyAdapter.ItemAdapterListener<Tarif> {
                     override fun onItemClicked(item: Tarif) {
-                        Log.d("tarifs clicked", item.tarif_sum)
+                        Log.d("tarifs clicked", item.prix.toString())
                     }
 
                 })
@@ -122,7 +132,7 @@ class ParkingDetailFragment : Fragment() {
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter =
             PaiementAdapter(
-                DataSource.getPaiement(currentParking),
+                mParkingListViewModel.getPaiements(currentParking!!),
                 object : MyAdapter.ItemAdapterListener<Paiement> {
                     override fun onItemClicked(item: Paiement) {
                         Log.d("Paiement clicked", item.type)
@@ -136,10 +146,10 @@ class ParkingDetailFragment : Fragment() {
         val recyclerview = binding.root.equipement_list
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter = EquipementAdapter(
-            DataSource.getEquipement(currentParking),
+            mParkingListViewModel.getEquipements(currentParking!!),
             object : MyAdapter.ItemAdapterListener<Equipement> {
                 override fun onItemClicked(item: Equipement) {
-                    Log.d("Equipement clicked", item.type)
+                    Log.d("Equipement clicked", item.designation)
                 }
 
             }
@@ -152,10 +162,10 @@ class ParkingDetailFragment : Fragment() {
         val recyclerview = binding.root.terms_list
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter = TermsAdapter(
-            DataSource.getTerms(currentParking),
-            object : MyAdapter.ItemAdapterListener<String> {
-                override fun onItemClicked(item: String) {
-                    Log.d("Term clicked", item)
+            mParkingListViewModel.getTermes(currentParking!!),
+            object : MyAdapter.ItemAdapterListener<Terme> {
+                override fun onItemClicked(item: Terme) {
+                    Log.d("Term clicked", item.contenu)
                 }
 
             }

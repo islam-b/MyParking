@@ -18,4 +18,5 @@ class ParkingCarouselAdapter(val parkingList:ArrayList<ParkingModel>,
         }
     }
 
+
 }

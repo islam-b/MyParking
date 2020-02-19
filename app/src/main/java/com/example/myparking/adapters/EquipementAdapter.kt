@@ -12,7 +12,7 @@ class EquipementAdapter(val equipementList : ArrayList<Equipement>,
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.binding.equipement =equipementList[position]
         holder.binding.type = EQUIPEMENT_TYPE
-        holder.binding.root.right_icon.setImageResource(equipementList[position].icon)
+       // holder.binding.root.right_icon.setImageResource(equipementList[position].icon)
         holder.binding.root.setOnClickListener{
             listener.onItemClicked(equipementList[position])
         }

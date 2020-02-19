@@ -109,7 +109,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
                                 android:gravity="end"
-                                android:text="@{reservation.parking.opened}"
+                                android:text="@{reservation.parking.ouvert}"
                                 android:textColor="@color/authorized"
                                 android:textSize="14sp" />
 
@@ -119,7 +119,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
                                 android:gravity="end"
-                                android:text="@{reservation.parking.capacity}"
+                                android:text="@{reservation.parking.nbPlaces}"
                                 android:textSize="14sp" />
 
                         </LinearLayout>  <!-- opeend - 50%-->
@@ -129,7 +129,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{reservation.parking.name}"
+                            android:text="@{reservation.parking.nom}"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
