@@ -5,5 +5,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Equipement(
     val idEquipement: Int,
-    val designation: String
+    val designation: String,
+    val iconUrl: String
 ): Parcelable

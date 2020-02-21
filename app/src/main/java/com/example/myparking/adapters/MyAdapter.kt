@@ -30,6 +30,11 @@ abstract class MyAdapter<ItemClass, ItemBinding>(
     override fun getItemCount(): Int {
         return itemList.size
     }
+    fun updateList(list: ArrayList<ItemClass>) {
+        itemList.clear()
+        itemList.addAll(list)
+        super.notifyDataSetChanged()
+    }
 
     interface ItemAdapterListener<ItemClass> {
         fun onItemClicked(item: ItemClass)

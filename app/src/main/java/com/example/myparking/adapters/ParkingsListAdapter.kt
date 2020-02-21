@@ -23,9 +23,4 @@ class ParkingsListAdapter(var parkingsList : ArrayList<Parking>,
         }
     }
 
-    fun updateList(list: ArrayList<Parking>) {
-        parkingsList.clear()
-        parkingsList.addAll(list)
-        super.notifyDataSetChanged()
-    }
 }

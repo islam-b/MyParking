@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="@{type == 0 ? horaire.heureOuverture+' '+horaire.heureFermeture : tarif.prix}"
+            android:text='@{type == 0 ? horaire.heureOuverture + " à " +horaire.heureFermeture : tarif.prix}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

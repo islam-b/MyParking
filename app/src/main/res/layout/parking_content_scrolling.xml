@@ -7,7 +7,7 @@
     <data>
         <variable
             name="parking"
-            type="com.example.myparking.models.Parking" />
+            type="com.example.myparking.viewmodels.ParkingItemViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -48,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@{parking.nom}"
+                        android:text="@{parking.getName()}"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -57,7 +57,7 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@{parking.adresse}"
+                        android:text="@{parking.getAddress()}"
                         android:textSize="14sp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,8 +72,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@{parking.ouvert}"
-                            android:textColor="@color/authorized"
+                            android:text='@{parking.getOuvert()}'
+                            android:textColor='@{parking.isOuvert() ? @color/authorized: @color/colorPrimary}'
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/capacity"
@@ -86,7 +86,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="80dp"
                             android:layout_weight="2"
-                            android:text="@{parking.nbPlaces}"
+                            android:text=" - 50%"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/distance"
@@ -99,7 +99,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
-                            android:text="1.0 km"
+                            android:text="1.0 km -"
                             android:textColor="@color/info"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -112,7 +112,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="5 min"
+                            android:text="5 min de marche."
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"

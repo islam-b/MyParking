@@ -23,17 +23,18 @@ import com.example.myparking.activities.ParkingsDetailsContainer
 
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.ParkingsListAdapter
-import com.example.myparking.utils.InjectorUtils
+import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
+import kotlinx.android.synthetic.main.fragment_parkings_list.*
 
 
 class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
 
-    private var parkingList : ArrayList<Parking> = ArrayList<Parking>()
+    private var parkingList: ArrayList<Parking> = ArrayList<Parking>()
     private lateinit var binding: FragmentParkingsListBinding
     private lateinit var recyclerview: RecyclerView
-    private  var mAdapter: ParkingsListAdapter? = null
+    private var mAdapter: ParkingsListAdapter? = null
 
     private lateinit var mParkingListViewModel: ParkingListViewModel
 
@@ -48,8 +49,6 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
     }
 
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,14 +57,16 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_list, container, false)
         recyclerview = binding.parkingsList
-        val factory = ParkingListViewModelFactory()
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
 
         mParkingListViewModel = ViewModelProviders.of(this, factory)
             .get(ParkingListViewModel::class.java)
+        showProgressBar()
 
         mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
         {
             mAdapter?.updateList(it)
+            hideProgressBar()
 
         })
         initParkings()
@@ -77,9 +78,16 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
             mAdapter = ParkingsListAdapter(parkingList, this)
             recyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             recyclerview.adapter = mAdapter
-        }else {
-             mAdapter?.notifyDataSetChanged()
+        } else {
+            mAdapter?.notifyDataSetChanged()
         }
 
+    }
+    private fun showProgressBar() {
+        progress_bar?.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        progress_bar?.visibility = View.GONE
     }
 }

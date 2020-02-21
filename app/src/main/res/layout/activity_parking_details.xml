@@ -8,7 +8,7 @@
     <data>
         <variable
             name="parking"
-            type="com.example.myparking.models.Parking" />
+            type="com.example.myparking.viewmodels.ParkingItemViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -42,7 +42,7 @@
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:title="@{parking.nom}"/>
+                    app:title="@{parking.getName()}"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>

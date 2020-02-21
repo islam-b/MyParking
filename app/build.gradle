@@ -83,9 +83,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     implementation 'com.squareup.retrofit2:retrofit-converters:2.7.1'
     implementation 'com.squareup.retrofit2:retrofit-adapters:2.7.1'
-
+/*
     // dagger2
-    ext.dagger2_version = '2.24'
+    ext.dagger2_version = '2.23'
     // Basic Dagger 2 (required)
     implementation "com.google.dagger:dagger:$dagger2_version"
     kapt "com.google.dagger:dagger-compiler:$dagger2_version"
@@ -93,7 +93,8 @@ dependencies {
     implementation "com.google.dagger:dagger-android:$dagger2_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger2_version"
     // Support library support (optional)
-    kapt "com.google.dagger:dagger-android-support:$dagger2_version"
+    kapt "com.google.dagger:dagger-android-support:$dagger2_version"*/
+
 
     kapt "com.android.databinding:compiler:$android_plugin_version"
 }

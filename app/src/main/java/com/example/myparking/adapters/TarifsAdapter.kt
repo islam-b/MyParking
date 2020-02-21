@@ -4,7 +4,7 @@ import com.example.myparking.databinding.ParkingDetailsItemType1Binding
 import com.example.myparking.R
 import com.example.myparking.models.Tarif
 
-class TarifsAdapter(val tarifsList : ArrayList<Tarif>,
+class TarifsAdapter(var tarifsList : ArrayList<Tarif>,
                      val listener : ItemAdapterListener<Tarif>) :
     MyAdapter<Tarif, ParkingDetailsItemType1Binding>(tarifsList, R.layout.parking_details_item_type1, listener) {
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {

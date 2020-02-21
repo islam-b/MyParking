@@ -13,13 +13,17 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.PagerAdapter
 import com.example.myparking.adapters.ParkingsPagerAdapter
 import com.example.myparking.fragements.ParkingDetailFragment
+import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.viewmodels.ParkingListViewModel
+import javax.crypto.AEADBadTagException
 
 
 class ParkingsDetailsContainer : AppCompatActivity() {
 
     private var currentParking : Parking? = null
     private var currentId :Int? =0
-    private var parkingsList = DataSource.getParkings()
+    private  var parkingsList  = ParkingListRepository.getInstance().getParkings()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,18 +31,18 @@ class ParkingsDetailsContainer : AppCompatActivity() {
         val bundle = intent.extras
         bundle?.let {
             bundle.apply {
-                currentParking = getParcelable<Parking>("PARKING") as Parking
                 currentId = getInt("POSITION")
+                currentParking = getParcelable<Parking>("PARKING") as Parking
+
             }
         }
         initPaging()
     }
 
     private fun initPaging() {
-
         val fragmentsList= ArrayList<Fragment>()
-        parkingsList.forEach {
-            fragmentsList.add(ParkingDetailFragment.newInstance(it))
+        parkingsList?.forEach {
+            fragmentsList.add(ParkingDetailFragment.newInstance(parkingsList.indexOf(it)))
         }
 
         val pagerAdapter = ParkingsPagerAdapter(supportFragmentManager,fragmentsList)
@@ -52,12 +56,8 @@ class ParkingsDetailsContainer : AppCompatActivity() {
         fun newIntent(context: Context, list:ArrayList<Parking>, position: Int): Intent {
             val intent = Intent(context, ParkingsDetailsContainer::class.java)
             val parking = list[position]
-            Log.d("Parking details", parking.nom)
             intent.putExtra("PARKING", parking)
             intent.putExtra("POSITION", position)
-            //intent.putExtra("NAME", parking.name)
-            //intent.putExtra("NEWS", news)
-            //intent.putExtra("TITLE",news.description)
             return intent
         }
     }

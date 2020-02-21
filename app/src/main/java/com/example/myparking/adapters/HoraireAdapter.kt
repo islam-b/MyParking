@@ -3,6 +3,7 @@ package com.example.myparking.adapters
 import com.example.myparking.databinding.ParkingDetailsItemType1Binding
 import com.example.myparking.R
 import com.example.myparking.models.Horaire
+import com.example.myparking.models.HoraireStatus
 
 
 class HoraireAdapter(val horaireList : ArrayList<Horaire>,

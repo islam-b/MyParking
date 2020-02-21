@@ -21,9 +21,13 @@ import com.example.myparking.R
 import com.example.myparking.activities.ReservationActivity
 import com.example.myparking.adapters.*
 import com.example.myparking.models.*
+import com.example.myparking.repositories.ParkingListRepository
 
 import com.example.myparking.utils.loadBackground
+import com.example.myparking.viewmodels.ParkingItemViewModel
+import com.example.myparking.viewmodels.ParkingItemViewModelFactory
 import com.example.myparking.viewmodels.ParkingListViewModel
+import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -37,13 +41,16 @@ class ParkingDetailFragment : Fragment() {
 
 
     private lateinit var binding: ActivityParkingDetailsBinding
-    private lateinit var mParkingListViewModel: ParkingListViewModel
-    private var currentParking: Parking? = null
+    private var currentParkingIndex: Int = 5
+
+    private lateinit var mParkingViewModel : ParkingItemViewModel
+    private var mAdapterTarif: TarifsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
-            currentParking = it.getParcelable("PARKING")
+            currentParkingIndex = it.getInt("PARKINGINDEX")
         }
 
 
@@ -53,17 +60,20 @@ class ParkingDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        mParkingListViewModel = ViewModelProviders.of(this)
-            .get(ParkingListViewModel::class.java)
-       /* mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
-        {
-            mAdapter.notifyDataSetChanged()
-        })*/
-
         binding =
             DataBindingUtil.inflate(inflater, R.layout.activity_parking_details, container, false)
-        binding.parking = currentParking
+       /* binding.parking = currentParking*/
+        val factory = ParkingItemViewModelFactory(currentParkingIndex, ParkingListRepository.getInstance())
+
+        mParkingViewModel = ViewModelProviders.of(this, factory)
+            .get(ParkingItemViewModel::class.java)
+
+        mParkingViewModel.getParkingItem().observe(this, Observer<Parking>
+        {
+            mAdapterTarif?.updateList(it.tarifs)
+
+        })
+        binding.parking = mParkingViewModel
         val toolbar = binding.root.toolbar
 
         toolbar.inflateMenu(R.menu.parking_details_menu)
@@ -82,7 +92,7 @@ class ParkingDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        loadBackground(image_info_parking, currentParking?.imageUrl)
+        loadBackground(image_info_parking, mParkingViewModel.getImageUrl())
 
         showHoraireList()
         showTarifsList()
@@ -92,7 +102,7 @@ class ParkingDetailFragment : Fragment() {
 
         //reserve btn click listener
         reserver.setOnClickListener {
-            val i = ReservationActivity.newIntent(context!!,currentParking!!)
+            val i = ReservationActivity.newIntent(context!!,mParkingViewModel.getParkingItem().value!!)
             startActivity(i)
         }
     }
@@ -102,7 +112,7 @@ class ParkingDetailFragment : Fragment() {
         var recyclerview = binding.root.horaire_list
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter = HoraireAdapter(
-            mParkingListViewModel.getHoraires(currentParking!!),
+            mParkingViewModel.getHoraires(),
             object : MyAdapter.ItemAdapterListener<Horaire> {
                 override fun onItemClicked(item: Horaire) {
                     Log.d("Horaire clicked", item.Jours)
@@ -117,7 +127,7 @@ class ParkingDetailFragment : Fragment() {
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter =
             TarifsAdapter(
-               mParkingListViewModel.getTarifs(currentParking!!),
+               mParkingViewModel.getTarifs(),
                 object : MyAdapter.ItemAdapterListener<Tarif> {
                     override fun onItemClicked(item: Tarif) {
                         Log.d("tarifs clicked", item.prix.toString())
@@ -132,7 +142,7 @@ class ParkingDetailFragment : Fragment() {
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter =
             PaiementAdapter(
-                mParkingListViewModel.getPaiements(currentParking!!),
+                mParkingViewModel.getPaiments(),
                 object : MyAdapter.ItemAdapterListener<Paiement> {
                     override fun onItemClicked(item: Paiement) {
                         Log.d("Paiement clicked", item.type)
@@ -146,7 +156,7 @@ class ParkingDetailFragment : Fragment() {
         val recyclerview = binding.root.equipement_list
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter = EquipementAdapter(
-            mParkingListViewModel.getEquipements(currentParking!!),
+            mParkingViewModel.getEquipements(),
             object : MyAdapter.ItemAdapterListener<Equipement> {
                 override fun onItemClicked(item: Equipement) {
                     Log.d("Equipement clicked", item.designation)
@@ -162,7 +172,7 @@ class ParkingDetailFragment : Fragment() {
         val recyclerview = binding.root.terms_list
         recyclerview.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val adapter = TermsAdapter(
-            mParkingListViewModel.getTermes(currentParking!!),
+            mParkingViewModel.getTermes(),
             object : MyAdapter.ItemAdapterListener<Terme> {
                 override fun onItemClicked(item: Terme) {
                     Log.d("Term clicked", item.contenu)
@@ -176,10 +186,12 @@ class ParkingDetailFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(parking: Parking) =
+        fun newInstance(/*parking: Parking*/index: Int) =
             ParkingDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable("PARKING", parking)
+                    /*putParcelable("PARKING", parking)*/
+                    putInt("PARKINGINDEX", index)
+
                 }
             }
     }

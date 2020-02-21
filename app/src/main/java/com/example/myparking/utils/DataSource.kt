@@ -101,7 +101,7 @@ object DataSource {
         return parkingsList
     }
 
-    fun getHoraire(parking: Parking?): ArrayList<Horaire> {
+    /*fun getHoraire(parking: Parking?): ArrayList<Horaire> {
         val list = ArrayList<Horaire>()
         parking?.let {
             parking?.horaire?.let {
@@ -110,7 +110,7 @@ object DataSource {
 
         }
         return list
-    }
+    }*/
 
     fun getTarifs(parking: Parking?): ArrayList<Tarif> {
         val list = ArrayList<Tarif>()
