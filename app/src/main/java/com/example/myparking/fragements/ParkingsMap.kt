@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
+import com.example.myparking.activities.ParkingsDetailsContainer
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.ParkingCarouselAdapter
 import com.example.myparking.databinding.FragmentParkingsMapBinding
@@ -324,6 +325,11 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         val listener = object : MyAdapter.ItemAdapterListener<Parking> {
             override fun onItemClicked(item: Parking) {
                 Log.d("Parking Model clicked", item.nom)
+                val intent = ParkingsDetailsContainer.newIntent(
+                    activity as Context,
+                    parkings!!, parkings.indexOf(item)!!
+                )
+                startActivity(intent)
             }
 
         }
