@@ -13,6 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
@@ -23,6 +25,7 @@ import com.example.myparking.databinding.ParkingCarouselItemBinding
 
 import com.example.myparking.models.Parking
 import com.example.myparking.models.ParkingModel
+import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.DataSource
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
@@ -31,6 +34,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.MapView
 import com.example.myparking.utils.MapsUtils
+import com.example.myparking.viewmodels.ParkingListViewModel
+import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -60,14 +65,15 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     private lateinit var carousel: DiscreteScrollView
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
-    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<ParkingModel, ParkingCarouselItemBinding>.MyViewHolder>
+    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<Parking, ParkingCarouselItemBinding>.MyViewHolder>
 
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
-    private var parkings: ArrayList<ParkingModel> = arrayListOf()
+    private var parkings: ArrayList<Parking> = arrayListOf()
     private var markers: ArrayList<Marker> = arrayListOf()
 
     private lateinit var binding: FragmentParkingsMapBinding
+    private lateinit var mParkingListViewModel: ParkingListViewModel
 
     /**
      * Request location from Maps Util
@@ -95,11 +101,11 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         mMap.setMinZoomPreference(10.0f)
         mMap.setMaxZoomPreference(20.0f)
         var r = 0
-        parkings.forEach {
+        parkings?.forEach {
             val pin = mMap.addMarker(
                 MarkerOptions()
-                    .position(LatLng(it.lat, it.long))
-                    .title(it.name)
+                    .position(LatLng(it.lattitude, it.longitude))
+                    .title(it.nom)
                     .icon(
                         BitmapDescriptorFactory.fromBitmap(
                             MapsUtils.createCustomMarker(
@@ -125,7 +131,7 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         Log.d("dialod not ", "not")
         //val parking = p0?.tag as ParkingModel
 //        ParkingBottomSheet.newInstance(parking).show(activity?.supportFragmentManager,"ActionBottomDialog")
-        val target = parkings.indexOf(p0?.tag as ParkingModel)
+        val target = parkings.indexOf(p0?.tag as Parking)
         if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
             carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(target))
         }else {
@@ -208,7 +214,7 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 //        {'id_parking': 'ChIJo1-bR81RjhIRnSAl4fxq4xQ', 'name': 'Parking Marche', 'location': [36.7169083, 3.1875255], 'places': 13},
 //        {'id_parking': 'ChIJMYWLDY1RjhIRqzl9svJjJ2I', 'name': 'Parking au visiteurs', 'location': [36.7158669, 3.1865293], 'places': 18}
 //        ]
-        parkings.addAll(
+       /* parkings.addAll(
             listOf(
                 ParkingModel(
                     "ChIJwa_rIPhRjhIRWG5EvXi9l6s",
@@ -236,6 +242,14 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 )
             )
         )
+*/
+        /*val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
+        Log.d("instanceGot", ParkingListRepository.getInstance().)
+        mParkingListViewModel = ViewModelProviders.of(this, factory)
+            .get(ParkingListViewModel::class.java)*/
+        Log.d("beforegetting","g")
+        Log.d("instanceGot", ParkingListRepository.getInstance().getParkings()[0].nom)
+        parkings = ParkingListRepository.getInstance().getParkings()
 
 
     }
@@ -255,6 +269,14 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
         //val rootView = inflater.inflate(R.layout.fragment_parkings_map, container, false)
         val rootView = binding.root
+       /* mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
+        {
+            parkings.clear()
+            parkings.addAll(it)
+            infiniteAdapter?.notifyDataSetChanged()
+
+
+        })*/
 //        binding =
 //            DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
         //val rootView = binding.root
@@ -299,9 +321,9 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         carousel.setOffscreenItems(1)
         carousel.setSlideOnFling(true)
-        val listener = object : MyAdapter.ItemAdapterListener<ParkingModel> {
-            override fun onItemClicked(item: ParkingModel) {
-                Log.d("Parking Model clicked", item.name)
+        val listener = object : MyAdapter.ItemAdapterListener<Parking> {
+            override fun onItemClicked(item: Parking) {
+                Log.d("Parking Model clicked", item.nom)
             }
 
         }

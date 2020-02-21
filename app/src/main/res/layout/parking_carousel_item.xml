@@ -5,7 +5,7 @@
     <data>
         <variable
             name="parking"
-            type="com.example.myparking.models.ParkingModel" />
+            type="com.example.myparking.models.Parking" />
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="320dp"
@@ -75,7 +75,7 @@
                             android:id="@+id/title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@{parking.name}"
+                            android:text="@{parking.nom}"
                             android:textColor="#000000"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@+id/textView3"
@@ -86,7 +86,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLines="2"
-                            android:text="4700 Kingsway Burnaby, Mohamedia Alger   "
+                            android:text="@{parking.adresse}"
                             app:layout_constraintBottom_toTopOf="@+id/textView4"
                             app:layout_constraintTop_toBottomOf="@+id/title" />
 
