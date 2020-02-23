@@ -1,5 +1,6 @@
 package com.example.myparking
 
+import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -12,8 +13,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.CursorAdapter
+import android.widget.ListAdapter
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.myparking.activities.FavoriteParkingsActivity
 import com.example.myparking.activities.MesReservationsActivity
@@ -22,6 +32,8 @@ import com.example.myparking.activities.MesReservationsActivity
 import com.example.myparking.fragements.FilterDialogFragment
 import com.example.myparking.fragements.ParkingsList
 import com.example.myparking.fragements.ParkingsMap
+import com.example.myparking.fragements.SearchDialogFragment
+import com.example.myparking.models.SearchModel
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.utils.NetworkReceiver
 import com.google.android.libraries.places.api.Places
@@ -33,7 +45,6 @@ import com.luseen.spacenavigation.SpaceNavigationView
 import com.luseen.spacenavigation.SpaceOnClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.android.libraries.places.widget.AutocompleteActivity
-
 /**
  * Main activity
  * This activity contains two view: Map view and List view*
@@ -97,6 +108,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         spaceNavigationView.setSpaceOnClickListener(this)
 
         onItemClick(0,"Liste")
+
+
+
 
     }
 
@@ -191,7 +205,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_search -> {
                 Log.d("CLICK", "SEARCH BTN CLICKED")
-                startAutoCompleteIntent()
+                val dialog = SearchDialogFragment()
+                dialog.show(supportFragmentManager, dialog.TAG1)
+                //onSearchRequested()
+                //startAutoCompleteIntent()
                 return true
             }
         }
