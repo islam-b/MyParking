@@ -60,9 +60,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+           <!-- <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content">-->
 
                 <LinearLayout
                     android:id="@+id/info_reseravtion_card"
@@ -70,17 +70,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingEnd="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                   >
 
                     <ImageView
+                        android:id="@+id/qr_image"
                         android:layout_width="match_parent"
                         android:layout_height="180dp"
                         android:layout_weight="1.5"
                         android:padding="16dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/code_qr" />
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -100,7 +99,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="@{reservation.code_res}"
+                                android:text="DZ-8796475"
                                 android:textColor="@color/inactiveDot" />
 
                             <TextView
@@ -110,7 +109,7 @@
                                 android:layout_weight="0.5"
                                 android:gravity="end"
                                 android:text="@{reservation.parking.ouvert}"
-                                android:textColor="@color/authorized"
+                                android:textColor='@{reservation.parking.ouvert == "Ouvert" ? @color/authorized: @color/colorPrimary}'
                                 android:textSize="14sp" />
 
                             <TextView
@@ -119,7 +118,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
                                 android:gravity="end"
-                                android:text="@{reservation.parking.nbPlaces}"
+                                android:text=" - 50%"
                                 android:textSize="14sp" />
 
                         </LinearLayout>  <!-- opeend - 50%-->
@@ -157,7 +156,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.7"
                                 android:gravity="end"
-                                android:text="@{reservation.entree}"
+                                android:text="@{reservation.dateEntreePrevue}"
                                 android:textSize="16sp" />
                         </LinearLayout> <!--entree-->
 
@@ -184,7 +183,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.7"
                                 android:gravity="end"
-                                android:text="@{reservation.sortie}"
+                                android:text="@{reservation.dateSortiePrevue}"
                                 android:textSize="16sp" />
                         </LinearLayout> <!-- sortie -->
 
@@ -193,11 +192,11 @@
 
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+           <!-- </androidx.constraintlayout.widget.ConstraintLayout>-->
         </FrameLayout>
 
         <View
-            android:id="@+id/divider8"
+            android:id="@+id/divider997"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />

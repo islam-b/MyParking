@@ -2,6 +2,7 @@ package com.example.myparking.utils
 
 import com.example.myparking.R
 import com.example.myparking.models.*
+import com.example.myparking.repositories.ReservationListRepository
 
 object DataSource {
     var parkingsList = ArrayList<Parking>()
@@ -176,14 +177,15 @@ object DataSource {
 */
 
     fun getReservations(): ArrayList<Reservation> {
-        var list = ArrayList<Reservation>()
+       /* var list = ArrayList<Reservation>()
         val reservation1 =
             Reservation("DZ-1245869", "Lun, Déc 16 12.40", "Lun, Déc 16 13.40", parkingsList[0])
         val reservation2 =
             Reservation("DZ-1478574", "Lun, Déc 16 15.40", "Lun, Déc 16 18.40", parkingsList[1])
         list.add(reservation1)
         list.add(reservation2)
-        return list
+        return list*/
+        return ReservationListRepository.getInstance().getReservations()
 
     }
 

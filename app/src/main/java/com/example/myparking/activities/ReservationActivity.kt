@@ -10,7 +10,9 @@ import android.util.Log
 import android.widget.TimePicker
 
 import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -22,6 +24,8 @@ import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.TarifsAdapter
 import com.example.myparking.databinding.ActivityReservationBinding
 import com.example.myparking.models.*
+import com.example.myparking.repositories.ReservationListRepository
+import com.example.myparking.services.ReservationRequest
 
 import com.example.myparking.utils.DataSource
 import kotlinx.android.synthetic.main.activity_reservation.*
@@ -29,12 +33,18 @@ import kotlinx.android.synthetic.main.activity_reservation.*
 import java.util.*
 
 import kotlinx.android.synthetic.main.reservation_dialog.view.*
+import java.text.SimpleDateFormat
 
 
-class ReservationActivity : AppCompatActivity(){
+class ReservationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReservationBinding
-    private lateinit var currentParking : Parking
+    private lateinit var currentParking: Parking
+    private lateinit var dateEntree: String
+    private lateinit var dateSortie: String
+    private lateinit var mDialogSuccuess : View
+    val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.FRANCE)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,56 +69,86 @@ class ReservationActivity : AppCompatActivity(){
         //initTarifsLists()
         initDurationsList()
         confirm_btn.setOnClickListener {
-            val mDialogView = LayoutInflater.from(this).inflate(R.layout.reservation_dialog, null)
-            val mBuilder = AlertDialog.Builder(this)
-                .setView(mDialogView)
+            // create Reservation
+            val date = Calendar.getInstance().time
+            Log.d("dateentree", dateEntree)
+            Log.d("datesortie", dateSortie)
+            val reservationRequest = ReservationRequest(
+                dateEntree,
+                dateSortie,
+                currentParking.idParking.toString(),
+                "1",
+                "1",
+                PaiementInstance("89", "5846", df.format(date))
+            )
+            ReservationListRepository.getInstance().getCreatedReservation(reservationRequest)
+                .observe(this, Observer<Reservation> {res ->
+                    val mBuilder = AlertDialog.Builder(this)
+                        .setView(mDialogSuccuess)
+
+                    val mAlertDialog = mBuilder.show()
+                    mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+                    mDialogSuccuess.see_details_btn.setOnClickListener {
+
+                        val reservationDetailsActivity =
+                            ReservationDetailsActivity.newIntent(this, res!!)
+                        startActivity(reservationDetailsActivity)
+                        finish()
+
+                    }
+
+                })
+            mDialogSuccuess = LayoutInflater.from(this).inflate(R.layout.reservation_dialog, null)
+          /*  val mBuilder = AlertDialog.Builder(this)
+                .setView(mDialogSuccuess)
 
             val mAlertDialog = mBuilder.show()
-            mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            mDialogView.see_details_btn.setOnClickListener{
+            mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) */
+          /*  mDialogView.see_details_btn.setOnClickListener {
+
                 // real data of reseravtion later
-                val reservation = Reservation("DZ - 12458647", "Lun, déc 16 12.40", " Lun, déc 16 13.40", currentParking)
-                val reservationDetailsActivity = ReservationDetailsActivity.newIntent(this, reservation)
+                // val reservation = Reservation("DZ - 12458647", "Lun, déc 16 12.40", " Lun, déc 16 13.40", currentParking)
+                val reservations = ReservationListRepository.getInstance().getReservations()
+                val reservation =
+                    reservations.find { res -> res.parking.idParking == currentParking.idParking }
+                val reservationDetailsActivity =
+                    ReservationDetailsActivity.newIntent(this, reservation!!)
                 startActivity(reservationDetailsActivity)
                 finish()
 
-            }
+            }*/
 
         }
     }
 
-/*
-    fun initTarifsLists() {
-        val recyclerView = tarifs_container
-        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        val list = arrayListOf(
-            Tarif("1 heure","100 DZD"),
-            Tarif("2 heure","200 DZD"),
-            Tarif("3 heure","300 DZD")
-        )
-        val adapter = TarifsAdapter(list, object : MyAdapter.ItemAdapterListener<Tarif> {
-            override fun onItemClicked(item: Tarif) {
-                Log.d("tarifs clicked", item.tarif_sum)
-            }
-
-        })
-        recyclerView.adapter = adapter
-    }
-*/
 
     fun initDurationsList() {
 
         val c = Calendar.getInstance()
         var hourIN = c.get(Calendar.HOUR_OF_DAY)
         var minuteIN = c.get(Calendar.MINUTE)
-        c.add(Calendar.HOUR_OF_DAY,2)
+        dateEntree = df.format(c.time)
+        c.add(Calendar.HOUR_OF_DAY, 2)
         var hourOUT = c.get(Calendar.HOUR_OF_DAY)
         var minuteOUT = c.get(Calendar.MINUTE)
-        c.add(Calendar.HOUR_OF_DAY,-2)
+        dateSortie = df.format(c.time)
+        c.add(Calendar.HOUR_OF_DAY, -2)
 
-        val IN = Duration("Entrée",String.format("%02d:%02d",hourIN,minuteIN), R.drawable.ic_hourglass_full,"IN",true)
-        val OUT = Duration("Sortie",String.format("%02d:%02d",hourOUT,minuteOUT), R.drawable.ic_hourglass_empty, "OUT",true)
-        val TOTAL = Duration("Temps total","2 heures", R.drawable.ic_timer, "TIME",false)
+        val IN = Duration(
+            "Entrée",
+            String.format("%02d:%02d", hourIN, minuteIN),
+            R.drawable.ic_hourglass_full,
+            "IN",
+            true
+        )
+        val OUT = Duration(
+            "Sortie",
+            String.format("%02d:%02d", hourOUT, minuteOUT),
+            R.drawable.ic_hourglass_empty,
+            "OUT",
+            true
+        )
+        val TOTAL = Duration("Temps total", "2 heures", R.drawable.ic_timer, "TIME", false)
 
         val recyclerView = duration_container
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
@@ -120,59 +160,71 @@ class ReservationActivity : AppCompatActivity(){
         val context = this
 
 
-        var adapter = DurationAdapter(list,object: MyAdapter.ItemAdapterListener<Duration> {
+        var adapter = DurationAdapter(list, object : MyAdapter.ItemAdapterListener<Duration> {
             override fun onItemClicked(item: Duration) {
             }
 
         })
-        val listener = object: MyAdapter.ItemAdapterListener<Duration> {
+        val listener = object : MyAdapter.ItemAdapterListener<Duration> {
 
             override fun onItemClicked(item: Duration) {
+                val c = Calendar.getInstance().time
+
                 when (item.TAG) {
-                    "IN"->{
-                        TimePickerDialog(context,
+                    "IN" -> {
+                        TimePickerDialog(
+                            context,
                             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                                 hourIN = hourOfDay
                                 minuteIN = minute
-                                IN.text2 = String.format("%02d:%02d",hourOfDay,minute)
+                                IN.text2 = String.format("%02d:%02d", hourOfDay, minute)
                                 updateTotal()
                                 adapter.notifyDataSetChanged()
-                            },hourIN,minuteIN,true).show()
+                                c.hours = hourOfDay
+                                c.minutes = minute
+                                dateEntree = df.format(c)
+                            }, hourIN, minuteIN, true
+                        ).show()
                     }
-                    "OUT"->{
-                        TimePickerDialog(context,
+                    "OUT" -> {
+                        TimePickerDialog(
+                            context,
                             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                                 hourOUT = hourOfDay
                                 minuteOUT = minute
-                                OUT.text2 = String.format("%02d:%02d",hourOfDay,minute)
+                                OUT.text2 = String.format("%02d:%02d", hourOfDay, minute)
                                 updateTotal()
                                 adapter.notifyDataSetChanged()
-                            },hourOUT,minuteOUT,true).show()
+                                c.hours = hourOfDay
+                                c.minutes = minute
+                                dateSortie = df.format(c)
+                            }, hourOUT, minuteOUT, true
+                        ).show()
                     }
                 }
             }
+
             fun updateTotal() {
                 val c1 = Calendar.getInstance()
                 val c2 = Calendar.getInstance()
-                c1.set(Calendar.HOUR_OF_DAY,hourIN)
-                c1.set(Calendar.MINUTE,minuteIN)
-                c2.set(Calendar.HOUR_OF_DAY,hourOUT)
-                c2.set(Calendar.MINUTE,minuteOUT)
+                c1.set(Calendar.HOUR_OF_DAY, hourIN)
+                c1.set(Calendar.MINUTE, minuteIN)
+                c2.set(Calendar.HOUR_OF_DAY, hourOUT)
+                c2.set(Calendar.MINUTE, minuteOUT)
                 val diff = c2.time.time - c1.time.time
-                val  seconds = diff / 1000
+                val seconds = diff / 1000
                 val minutes = seconds / 60
                 val hours = minutes / 60
-                TOTAL.text2 = String.format("%02d heures",hours)
+                TOTAL.text2 = String.format("%02d heures", hours)
             }
         }
-        adapter = DurationAdapter(list, listener )
+        adapter = DurationAdapter(list, listener)
         recyclerView.adapter = adapter
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
     }
-
 
 
     companion object {

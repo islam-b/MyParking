@@ -26,7 +26,7 @@ data class Parking
     val tarifs :  ArrayList<Tarif>,
     val equipements: ArrayList<Equipement>,
     val termes: ArrayList<Terme>,
-    val routeInfo : RouteInfo
+    val routeInfo : RouteInfo?
     /*val opened: String = "",
     val capacity: String = "",
     val name: String = "",

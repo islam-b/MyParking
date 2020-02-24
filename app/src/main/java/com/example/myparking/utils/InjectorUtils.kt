@@ -1,7 +1,9 @@
 package com.example.myparking.utils
 
+import android.util.Log
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.services.ParkingService
+import com.example.myparking.services.ReservationService
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -18,6 +20,7 @@ object InjectorUtils {
     }
 
     private fun provideRetrofit(): Retrofit {
+        Log.d("retrofit inst", "INSTA")
         return Retrofit.Builder()
             .baseUrl(baseURL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -31,6 +34,9 @@ object InjectorUtils {
     }
     fun provideParkingService(): ParkingService {
         return retrofit.create(ParkingService::class.java)
+    }
+    fun provideReservationService(): ReservationService {
+        return retrofit.create(ReservationService::class.java)
     }
 
 }

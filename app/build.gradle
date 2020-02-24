@@ -97,6 +97,9 @@ dependencies {
 
 
     kapt "com.android.databinding:compiler:$android_plugin_version"
+
+/*    // localdatetime for api level < 26
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'*/
 }
 androidExtensions {
     experimental = true

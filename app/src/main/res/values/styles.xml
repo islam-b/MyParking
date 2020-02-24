@@ -53,6 +53,10 @@
         <item name="android:backgroundTint">@color/facebook</item>
     </style>
 
+    <style name="DialogAnimation_Zoom_In">
+        <item name="android:windowEnterAnimation">@anim/anim_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_out</item>
+    </style>
 
 
 

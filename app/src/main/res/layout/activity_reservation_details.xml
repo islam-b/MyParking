@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -85,7 +84,7 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="@{reservation.state}"
+                            android:text="En cours"
                             android:backgroundTint="@color/authorized"
                             android:textColor="@color/white"
                             android:layout_margin="16dp"
@@ -118,12 +117,13 @@
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/qrImage"
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
                             android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/code_qr" />
+                             />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -186,7 +186,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:paddingStart="16dp"
-                            android:text="@{reservation.place}"
+                            android:text="E05-P084"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -221,7 +221,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:paddingStart="16dp"
-                            android:text="@{reservation.code_res}"
+                            android:text="DZ-7854961"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -279,7 +279,7 @@
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:paddingEnd="16dp"
-                                android:text="@{reservation.entree}"
+                                android:text="@{reservation.dateEntreeEffective}"
                                 android:textSize="16sp" />
                         </LinearLayout>
 
@@ -314,7 +314,7 @@
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:paddingEnd="16dp"
-                                android:text="@{reservation.sortie}"
+                                android:text="@{reservation.dateSortieEffective}"
                                 android:textSize="16sp" />
                         </LinearLayout>
                     </LinearLayout>
