@@ -57,6 +57,7 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_list, container, false)
         recyclerview = binding.parkingsList
+
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
 
         mParkingListViewModel = ViewModelProviders.of(this, factory)

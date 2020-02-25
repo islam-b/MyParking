@@ -50,8 +50,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
-    private  var currentItem = 0
+    private var currentItem : Int? = 0
     val networkReceiver = NetworkReceiver()
+    private lateinit var spaceNavigationView : SpaceNavigationView
 
     /**
      * This function initialize the main activity:
@@ -63,6 +64,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //NetworkUtil.registerConnectivityNetworkMonitor(this)
+        val bundle = intent.extras
+        bundle?.let {
+            bundle.apply {
+                currentItem = getInt("CURRENT_VIEW")
+                Log.d("curreenTTT", currentItem.toString())
+            }
+        }
 
         registerReceiver(networkReceiver, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
 
@@ -89,16 +97,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         toolbar.setNavigationIcon(R.drawable.ic_menu)
 
-        val spaceNavigationView = nav_view as SpaceNavigationView
+        spaceNavigationView = nav_view as SpaceNavigationView
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState)
         spaceNavigationView.addSpaceItem(SpaceItem(0,"Liste", R.drawable.list_view))
         spaceNavigationView.addSpaceItem(SpaceItem(1,"Carte", R.drawable.map_view))
         spaceNavigationView.setCentreButtonIconColorFilterEnabled(false)
         spaceNavigationView.setSpaceOnClickListener(this)
+        //spaceNavigationView.changeCurrentItem(currentItem!!)
 
-        onItemClick(0,"Liste")
+        var itemName ="Liste"
+        if (currentItem == 1)  itemName = "Carte"
+        onItemClick(currentItem!!,itemName)
 
     }
+
 
     /**
      * This function opens the filter dialog, it is triggered when the user click on the filter button
@@ -134,6 +146,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onItemReselected(itemIndex: Int, itemName: String?) {
 
     }
+
 
 
     /**
@@ -242,8 +255,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * Create new intent to start the main activity
          * @return new main activity intent
          */
-        fun newIntent(context: Context): Intent {
+        fun newIntent(context: Context, currentView: Int): Intent {
             val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("CURRENT_VIEW", currentView)
             return intent
         }
     }

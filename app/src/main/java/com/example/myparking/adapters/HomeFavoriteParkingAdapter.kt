@@ -1,6 +1,7 @@
 package com.example.myparking.adapters
 
 
+import android.util.Log
 import com.example.myparking.R
 import com.example.myparking.databinding.HomeFavoriteParkingItemBinding
 import com.example.myparking.databinding.HomeProposedParkingItemBinding
@@ -13,6 +14,7 @@ class HomeFavoriteParkingAdapter(val parkingsList : ArrayList<Parking>, val list
 {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        Log.d("favoritee", parkingsList[position].nom)
         holder.binding.parking = parkingsList[position]
         holder.binding.root.home_fav_parking.setOnClickListener{
             listener.onItemClicked(parkingsList[position])

@@ -98,7 +98,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
-                            android:id="@+id/text21"
+                            android:id="@+id/see_more_parkings"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -185,7 +185,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
-                            android:id="@+id/textView22"
+                            android:id="@+id/see_more_reservations"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -280,7 +280,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Button
-                            android:id="@+id/button2"
+                            android:id="@+id/vue_carte_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="24dp"
@@ -340,7 +340,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
-                            android:id="@+id/textView23"
+                            android:id="@+id/see_more_favorites"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"

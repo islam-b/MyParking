@@ -14,6 +14,7 @@ import retrofit2.Retrofit
 class ParkingListRepository { // maybe add dao
 
     private var dataSet = ArrayList<Parking>()
+
     var service: ParkingService
 
     init {
@@ -23,16 +24,31 @@ class ParkingListRepository { // maybe add dao
 
     fun getParkingsList (): MutableLiveData<ArrayList<Parking>>{
         var data = MutableLiveData<ArrayList<Parking>>()
-        service.findParkings().enqueue(object: Callback<List<Parking>> {
-            override fun onFailure(call: Call<List<Parking>>, t: Throwable) {
-            }
-            override fun onResponse(call: Call<List<Parking>>, response: Response<List<Parking>>) {
-                dataSet = ArrayList(response.body()!!)
-                data.value = dataSet
-            }
-        })
+
+        if (dataSet.size == 0 || dataSet.isEmpty()) {
+            service.findParkings().enqueue(object : Callback<List<Parking>> {
+                override fun onFailure(call: Call<List<Parking>>, t: Throwable) {
+                }
+
+                override fun onResponse(
+                    call: Call<List<Parking>>,
+                    response: Response<List<Parking>>
+                ) {
+                    dataSet = ArrayList(response.body()!!)
+                    data.value = dataSet
+
+                }
+            })
+            return data
+        }
+        data.value= dataSet
         return data
     }
+   /* fun getParkingItem(index: Int) : Parking {
+        if (dataSet.find { parking -> parking.idParking == index })!=null) {
+            getParkingsList()
+        }
+    }*/
     fun getParkings(): ArrayList<Parking> {
         return dataSet
     }
