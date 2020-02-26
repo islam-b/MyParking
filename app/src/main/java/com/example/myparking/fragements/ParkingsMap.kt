@@ -22,6 +22,7 @@ import com.example.myparking.activities.ParkingsDetailsContainer
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.ParkingCarouselAdapter
 import com.example.myparking.databinding.FragmentParkingsMapBinding
+import com.example.myparking.databinding.ParkingCarouselItem2Binding
 import com.example.myparking.databinding.ParkingCarouselItemBinding
 
 import com.example.myparking.models.Parking
@@ -66,7 +67,7 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     private lateinit var carousel: DiscreteScrollView
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
-    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<Parking, ParkingCarouselItemBinding>.MyViewHolder>
+    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<Parking, ParkingCarouselItem2Binding>.MyViewHolder>
 
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
