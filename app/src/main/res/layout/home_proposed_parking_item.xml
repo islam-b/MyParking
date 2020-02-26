@@ -123,14 +123,43 @@
                     android:text="@{parking.adresse.substring(0,16)}"
                     android:textSize="12sp" />
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/textView17"
                     android:layout_width="match_parent"
                     android:lines="1"
                     android:layout_height="wrap_content"
                     android:text="5 Min de marche."
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp" />-->
+                <LinearLayout
+                    android:id="@+id/bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@{ parking.isWalkable() ? @drawable/ic_walking_person : @drawable/ic_car}"
+                        />
+
+                    <TextView
+                        android:id="@+id/distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{parking.getDistance()}"
+                        android:textColor="@color/info"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/walk_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{parking.getTime()}"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

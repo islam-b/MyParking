@@ -45,7 +45,7 @@ private lateinit var binding : ActivityFavoriteParkingsBinding
         Log.d("parking clicked", "cc")
         val l =DataSource.getParkings()
         val i = l.indexOf(item)
-        startActivity(ParkingsDetailsContainer.newIntent(this,l,i))
+        startActivity(ParkingsDetailsContainer.newIntent(this,l,item.idParking))
         finish()
     }
 

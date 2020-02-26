@@ -62,7 +62,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/topper"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         >
@@ -71,10 +71,10 @@
                             android:id="@+id/opened"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:text='@{parking.getOuvert()}'
                             android:textColor='@{parking.isOuvert() ? @color/authorized: @color/colorPrimary}'
                             android:textSize="14sp"
+                            android:gravity="start"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/capacity"
                             app:layout_constraintStart_toStartOf="parent"
@@ -85,41 +85,47 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="80dp"
-                            android:layout_weight="2"
-                            android:text=" - 50%"
+                            android:gravity="start"
+                            android:text="@{parking.getParking().getCapacity()}"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/distance"
                             app:layout_constraintStart_toEndOf="@+id/opened"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/icon_travel_mean"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@{ parking.getParking().isWalkable() ? @drawable/ic_walking_person : @drawable/ic_car}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/distance"
+                            app:layout_constraintTop_toTopOf="parent"
+
+                            />
 
                         <TextView
                             android:id="@+id/distance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:gravity="end"
-                            android:text="1.0 km -"
+                            android:text="@{parking.getParking().getDistance()}"
                             android:textColor="@color/info"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/opened"
+                            app:layout_constraintEnd_toStartOf="@id/walk_time"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/walk_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:text="5 min de marche."
+                            android:text="@{parking.getParking().getTime()}"
                             android:textSize="14sp"
+                            android:gravity="end"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="1.0"
-                            app:layout_constraintStart_toEndOf="@+id/distance"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0" />
+                            />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 

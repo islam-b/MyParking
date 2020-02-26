@@ -7,6 +7,7 @@ import kotlinx.android.parcel.RawValue
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.Glide
 import androidx.databinding.BindingAdapter
+import kotlin.math.roundToInt
 
 @Parcelize
 data class Parking
@@ -14,6 +15,7 @@ data class Parking
     val idParking: Int,
     val nbEtages: String,
     val nbPlaces: String,
+    val nbPlacesDisponibles: String,
     val nom: String,
     val adresse: String,
     val imageUrl: String,
@@ -39,4 +41,28 @@ data class Parking
     val paiements: ArrayList<Int>? = null,
     val equipements: ArrayList<Int>? = null,
     val termes: ArrayList<String>? = null*/
-):Parcelable
+):Parcelable {
+    fun getDistance(): String {
+        if (routeInfo?.canWalk!!) {
+            return "%.2f Km -".format(routeInfo.walkingDistance.toFloat().div(1000)!!)
+        }
+        return "%.2f Km -".format(routeInfo.travelDistance.toFloat().div(1000)!!)
+
+    }
+
+    fun getTime(): String {
+        if (routeInfo?.canWalk!!) {
+            return " %d min.".format(routeInfo.walkingTime.div(60))
+        }
+        return " %d min.".format(routeInfo.travelTime.div(60)!!)
+
+    }
+    fun isWalkable() : Boolean {
+        return routeInfo?.canWalk!!
+    }
+
+    fun getCapacity() : String {
+        val percentage =  nbPlacesDisponibles.toFloat().div(nbPlaces.toFloat()) * 100
+        return " - "+percentage.roundToInt().toString() + "%"
+    }
+}

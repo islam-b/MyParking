@@ -43,7 +43,7 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
         val list = mParkingListViewModel.getParkingsList().value
         val intent = ParkingsDetailsContainer.newIntent(
             this.activity as Context,
-            list!!, list.indexOf(item)!!
+            list!!, item.idParking
         )
         startActivity(intent)
     }
@@ -53,24 +53,33 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        Log.d("OnCreateViewList", "parkiings")
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_list, container, false)
+
         recyclerview = binding.parkingsList
-
+        Log.d("step","1")
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
-
+        Log.d("step","2")
         mParkingListViewModel = ViewModelProviders.of(this, factory)
             .get(ParkingListViewModel::class.java)
+        Log.d("step","3")
         showProgressBar()
-
+        Log.d("step","4")
         mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
         {
-            mAdapter?.updateList(it)
+            if (mAdapter!==null) {
+                mAdapter?.updateList(it)
+            } else {
+                Log.d("adapter", "null adapter")
+            }
+
             hideProgressBar()
 
         })
+        Log.d("step","5")
         initParkings()
+        Log.d("step","6")
         return binding.root
     }
 

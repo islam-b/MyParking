@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        registerReceiver(networkReceiver, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
+        // registerReceiver(networkReceiver, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
 
         setContentView(R.layout.activity_main2)
         MapsUtils.initLocationProvider(this)
@@ -103,13 +103,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         spaceNavigationView.addSpaceItem(SpaceItem(1,"Carte", R.drawable.map_view))
         spaceNavigationView.setCentreButtonIconColorFilterEnabled(false)
         spaceNavigationView.setSpaceOnClickListener(this)
-        //spaceNavigationView.changeCurrentItem(currentItem!!)
 
-        var itemName ="Liste"
-        if (currentItem == 1)  itemName = "Carte"
-        onItemClick(currentItem!!,itemName)
+
+
+            if (currentItem ==0 ) onItemClick(currentItem!!,"Liste")
+            else spaceNavigationView.changeCurrentItem(currentItem!!)
+
 
     }
+
 
 
     /**
@@ -129,8 +131,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onItemClick(itemIndex: Int, itemName: String?) {
         var fragment: Fragment
         currentItem = itemIndex
+        Log.d("item ",itemIndex.toString())
         when (itemIndex) {
             0-> {
+                Log.d("item clicked","item 0")
                 fragment = ParkingsList()
             }
             1-> {

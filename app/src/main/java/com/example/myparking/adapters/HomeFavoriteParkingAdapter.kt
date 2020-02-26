@@ -14,7 +14,7 @@ class HomeFavoriteParkingAdapter(val parkingsList : ArrayList<Parking>, val list
 {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        Log.d("favoritee", parkingsList[position].nom)
+
         holder.binding.parking = parkingsList[position]
         holder.binding.root.home_fav_parking.setOnClickListener{
             listener.onItemClicked(parkingsList[position])

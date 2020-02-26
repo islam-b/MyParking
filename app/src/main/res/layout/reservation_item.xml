@@ -99,7 +99,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="DZ-8796475"
+                                android:text="@{reservation.codeReservation}"
                                 android:textColor="@color/inactiveDot" />
 
                             <TextView
@@ -118,7 +118,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
                                 android:gravity="end"
-                                android:text=" - 50%"
+                                android:text="@{reservation.parking.getCapacity()}"
                                 android:textSize="14sp" />
 
                         </LinearLayout>  <!-- opeend - 50%-->
@@ -148,7 +148,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.8"
-                                android:text="Entree"
+                                android:text="Entrée"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -156,7 +156,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.7"
                                 android:gravity="end"
-                                android:text="@{reservation.dateEntreePrevue}"
+                                android:text="@{reservation.getDateEntree()}"
                                 android:textSize="16sp" />
                         </LinearLayout> <!--entree-->
 
@@ -183,7 +183,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.7"
                                 android:gravity="end"
-                                android:text="@{reservation.dateSortiePrevue}"
+                                android:text="@{reservation.getDateSortie()}"
                                 android:textSize="16sp" />
                         </LinearLayout> <!-- sortie -->
 

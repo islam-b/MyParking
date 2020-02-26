@@ -19,7 +19,7 @@ class ReservationAdapter(var listReservation : ArrayList<Reservation>,
         val mReservationViewModel = ViewModelProviders.of(, factory).get(ReservationItemViewModel::class.java)*/
         holder.binding.reservation = listReservation[position]
         loadImage(holder.binding.qrImage, listReservation[position].qrUrl)
-        holder.binding.root.my_reservation_fav.setOnClickListener{
+        holder.binding.root.info_reseravtion_card.setOnClickListener{
             listener.onItemClicked(listReservation[position])
         }
     }

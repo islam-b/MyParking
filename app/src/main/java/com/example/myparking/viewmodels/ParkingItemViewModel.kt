@@ -21,6 +21,9 @@ class ParkingItemViewModel(
     fun getParkingItem(): LiveData<Parking> { // can't change it only observe
         return mParking;
     }
+    fun getParking(): Parking {
+        return mParking.value!!
+    }
 
     fun getTarifs(): ArrayList<Tarif> {
         var tarifList = ArrayList<Tarif>()

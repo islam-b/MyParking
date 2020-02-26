@@ -39,6 +39,11 @@ class ParkingsDetailsContainer : AppCompatActivity() {
         initPaging()
     }
 
+    override fun onBackPressed() {
+        // if main not opened open it and go to it not to home
+        super.onBackPressed()
+    }
+
     private fun initPaging() {
         val fragmentsList= ArrayList<Fragment>()
         parkingsList?.forEach {
@@ -53,11 +58,11 @@ class ParkingsDetailsContainer : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context, list:ArrayList<Parking>, position: Int): Intent {
+        fun newIntent(context: Context, list:ArrayList<Parking>, idParking: Int): Intent {
             val intent = Intent(context, ParkingsDetailsContainer::class.java)
-            val parking = list[position]
-            intent.putExtra("PARKING", parking)
-            intent.putExtra("POSITION", position)
+            val parking = list.find{parking -> parking.idParking == idParking}
+            intent.putExtra("PARKING", parking!!)
+            intent.putExtra("POSITION", list.indexOf(parking!!))
             return intent
         }
     }

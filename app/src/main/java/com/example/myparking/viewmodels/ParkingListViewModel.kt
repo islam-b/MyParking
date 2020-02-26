@@ -11,6 +11,7 @@ class ParkingListViewModel (private val parkingListRepository: ParkingListReposi
     private var mParkingList: MutableLiveData<ArrayList<Parking>> = parkingListRepository.getParkingsList()
 
     fun getParkingsList(): LiveData<ArrayList<Parking>> { // can't change it only observe
+
         return mParkingList;
     }
 

@@ -36,6 +36,8 @@ import android.view.WindowManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.myparking.activities.MesReservationsActivity
+import com.example.myparking.activities.ParkingsDetailsContainer
+import com.example.myparking.activities.ReservationDetailsActivity
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.repositories.ReservationListRepository
 import com.example.myparking.viewmodels.ParkingListViewModel
@@ -97,9 +99,9 @@ class HomeActivity : AppCompatActivity() {
             .get(ParkingListViewModel::class.java)
         mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
         {list ->
-            val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.distance}))
-            mParkingListAdapter?.updateList(ArrayList(newList.take(3)))
-            mFavoriteParkings?.updateList(ArrayList(newList.takeLast(3)))
+            val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
+            mParkingListAdapter?.updateList(ArrayList(newList.takeLast(3)))
+            mFavoriteParkings?.updateList(ArrayList(newList.take(3)))
         })
         val factoryReservation = ReservationListViewModelFactory(1, ReservationListRepository.getInstance())
 
@@ -145,6 +147,14 @@ class HomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun goToParkingDetails( idParking: Int) {
+        startActivity(ParkingsDetailsContainer.newIntent(this,  mParkingListViewModel.getParkingsList().value!!, idParking))
+        finish()
+    }
+    fun goToReservationDetails( reservation: Reservation) {
+        startActivity(ReservationDetailsActivity.newIntent(this, reservation))
+        finish()
+    }
     /**
      * This function create the options for the toolbar menu
      * @return boolean value representing success or failure
@@ -159,7 +169,8 @@ class HomeActivity : AppCompatActivity() {
         near_parkings.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
         mParkingListAdapter = HomeParkingAdapter(nearParkingList,object:MyAdapter.ItemAdapterListener<Parking> {
             override fun onItemClicked(item: Parking) {
-
+                Log.d("itemClicked", item.nom + " " + item.idParking+ " " + nearParkingList.indexOf(item))
+                goToParkingDetails(item.idParking)
             }
 
         })
@@ -169,6 +180,7 @@ class HomeActivity : AppCompatActivity() {
         home_reservations_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
         mReservationListAdapter = HomeReservationAdapter(recentReservationList,object:MyAdapter.ItemAdapterListener<Reservation> {
             override fun onItemClicked(item: Reservation) {
+                goToReservationDetails(item)
 
             }
 
@@ -179,6 +191,7 @@ class HomeActivity : AppCompatActivity() {
         home_favorites_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
         mFavoriteParkings = HomeFavoriteParkingAdapter(nearParkingList /* to chnage */,object:MyAdapter.ItemAdapterListener<Parking> {
             override fun onItemClicked(item: Parking) {
+                goToParkingDetails(item.idParking)
 
             }
 

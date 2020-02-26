@@ -30,6 +30,7 @@ class ReservationListRepository { // maybe add dao
 
     fun getReservationsList(id: Int): MutableLiveData<ArrayList<Reservation>> {
         var data = MutableLiveData<ArrayList<Reservation>>()
+
         service.findReservations(id).enqueue(object : Callback<List<Reservation>> {
             override fun onFailure(call: Call<List<Reservation>>, t: Throwable) {
             }
@@ -85,7 +86,10 @@ class ReservationListRepository { // maybe add dao
                 it.parking,
                 it.automobiliste,
                 it.paiment,
-                it.paiementInstance
+                it.paiementInstance,
+                it.codeReservation,
+                it.etageAttribue,
+                it.placeAttribue
             )
             reservationsNew.add(newRes)
         }

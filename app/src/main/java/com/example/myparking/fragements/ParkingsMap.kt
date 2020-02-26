@@ -67,6 +67,7 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private lateinit var carousel: DiscreteScrollView
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
     private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<Parking, ParkingCarouselItemBinding>.MyViewHolder>
+    private  var mAdapter: ParkingCarouselAdapter? = null
 
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
@@ -203,56 +204,6 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         arguments?.let {
 
         }
-//        }
-//        {'id_parking': 'ChIJwa_rIPhRjhIRWG5EvXi9l6s', 'name': 'Parking de carrfour Alger', 'location': [36.7289608, 3.1794445], 'places': 13},
-//        {'id_parking': 'ChIJn365GQ1SjhIRusvV1OXvFJQ', 'name': 'Parking Safex Public', 'location': [36.7315206, 3.1593492], 'places': 15},
-//        {'id_parking': 'ChIJO2kzwh1SjhIRoyVikwECJYQ', 'name': 'Parking communal 100 places', 'location': [36.7245058, 3.1765598], 'places': 15},
-//        {'id_parking': 'ChIJfWcYsfZRjhIRBvNTVJdF5xg', 'name': 'Parking Daïra', 'location': [36.7243167, 3.1825472], 'places': 11},
-//        {'id_parking': 'ChIJZzTFn3VSjhIR-G7-af43cBU', 'name': 'Parking ABC Tower', 'location': [36.7390456, 3.1553383], 'places': 14},
-//        {'id_parking': 'ChIJicmhtXZSjhIR2rBuhVj-B2c', 'name': 'Parking Safex Public 2', 'location': [36.7351639, 3.1516975], 'places': 11},
-//        {'id_parking': 'ChIJQRomCyBSjhIRPLupkg99hiM', 'name': 'Parking El Djorf', 'location': [36.7168406, 3.1773357], 'places': 20},
-//        {'id_parking': 'ChIJ50cQ1ntTjhIR9XHYmB52be8', 'name': 'ERMA', 'location': [36.7150498, 3.1753268], 'places': 16},
-//        {'id_parking': 'ChIJo1-bR81RjhIRnSAl4fxq4xQ', 'name': 'Parking Marche', 'location': [36.7169083, 3.1875255], 'places': 13},
-//        {'id_parking': 'ChIJMYWLDY1RjhIRqzl9svJjJ2I', 'name': 'Parking au visiteurs', 'location': [36.7158669, 3.1865293], 'places': 18}
-//        ]
-       /* parkings.addAll(
-            listOf(
-                ParkingModel(
-                    "ChIJwa_rIPhRjhIRWG5EvXi9l6s",
-                    "Parking de carrfour Alger",
-                    36.7289608,
-                    3.1794445
-                ),
-                ParkingModel(
-                    "ChIJn365GQ1SjhIRusvV1OXvFJQ",
-                    "Parking Safex Public",
-                    36.7315206,
-                    3.1593492
-                ),
-                ParkingModel(
-                    "ChIJZzTFn3VSjhIR-G7-af43cBU",
-                    "Parking ABC Tower",
-                    36.7390456,
-                    3.1553383
-                ),
-                ParkingModel(
-                    "ChIJicmhtXZSjhIR2rBuhVj-B2c",
-                    "Parking Safex Public 2",
-                    36.7351639,
-                    3.1516975
-                )
-            )
-        )
-*/
-        /*val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
-        Log.d("instanceGot", ParkingListRepository.getInstance().)
-        mParkingListViewModel = ViewModelProviders.of(this, factory)
-            .get(ParkingListViewModel::class.java)*/
-        Log.d("beforegetting","g")
-        Log.d("instanceGot", ParkingListRepository.getInstance().getParkings()[0].nom)
-        parkings = ParkingListRepository.getInstance().getParkings()
-
-
     }
 
     /**
@@ -270,17 +221,33 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
         //val rootView = inflater.inflate(R.layout.fragment_parkings_map, container, false)
         val rootView = binding.root
-       /* mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
+
+        mParkingListViewModel = ViewModelProviders.of(this, factory)
+            .get(ParkingListViewModel::class.java)
+
+        mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
         {
-            parkings.clear()
-            parkings.addAll(it)
+            mAdapter?.updateList(it)
             infiniteAdapter?.notifyDataSetChanged()
 
+        })
+        val listener = object : MyAdapter.ItemAdapterListener<Parking> {
+            override fun onItemClicked(item: Parking) {
+                Log.d("Parking Model clicked", item.nom)
+                val intent = ParkingsDetailsContainer.newIntent(
+                    activity as Context,
+                    parkings!!, item.idParking!!
+                )
+                startActivity(intent)
+            }
 
-        })*/
-//        binding =
-//            DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
-        //val rootView = binding.root
+        }
+        mAdapter = ParkingCarouselAdapter(parkings, listener)
+        infiniteAdapter = InfiniteScrollAdapter.wrap(
+            mAdapter!!
+        )
+
         val llBottomSheet =  rootView.findViewById<LinearLayout>(R.id.bottom_sheet)
 
 // init the bottom sheet behavior
@@ -290,13 +257,6 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         mMapView = rootView.findViewById<MapView>(R.id.mapV)
-
-        //       val options = GoogleMapOptions()
-//        options.mapType(GoogleMap.MAP_TYPE_NORMAL)
-//            .compassEnabled(false)
-//            .rotateGesturesEnabled(false)
-//            .tiltGesturesEnabled(false)
-
 
         mMapView.onCreate(savedInstanceState)
 
@@ -322,20 +282,8 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         carousel.setOffscreenItems(1)
         carousel.setSlideOnFling(true)
-        val listener = object : MyAdapter.ItemAdapterListener<Parking> {
-            override fun onItemClicked(item: Parking) {
-                Log.d("Parking Model clicked", item.nom)
-                val intent = ParkingsDetailsContainer.newIntent(
-                    activity as Context,
-                    parkings!!, parkings.indexOf(item)!!
-                )
-                startActivity(intent)
-            }
 
-        }
-        infiniteAdapter = InfiniteScrollAdapter.wrap(
-            ParkingCarouselAdapter(parkings, listener)
-        )
+
         carousel.adapter = infiniteAdapter
         carousel.setItemTransformer(
             ScaleTransformer.Builder()

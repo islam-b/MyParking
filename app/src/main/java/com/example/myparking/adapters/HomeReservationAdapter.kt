@@ -20,8 +20,10 @@ class HomeReservationAdapter(val reservationList : ArrayList<Reservation>, val l
         loadImage(holder.binding.root.imageView6, reservationList[position].qrUrl)
         val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.FRANCE)
         val newFormatter = SimpleDateFormat("EEE, dd MMM, HH:mm", Locale.FRANCE)
-        holder.binding.root.textView23.text = newFormatter.format(df.parse(reservationList[position].dateEntreeEffective.substring(0,19)!!)!!)
-        holder.binding.root.home_reservation.setOnClickListener{
+        val endTimeFormatter = SimpleDateFormat("HH:mm", Locale.FRANCE)
+        val timeInterval =newFormatter.format(df.parse(reservationList[position].dateEntreePrevue.substring(0,19)!!)!!) + " à " + endTimeFormatter.format(df.parse(reservationList[position].dateSortiePrevue.substring(0,19)!!)!!)
+        holder.binding.root.textView23.text = timeInterval
+            holder.binding.root.home_reservation.setOnClickListener{
             listener.onItemClicked(reservationList[position])
         }
     }

@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 
 interface ParkingService {
-    @GET("parking/?start=36.705039%2C3.173912")
+    @GET("parking/?start=36.734473%2C3.152525")
     fun findParkings(): Call<List<Parking>>
 }

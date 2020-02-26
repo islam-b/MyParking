@@ -186,7 +186,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:paddingStart="16dp"
-                            android:text="E05-P084"
+                            android:text="@{reservation.getPlace()}"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -221,7 +221,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:paddingStart="16dp"
-                            android:text="DZ-7854961"
+                            android:text="@{reservation.codeReservation}"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -279,7 +279,7 @@
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:paddingEnd="16dp"
-                                android:text="@{reservation.dateEntreeEffective}"
+                                android:text="@{reservation.getDateEntree()}"
                                 android:textSize="16sp" />
                         </LinearLayout>
 
@@ -314,7 +314,7 @@
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:paddingEnd="16dp"
-                                android:text="@{reservation.dateSortieEffective}"
+                                android:text="@{reservation.getDateSortie()}"
                                 android:textSize="16sp" />
                         </LinearLayout>
                     </LinearLayout>
