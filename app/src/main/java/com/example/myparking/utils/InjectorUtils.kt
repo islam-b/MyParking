@@ -1,6 +1,7 @@
 package com.example.myparking.utils
 
 import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.services.AuthService
 import com.example.myparking.services.ParkingService
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import okhttp3.OkHttpClient
@@ -31,6 +32,10 @@ object InjectorUtils {
     }
     fun provideParkingService(): ParkingService {
         return retrofit.create(ParkingService::class.java)
+    }
+
+    fun provideAuthService(): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 
 }
