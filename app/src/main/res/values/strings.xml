@@ -53,6 +53,7 @@ Children can specify insetEdge to describe how the view insets the CoordinatorLa
     <string name="lastname_hint">Nom</string>
     <string name="firstname_hint">Prénom</string>
     <string name="mail_hint">Email</string>
+    <string name="num_hint">Numéro téléphone</string>
     <string name="password_hint">Mot de passe</string>
     <string name="password_confirm_hint">Confirmez le mot de passe</string>
 

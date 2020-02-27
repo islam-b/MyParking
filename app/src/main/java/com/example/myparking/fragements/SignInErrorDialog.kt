@@ -11,13 +11,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.myparking.R
 
-class SignInErrorDialog: DialogFragment() {
+class SignInErrorDialog(val message: String): DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.sign_in_error_dialog,container,false)
+        view.findViewById<TextView>(R.id.msg).text = message
         return view
     }
 
