@@ -2,6 +2,7 @@ package com.example.myparking.utils
 
 import android.util.Log
 import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.services.AuthService
 import com.example.myparking.services.ParkingService
 import com.example.myparking.services.ReservationService
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
@@ -37,6 +38,10 @@ object InjectorUtils {
     }
     fun provideReservationService(): ReservationService {
         return retrofit.create(ReservationService::class.java)
+    }
+
+    fun provideAuthService(): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 
 }

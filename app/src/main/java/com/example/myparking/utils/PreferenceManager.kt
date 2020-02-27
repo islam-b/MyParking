@@ -16,6 +16,12 @@ class PreferenceManager(val context: Context){
         editor.apply()
     }
 
+    fun writeDriverId(idAutomobiliste: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(context.getString(R.string.driver_pref),idAutomobiliste)
+        editor.apply()
+    }
+
     fun checkPreference(): Boolean {
         var status = true
         if (sharedPreferences.getString(context.getString(R.string.my_preference_key), "null").equals("null")) {

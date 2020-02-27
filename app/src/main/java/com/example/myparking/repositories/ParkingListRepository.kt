@@ -24,12 +24,12 @@ class ParkingListRepository { // maybe add dao
     }
 
 
-    fun getParkingsList (filterStateLiveData: LiveData<FilterParkingsModel>): MutableLiveData<ArrayList<Parking>>{
-        val filterState = filterStateLiveData.value!!
+    fun getParkingsList (/*filterStateLiveData: LiveData<FilterParkingsModel>*/): MutableLiveData<ArrayList<Parking>>{
+ /*       val filterState = filterStateLiveData.value!!*/
         var data = MutableLiveData<ArrayList<Parking>>()
 
         if (dataSet.size == 0 || dataSet.isEmpty()) {
-            service.findParkings(filterState.minPrice, filterState.maxPrice, filterState.equipements, filterState.minDistance, filterState.maxDistance).enqueue(object : Callback<List<Parking>> {
+            service.findParkings(null, null, null, null, null).enqueue(object : Callback<List<Parking>> {
                 override fun onFailure(call: Call<List<Parking>>, t: Throwable) {
                 }
 

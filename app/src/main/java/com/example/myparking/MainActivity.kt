@@ -1,5 +1,6 @@
 package com.example.myparking
 
+import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -12,16 +13,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.CursorAdapter
+import android.widget.ListAdapter
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.myparking.activities.FavoriteParkingsActivity
 import com.example.myparking.activities.MesReservationsActivity
+import com.example.myparking.adapters.OnSearchListener
+import com.example.myparking.fragements.*
+import com.example.myparking.models.ParkingModel
 
 
-import com.example.myparking.fragements.FilterDialogFragment
-import com.example.myparking.fragements.ParkingsList
-import com.example.myparking.fragements.ParkingsMap
+import com.example.myparking.models.SearchModel
+import com.example.myparking.models.SearchResult
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.utils.NetworkReceiver
 import com.google.android.libraries.places.api.Places
@@ -33,7 +45,6 @@ import com.luseen.spacenavigation.SpaceNavigationView
 import com.luseen.spacenavigation.SpaceOnClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.android.libraries.places.widget.AutocompleteActivity
-
 /**
  * Main activity
  * This activity contains two view: Map view and List view*
@@ -44,10 +55,12 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
  * @property networkReceiver the Broadcast Receiver, it receives the connectivity state
  */
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener,
+    OnSearchListener {
 
 
 
+    private lateinit var searchListener: OnSearchListener
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private var currentItem : Int? = 0
@@ -60,6 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - Initializing Toolbars and navigation
      * - Starting the activity as List view
      */
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +124,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else spaceNavigationView.changeCurrentItem(currentItem!!)
 
 
+
+
+
     }
 
 
@@ -120,6 +137,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCentreButtonClick() {
         val dialog = FilterDialogFragment()
         dialog.show(supportFragmentManager, dialog.TAG1)
+
+    }
+
+    override fun onSearchClick(searchResult: SearchResult) {
+        if (currentItem==0) {
+            val spaceNavigationView = nav_view as SpaceNavigationView
+            spaceNavigationView.changeCurrentItem(1)
+        }
+        searchListener.onSearchClick(searchResult)
 
     }
 
@@ -146,6 +172,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         supportFragmentManager.beginTransaction().replace(R.id.nav_host,fragment).commit()
     }
+
+
 
     override fun onItemReselected(itemIndex: Int, itemName: String?) {
 
@@ -208,12 +236,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_search -> {
                 Log.d("CLICK", "SEARCH BTN CLICKED")
-                startAutoCompleteIntent()
+                val dialog = SearchDialogFragment(this)
+                dialog.show(supportFragmentManager, dialog.TAG1)
+                //onSearchRequested()
+                //startAutoCompleteIntent()
                 return true
             }
         }
         return false
     }
+
+
+    override fun onAttachFragment(fragment: Fragment) {
+        if (fragment is ParkingsMap) {
+            searchListener = fragment.getSearchListner()
+        }
+    }
+
+
+
+
 
     val AUTOCOMPLETE_REQUEST_CODE = 1
     /**

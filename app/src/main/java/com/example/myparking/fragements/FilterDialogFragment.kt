@@ -64,7 +64,7 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         toolbar = view.findViewById<Toolbar>(R.id.filter_toolbar)
         toolbar?.let {
-//            it.setNavigationOnClickListener { v -> dismiss() }
+            //            it.setNavigationOnClickListener { v -> dismiss() }
 //            it.setTitle("Some Title")
             it.inflateMenu(R.menu.filter_dialog_menu)
             it.setOnMenuItemClickListener(this)
