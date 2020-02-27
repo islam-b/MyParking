@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
 import com.example.myparking.activities.ParkingsDetailsContainer
 import com.example.myparking.adapters.MyAdapter
+import com.example.myparking.adapters.OnSearchListener
 import com.example.myparking.adapters.ParkingCarouselAdapter
 import com.example.myparking.databinding.FragmentParkingsMapBinding
 import com.example.myparking.databinding.ParkingCarouselItem2Binding
@@ -27,6 +28,7 @@ import com.example.myparking.databinding.ParkingCarouselItemBinding
 
 import com.example.myparking.models.Parking
 import com.example.myparking.models.ParkingModel
+import com.example.myparking.models.SearchResult
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.DataSource
 import com.google.android.gms.location.LocationCallback
@@ -61,8 +63,9 @@ import kotlinx.android.synthetic.main.fragment_parkings_map.view.*
  * @property parkings The List of parkings
  * @property binding Binding data with the view
  */
-class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener ,GoogleMap.OnMapClickListener,
-    OnLocationListener {
+class ParkingsMap() : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener ,GoogleMap.OnMapClickListener,
+    OnLocationListener , OnSearchListener{
+
 
 
     private lateinit var carousel: DiscreteScrollView
@@ -77,6 +80,30 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private lateinit var binding: FragmentParkingsMapBinding
     private lateinit var mParkingListViewModel: ParkingListViewModel
 
+    override fun onSearchClick(searchResult: SearchResult) {
+
+        val pos= LatLng(searchResult.position[0], searchResult.position[1])
+        mMap.addMarker(
+            MarkerOptions()
+                .position(pos)
+                .title(searchResult.categoryTitle)
+                .icon(
+                    BitmapDescriptorFactory.fromBitmap(
+                        MapsUtils.createCustomMarker(
+                            context!!, mMapView,
+                            R.color.authorized, ""
+                        )
+                    )
+                )
+        ).tag = searchResult
+        //mMap.addMarker(MarkerOptions().position(myLocation).title("Marker in my location"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(pos))
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f))
+    }
+
+    fun getSearchListner():OnSearchListener {
+        return this
+    }
     /**
      * Request location from Maps Util
      * @see com.example.myparking.utils.MapsUtils.getLastLocation
@@ -133,13 +160,19 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         Log.d("dialod not ", "not")
         //val parking = p0?.tag as ParkingModel
 //        ParkingBottomSheet.newInstance(parking).show(activity?.supportFragmentManager,"ActionBottomDialog")
-        val target = parkings.indexOf(p0?.tag as Parking)
-        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-            carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(target))
-        }else {
-            carousel.scrollToPosition(infiniteAdapter.getClosestPosition(target))
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        val obj = p0?.tag
+        if (obj is Parking) {
+            val target = parkings.indexOf(obj)
+            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(target))
+            }else {
+                carousel.scrollToPosition(infiniteAdapter.getClosestPosition(target))
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        } else if (obj is SearchResult) {
+
         }
+
         return false
     }
 
@@ -368,6 +401,17 @@ class ParkingsMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
+    companion object {
+        fun getListener():OnSearchListener  {
+            return object : OnSearchListener {
+                override fun onSearchClick(searchResult: SearchResult) {
+
+                }
+
+            }
+        }
+    }
+
 
 }
 
@@ -381,4 +425,5 @@ interface OnLocationListener {
      */
     fun onLocationReady(location: Location)
 }
+
 

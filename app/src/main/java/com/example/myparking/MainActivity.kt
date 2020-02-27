@@ -27,13 +27,13 @@ import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.myparking.activities.FavoriteParkingsActivity
 import com.example.myparking.activities.MesReservationsActivity
+import com.example.myparking.adapters.OnSearchListener
+import com.example.myparking.fragements.*
+import com.example.myparking.models.ParkingModel
 
 
-import com.example.myparking.fragements.FilterDialogFragment
-import com.example.myparking.fragements.ParkingsList
-import com.example.myparking.fragements.ParkingsMap
-import com.example.myparking.fragements.SearchDialogFragment
 import com.example.myparking.models.SearchModel
+import com.example.myparking.models.SearchResult
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.utils.NetworkReceiver
 import com.google.android.libraries.places.api.Places
@@ -55,10 +55,12 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
  * @property networkReceiver the Broadcast Receiver, it receives the connectivity state
  */
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener , SpaceOnClickListener,
+    OnSearchListener {
 
 
 
+    private lateinit var searchListener: OnSearchListener
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private  var currentItem = 0
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - Initializing Toolbars and navigation
      * - Starting the activity as List view
      */
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +126,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    override fun onSearchClick(searchResult: SearchResult) {
+        if (currentItem==0) {
+            val spaceNavigationView = nav_view as SpaceNavigationView
+            spaceNavigationView.changeCurrentItem(1)
+        }
+        searchListener.onSearchClick(searchResult)
+
+    }
+
     /**
      * This function opens one of the views (list or map) depending on the clicked item
      * @param itemIndex the index of the view selected
@@ -144,6 +156,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         supportFragmentManager.beginTransaction().replace(R.id.nav_host,fragment).commit()
     }
+
+
 
     override fun onItemReselected(itemIndex: Int, itemName: String?) {
 
@@ -205,7 +219,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_search -> {
                 Log.d("CLICK", "SEARCH BTN CLICKED")
-                val dialog = SearchDialogFragment()
+                val dialog = SearchDialogFragment(this)
                 dialog.show(supportFragmentManager, dialog.TAG1)
                 //onSearchRequested()
                 //startAutoCompleteIntent()
@@ -214,6 +228,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         return false
     }
+
+
+    override fun onAttachFragment(fragment: Fragment) {
+        if (fragment is ParkingsMap) {
+            searchListener = fragment.getSearchListner()
+        }
+    }
+
+
+
+
 
     val AUTOCOMPLETE_REQUEST_CODE = 1
     /**

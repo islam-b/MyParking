@@ -19,8 +19,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
+import com.example.myparking.adapters.OnSearchListener
 import com.example.myparking.adapters.SearchAdapter
 import com.example.myparking.models.SearchModel
+import com.example.myparking.models.SearchResult
 import com.example.myparking.services.ParkingService
 import com.example.myparking.utils.InjectorUtils
 import kotlinx.android.synthetic.main.search_dialog_layout.*
@@ -28,7 +30,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchDialogFragment(): DialogFragment() {
+class SearchDialogFragment(val listener: OnSearchListener): DialogFragment(), OnSearchListener {
+
+    override fun onSearchClick(searchResult: SearchResult) {
+        dismiss()
+        listener.onSearchClick(searchResult)
+    }
+
     val TAG1 = "SearchDialogFragment"
     lateinit var service: ParkingService
     lateinit var recyclerView: RecyclerView
@@ -60,7 +68,7 @@ class SearchDialogFragment(): DialogFragment() {
         recyclerView = view.findViewById<RecyclerView>(R.id.search_list)
         recyclerView.layoutManager = LinearLayoutManager(context,RecyclerView.VERTICAL,false)
         loading.visibility = GONE
-
+        val dialog = this
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener,
             Callback<SearchModel> {
 
@@ -88,7 +96,7 @@ class SearchDialogFragment(): DialogFragment() {
                 loading.visibility = GONE
                 val list = response.body()?.results!!
                 list.let {
-                    recyclerView.adapter = SearchAdapter(it)
+                    recyclerView.adapter = SearchAdapter(it,dialog)
                 }
             }
 
