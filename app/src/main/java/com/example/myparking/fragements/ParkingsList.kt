@@ -58,14 +58,10 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_list, container, false)
 
         recyclerview = binding.parkingsList
-        Log.d("step","1")
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
-        Log.d("step","2")
         mParkingListViewModel = ViewModelProviders.of(this, factory)
             .get(ParkingListViewModel::class.java)
-        Log.d("step","3")
         showProgressBar()
-        Log.d("step","4")
         mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
         {
             if (mAdapter!==null) {

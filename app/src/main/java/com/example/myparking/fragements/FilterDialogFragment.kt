@@ -29,6 +29,12 @@ import com.example.myparking.utils.AnimationUtils
 import net.cachapa.expandablelayout.ExpandableLayout
 import android.view.View.FOCUS_DOWN
 import android.widget.ScrollView
+import androidx.lifecycle.ViewModelProviders
+import com.example.myparking.MainActivity
+import com.example.myparking.models.FilterParkingsModel
+import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.viewmodels.ParkingListViewModel
+import com.example.myparking.viewmodels.ParkingListViewModelFactory
 
 
 class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
@@ -36,6 +42,8 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
     val TAG1 = "FilterDialogFragment"
     private var toolbar: Toolbar? = null
     private lateinit var  binding: FilterDialogBinding
+    private var currentFilterState = FilterParkingsModel()
+    private lateinit var mParkingListViewModel: ParkingListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +53,10 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
 
         binding = DataBindingUtil.inflate(inflater,R.layout.filter_dialog,container,false)
-
+        (activity as MainActivity)
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
+        mParkingListViewModel = ViewModelProviders.of(this, factory)
+            .get(ParkingListViewModel::class.java)
         return binding.root
     }
 

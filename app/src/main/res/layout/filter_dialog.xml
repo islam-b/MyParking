@@ -216,13 +216,13 @@
                             app:mrb_temporaryPins="false"
                             app:mrb_tickDefaultColor="@android:color/transparent"
                             app:mrb_tickDefaultLabel="@string/app_name"
-                            app:mrb_tickEnd="10"
+                            app:mrb_tickEnd="3000"
                             app:mrb_tickHeight="0dp"
                             app:mrb_tickInterval="1"
                             app:mrb_tickLabelColor="@color/inactiveDot"
                             app:mrb_tickLabelSelectedColor="@color/colorPrimaryDark"
                             app:mrb_tickLabelSize="4sp"
-                            app:mrb_tickStart="1" />
+                            app:mrb_tickStart="50" />
 
 
 
