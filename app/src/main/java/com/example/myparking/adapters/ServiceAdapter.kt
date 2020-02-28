@@ -12,11 +12,12 @@ class ServiceAdapter(val servicesList : ArrayList<Service>,
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.binding.service = servicesList[position]
-        holder.binding.checked = false
+        holder.binding.checked = servicesList[position].checked
         holder.binding.root.service_icon.setImageResource(servicesList[position].icon)
         holder.binding.root.setOnClickListener{
             val b = holder.binding.checked
              holder.binding.checked = !(b!!)
+            servicesList[position].checked = !(b!!)
             listener.onItemClicked(servicesList[position])
         }
 

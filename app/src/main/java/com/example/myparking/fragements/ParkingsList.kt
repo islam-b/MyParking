@@ -59,16 +59,13 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
 
         recyclerview = binding.parkingsList
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
-        mParkingListViewModel = ViewModelProviders.of(this, factory)
+        mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
         showProgressBar()
-        mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
+        mParkingListViewModel.mParkingList.observe(this, Observer<ArrayList<Parking>>
         {
-            if (mAdapter!==null) {
+            Log.d("ViewModelChanged", it?.size?.toString()!!)
                 mAdapter?.updateList(it)
-            } else {
-                Log.d("adapter", "null adapter")
-            }
 
             hideProgressBar()
 
