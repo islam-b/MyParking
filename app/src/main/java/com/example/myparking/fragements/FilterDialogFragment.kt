@@ -163,11 +163,11 @@ class FilterDialogFragment: DialogFragment(), Toolbar.OnMenuItemClickListener {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
-            dialog.window!!.setLayout(width, height)
-            dialog.window!!.setWindowAnimations(R.style.Slide)
-            dialog.window!!.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            dialog.window!!.statusBarColor = ContextCompat.getColor(context!!,R.color.colorPrimaryDark)
-            dialog.window!!.decorView.systemUiVisibility  = SYSTEM_UI_FLAG_LAYOUT_STABLE
+            dialog!!.window!!.setLayout(width, height)
+            dialog!!.window!!.setWindowAnimations(R.style.Slide)
+            dialog!!.window!!.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            dialog!!.window!!.statusBarColor = ContextCompat.getColor(context!!,R.color.colorPrimaryDark)
+            dialog!!.window!!.decorView.systemUiVisibility  = SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -123,7 +123,7 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
     override fun onFailure(call: Call<SignInModelResponse>, t: Throwable) {
         Log.d("error", t.printStackTrace().toString())
         hideLoading()
-        SignInErrorDialog("Une erreur s\'est produite, veuillez réesayez").show(activity?.supportFragmentManager,"SIGN_IN_ERROR")
+        SignInErrorDialog("Une erreur s\'est produite, veuillez réesayez").show(childFragmentManager,"SIGN_IN_ERROR")
     }
 
     override fun onResponse(
@@ -137,7 +137,7 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
             startHomeActivity()
         } else {
             hideLoading()
-            SignInErrorDialog("Nom d'utilisateur ou mot de passe incorrect.").show(activity?.supportFragmentManager,"SIGN_IN_ERROR")
+            SignInErrorDialog("Nom d'utilisateur ou mot de passe incorrect.").show(childFragmentManager,"SIGN_IN_ERROR")
         }
 
     }

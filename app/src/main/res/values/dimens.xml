@@ -23,13 +23,9 @@ import android.view.View
 
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen
-        name="design_bottom_navigation_text_size"
-        tools:override="true">11sp </dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">11sp</dimen>
 
-    <dimen
-        name="design_bottom_navigation_active_text_size"
-        tools:override="true">10sp </dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">10sp</dimen>
 
     <dimen name="textSize_16sp">16sp</dimen>
 </resources>

@@ -145,7 +145,7 @@ class SignUpFragment : Fragment(), Callback<Any> {
 
     override fun onFailure(call: Call<Any>, t: Throwable) {
         hideLoading()
-        SignInErrorDialog("Une erreur s\'est produite, veuillez réesayez").show(activity?.supportFragmentManager,"SIGN_UP_ERROR")
+        SignInErrorDialog("Une erreur s\'est produite, veuillez réesayez").show(childFragmentManager,"SIGN_UP_ERROR")
     }
 
     override fun onResponse(call: Call<Any>, response: Response<Any>) {
@@ -153,7 +153,7 @@ class SignUpFragment : Fragment(), Callback<Any> {
             service.signIn(SignInModelRequest(username,password)).enqueue(object: Callback<SignInModelResponse> {
                 override fun onFailure(call: Call<SignInModelResponse>, t: Throwable) {
                     hideLoading()
-                    SignInErrorDialog("Une erreur s\'est produite, veuillez réesayez").show(activity?.supportFragmentManager,"SIGN_IN_ERROR")
+                    SignInErrorDialog("Une erreur s\'est produite, veuillez réesayez").show(childFragmentManager,"SIGN_IN_ERROR")
                 }
 
                 override fun onResponse(
@@ -168,7 +168,7 @@ class SignUpFragment : Fragment(), Callback<Any> {
                         startActivity(mainActivityIntent)
                     } else {
                         hideLoading()
-                        SignInErrorDialog("Nom d'utilisateur ou mot de passe incorrect.").show(activity?.supportFragmentManager,"SIGN_IN_ERROR")
+                        SignInErrorDialog("Nom d'utilisateur ou mot de passe incorrect.").show(childFragmentManager,"SIGN_IN_ERROR")
                     }
                 }
 
@@ -176,7 +176,7 @@ class SignUpFragment : Fragment(), Callback<Any> {
             })
         } else {
             hideLoading()
-            SignInErrorDialog("Une erreur s\'est produite, veuillez réesayez").show(activity?.supportFragmentManager,"SIGN_UP_ERROR")
+            SignInErrorDialog("Une erreur s\'est produite, veuillez réesayez").show(childFragmentManager,"SIGN_UP_ERROR")
         }
     }
 
