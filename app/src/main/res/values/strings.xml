@@ -80,5 +80,5 @@ Children can specify insetEdge to describe how the view insets the CoordinatorLa
     <string name="congrats">Félicitations</string>
     <string name="see_more">Voir details</string>
     <string name="termes_et_conditions">Termes et Conditions</string>
-
+    <string name="facebook_app_id">504447433549983</string> <string name="fb_login_protocol_scheme">fb1495353293973396</string>
 </resources>
