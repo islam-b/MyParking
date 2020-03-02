@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<data>
+    <variable
+        name="filterViewModel"
+        type="com.example.myparking.viewmodels.FilterParkingsViewModel" />
+    <variable
+        name="filterInfo"
+        type="com.example.myparking.models.FilterInfoResponse" />
+</data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:background="@drawable/custom_dialog_bg"
@@ -110,7 +117,8 @@
                         android:background="@drawable/checked_distance_btn"
                         android:gravity="center"
                         android:text="DISTANCE"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        />
 
                     <TextView
                         android:id="@+id/toggle_price"
@@ -156,12 +164,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Distance"
+                        android:text="Distance (Metres)"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toTopOf="@+id/distance_container"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:checked="@={filterViewModel.distanceCheck}"
+                        >
 
                     </CheckBox>
 
@@ -191,6 +201,8 @@
                             android:id="@+id/distance_range_bar"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            app:tickEnd="@{filterInfo !=null ? filterInfo.getDistanceMax() : 35000.0F}"
+                            app:mrb_tickStart="50"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -216,13 +228,12 @@
                             app:mrb_temporaryPins="false"
                             app:mrb_tickDefaultColor="@android:color/transparent"
                             app:mrb_tickDefaultLabel="@string/app_name"
-                            app:mrb_tickEnd="9000"
                             app:mrb_tickHeight="0dp"
                             app:mrb_tickInterval="1"
                             app:mrb_tickLabelColor="@color/inactiveDot"
                             app:mrb_tickLabelSelectedColor="@color/colorPrimaryDark"
                             app:mrb_tickLabelSize="4sp"
-                            app:mrb_tickStart="50" />
+                            />
 
 
 
@@ -251,12 +262,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Prix"
+                        android:text="Prix (DA)"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toTopOf="@+id/price_container"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:checked="@{filterViewModel.priceIsChecked()}"
+                        >
 
                     </CheckBox>
 
@@ -290,6 +303,8 @@
                             android:id="@+id/price_range_bar"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            app:tickEnd="@{filterInfo !=null ? filterInfo.getPriceMax(): 30000.0F}"
+                            app:mrb_tickStart="50"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -315,13 +330,12 @@
                             app:mrb_temporaryPins="false"
                             app:mrb_tickDefaultColor="@android:color/transparent"
                             app:mrb_tickDefaultLabel="@string/app_name"
-                            app:mrb_tickEnd="1000"
                             app:mrb_tickHeight="0dp"
                             app:mrb_tickInterval="1"
                             app:mrb_tickLabelColor="@color/inactiveDot"
                             app:mrb_tickLabelSelectedColor="@color/colorPrimaryDark"
                             app:mrb_tickLabelSize="4sp"
-                            app:mrb_tickStart="1" />
+                            />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                     </net.cachapa.expandablelayout.ExpandableLayout>
 
@@ -352,7 +366,8 @@
                         app:layout_constraintBottom_toTopOf="@+id/service_container"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:checked="@{filterViewModel.serviceIsChecked()}">
 
                     </CheckBox>
 

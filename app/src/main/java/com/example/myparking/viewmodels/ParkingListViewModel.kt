@@ -35,6 +35,17 @@ class ParkingListViewModel (private val parkingListRepository: ParkingListReposi
         return filterState
     }
 
+    fun sortByDistance () {
+        val parkings = mParkingList.value!!
+        val newList = ArrayList(parkings?.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
+        mParkingList.value=newList
+    }
+    fun sortByPrice () {
+        val parkings = mParkingList.value!!
+        val newList = ArrayList(parkings?.sortedWith(compareBy {it.tarifs?.get(0).prix}))
+        mParkingList.value=newList
+    }
+
 
 
 

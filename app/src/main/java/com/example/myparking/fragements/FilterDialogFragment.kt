@@ -25,22 +25,23 @@ import com.example.myparking.R
 
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.ServiceAdapter
-import com.example.myparking.models.Service
 import com.example.myparking.utils.AnimationUtils
 import net.cachapa.expandablelayout.ExpandableLayout
 import android.view.View.FOCUS_DOWN
 import android.widget.ScrollView
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.appyvet.materialrangebar.RangeBar
 import com.example.myparking.MainActivity
-import com.example.myparking.models.FilterParkingsModel
-import com.example.myparking.models.Parking
+import com.example.myparking.models.*
 import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.viewmodels.FilterParkingsViewModel
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import kotlinx.android.synthetic.main.filter_dialog.view.*
+
 
 
 class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
@@ -49,8 +50,11 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
     private var toolbar: Toolbar? = null
     private lateinit var binding: FilterDialogBinding
 /*    private var currentFilterState = FilterParkingsModel()*/
-    private var currentFilterState = MutableLiveData<FilterParkingsModel>()
+    private lateinit var currentFilterState : FilterParkingsViewModel
     private lateinit var mParkingListViewModel: ParkingListViewModel
+    private lateinit var serviceAdapter: ServiceAdapter
+    private var arrayEquipements=  ArrayList<Int>()
+    private var filterInfoInitial = FilterInfoResponse()
 
 
     override fun onCreateView(
@@ -63,13 +67,25 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.filter_dialog, container, false)
         (activity as MainActivity)
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
+        currentFilterState = ViewModelProviders.of(this.activity!!).get(FilterParkingsViewModel::class.java)
+
+        currentFilterState.getFilterMainInfo().observe(this, Observer<FilterInfoResponse> {
+            // binding.root.distance_range_bar?.tickStart = it?.distance?.min?.toFloat()!!
+            serviceAdapter?.updateList(it?.equipements!!)
+            Log.d("equipements", it?.equipements?.get(0)?.designation+"bbala")
+            binding.filterInfo = it!!
+        })
+       // binding.filterInfo = filterInfoInitial
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
-        /**/
-        currentFilterState = mParkingListViewModel.getFilterState()
-        /*mParkingListViewModel?.getParkingsList().observe(this, Observer<ArrayList<Parking>> {
-            mParkingListViewModel?.receiveFilter(currentFilterState)
-        })*/
+
+
+
+
+
+        binding.filterViewModel = currentFilterState
+
+
         binding.lifecycleOwner = this.activity
 
 
@@ -85,8 +101,11 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
                 leftPinValue: String?,
                 rightPinValue: String?
             ) {
-                currentFilterState?.value!!.maxDistance = rightPinValue?.toInt()
-                currentFilterState?.value!!.minDistance = leftPinValue?.toInt()
+                val currentState = currentFilterState.getFilterParkingsState().value!!
+
+                val newState = FilterParkingsModel(currentState.minPrice, currentState.maxPrice,currentState.equipements, leftPinValue?.toInt(), rightPinValue?.toInt()  )
+                currentFilterState.postFilterParkingsState(newState)
+
             }
 
             override fun onTouchStarted(rangeBar: RangeBar?) {
@@ -106,8 +125,10 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
                 leftPinValue: String?,
                 rightPinValue: String?
             ) {
-                currentFilterState?.value!!.maxPrice = rightPinValue?.toInt()
-                currentFilterState?.value!!.minPrice = leftPinValue?.toInt()
+                val currentState = currentFilterState.getFilterParkingsState().value!!
+                val newState = FilterParkingsModel(leftPinValue?.toInt(), rightPinValue?.toInt() ,currentState.equipements, currentState.minDistance, currentState.maxDistance )
+                currentFilterState.postFilterParkingsState(newState)
+
             }
 
             override fun onTouchStarted(rangeBar: RangeBar?) {
@@ -115,7 +136,7 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
 
         })
         binding.root.apply_filter_btn?.setOnClickListener {
-            mParkingListViewModel?.receiveFilter(currentFilterState.value!!).observe(this, Observer<ArrayList<Parking>>
+            mParkingListViewModel?.receiveFilter(currentFilterState.getFilterParkingsState().value!!).observe(this, Observer<ArrayList<Parking>>
             {
                 mParkingListViewModel?.postFilteredList(it)
                 dismiss()
@@ -124,9 +145,16 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
 
         }
         binding.root.reset_filter_btn?.setOnClickListener {
-            currentFilterState.value = FilterParkingsModel()
+            currentFilterState.postFilterParkingsState(FilterParkingsModel())
+            binding.root.price_range_bar.setRangePinsByValue(binding.root.price_range_bar.tickStart, binding.root.price_range_bar.tickEnd)
+            binding.root.distance_range_bar.setRangePinsByValue(binding.root.distance_range_bar.tickStart, binding.root.distance_range_bar.tickEnd)
+            binding.root.price_check.isChecked = false
+            binding.root.distance_check.isChecked = false
+            binding.root.service_check.isChecked =false
+
+            serviceAdapter?.updateList(filterInfoInitial.equipements!!)
             // just incase he closes before applying
-            mParkingListViewModel?.receiveFilter(currentFilterState.value!!).observe(this, Observer<ArrayList<Parking>>
+            mParkingListViewModel?.receiveFilter(FilterParkingsModel()).observe(this, Observer<ArrayList<Parking>>
             {
                 mParkingListViewModel?.postFilteredList(it)
             })
@@ -149,21 +177,19 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
 
         val check_distance = view.findViewById<CheckBox>(R.id.distance_check)
         val distance_container = view.findViewById<ExpandableLayout>(R.id.distance_container)
-        if(!check_distance.isChecked && (currentFilterState.value!!.maxDistance !=null || currentFilterState.value!!.minDistance !=null)) {
-
-            check_distance.toggle()
-            distance_container.isExpanded =true
-        }
+        distance_container.isExpanded = currentFilterState.distanceIsChecked()
         check_distance.setOnCheckedChangeListener { compoundButton, b ->
+           /* check_distance.isChecked = currentFilterState.distanceIsChecked()*/
             distance_container.toggle()
         }
         val check_price = view.findViewById<CheckBox>(R.id.price_check)
         val price_container = view.findViewById<ExpandableLayout>(R.id.price_container)
-        if(!check_price.isChecked && (currentFilterState.value!!.maxPrice !=null || currentFilterState.value!!.minPrice !=null)) {
-
+        price_container.isExpanded = currentFilterState.priceIsChecked()
+        if(currentFilterState.priceIsChecked()) {
             check_price.toggle()
-            price_container.isExpanded =true
+            check_price.isChecked = currentFilterState.priceIsChecked()
         }
+
         //AnimationUtils.collapse(price_container)
         check_price.setOnCheckedChangeListener { compoundButton, b ->
             price_container.toggle()
@@ -174,42 +200,48 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
         services_list.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         // bring real services
-        val services = arrayListOf(
-            Service("1","24/7", R.drawable.ic_timer),
-            Service("2", "Caméra", R.drawable.ic_cctv),
-            Service("3", "24/7", R.drawable.ic_timer),
-            Service("4", "Caméra", R.drawable.ic_cctv),
-            Service("5", "24/7", R.drawable.ic_timer)
-        )
-        if (currentFilterState.value!!.equipements !=null && currentFilterState.value!!.equipements !="") {
-            val selectedIds = currentFilterState.value!!.equipements?.split(",")
+        val services : ArrayList<Equipement> = arrayListOf()
+
+        /* to improve **/
+        if (currentFilterState.getFilterParkingsState().value!!.equipements !=null && currentFilterState.getFilterParkingsState().value!!.equipements !="") {
+            val selectedIds = currentFilterState.getFilterParkingsState().value!!.equipements?.split(",")
+            services.forEach{serv -> serv.checked = false}
             selectedIds?.forEach { id->
-                val service = services.find{serv-> serv.id ==id}
+                val service = services.find{serv-> serv.idEquipement ==id}
                 service?.checked = true
             }
         }
-        val adapter = ServiceAdapter(services, object : MyAdapter.ItemAdapterListener<Service> {
-            override fun onItemClicked(item: Service) {
-                    var toConcat = ","+ item.id
-                if (currentFilterState.value!!.equipements == null) {
-                    currentFilterState.value!!.equipements =""
-                    toConcat = item.id
-                }
+       serviceAdapter = ServiceAdapter(services, object : MyAdapter.ItemAdapterListener<Equipement> {
+            override fun onItemClicked(item: Equipement) {
+                // add case click to remove
+                val checkedService = item.checked
+                if(!checkedService) {
+                    arrayEquipements.remove(item.idEquipement.toInt())
+                } else arrayEquipements.add(item.idEquipement.toInt())
+                var toPost: String? = arrayEquipements.joinToString(separator = ",")
+                Log.d("TOPOSTT", toPost!!)
+                if (toPost=="") toPost=null
+                val currentState = currentFilterState.getFilterParkingsState().value!!
+                currentFilterState.postFilterParkingsState(FilterParkingsModel(currentState.minPrice, currentState.maxPrice, toPost,currentState.minDistance, currentState.maxDistance ))
 
-                currentFilterState.value!!.equipements = currentFilterState.value!!.equipements + ""+  toConcat
             }
 
 
         })
-        services_list.adapter = adapter
+        services_list.adapter = serviceAdapter
 
         val check_service = view.findViewById<CheckBox>(R.id.service_check)
         val service_container = view.findViewById<ExpandableLayout>(R.id.service_container)
-        if(!check_service.isChecked && (currentFilterState.value!!.equipements !=null )) {
+        service_container.isExpanded = currentFilterState.serviceIsChecked()
+        if(currentFilterState.serviceIsChecked()) {
+            check_service.toggle()
+            check_service.isChecked = currentFilterState.serviceIsChecked()
+        }
+       /* if(!check_service.isChecked && (currentFilterState.value!!.equipements !=null )) {
 
             check_service.toggle()
             service_container.isExpanded =true
-        }
+        }*/
 
         service_container.setOnExpansionUpdateListener { expansionFraction, state ->
             val expansionFr = state
@@ -225,25 +257,29 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
         sort_toggle_price = view.findViewById<TextView>(R.id.toggle_price)
         sort_toggle_price.setOnClickListener {
             toggleSort(false)  //false for price
+            mParkingListViewModel.sortByPrice()
         }
         sort_toggle_distance = view.findViewById<TextView>(R.id.toggle_distance)
         sort_toggle_distance.setOnClickListener {
             toggleSort(true)  //true for distance
+            mParkingListViewModel.sortByDistance()
         }
 
         // range bar initial vals
+        val currentState = currentFilterState.getFilterParkingsState().value!!
         if(distance_container.isExpanded) {
-            Log.d("currentmaxDistance", currentFilterState.value!!.maxDistance?.toString()!!)
-            binding.root.distance_range_bar?.setRangePinsByValue(currentFilterState.value!!.minDistance?.toFloat()!!, currentFilterState.value!!.maxDistance?.toFloat()!!)
+           /* Log.d("currentmaxDistance", currentFilterState.value!!.maxDistance?.toString()!!)*/
+            binding.root.distance_range_bar?.setRangePinsByValue(currentState.minDistance?.toFloat()!!, currentState.maxDistance?.toFloat()!!)
         }
         if(price_container.isExpanded) {
-            Log.d("currentmaxPrice", currentFilterState.value!!.maxPrice?.toString()!!)
-            binding.root.price_range_bar?.setRangePinsByValue(currentFilterState.value!!.minPrice?.toFloat()!!, currentFilterState.value!!.maxPrice?.toFloat()!!)
+         /*   Log.d("currentmaxPrice", currentFilterState.value!!.maxPrice?.toString()!!)*/
+            binding.root.price_range_bar?.setRangePinsByValue(currentState.minPrice?.toFloat()!!, currentState.maxPrice?.toFloat()!!)
 
         }
       /*  if (service_container.isExpanded) {
 
         }*/
+
 
     }
 

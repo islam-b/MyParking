@@ -3,6 +3,7 @@ package com.example.myparking.repositories
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.myparking.models.FilterInfoResponse
 import com.example.myparking.models.FilterParkingsModel
 import com.example.myparking.models.Parking
 import com.example.myparking.services.ParkingService
@@ -64,6 +65,22 @@ class ParkingListRepository { // maybe add dao
           return data*/
     }
 
+    fun getFilterInfo() : MutableLiveData<FilterInfoResponse> {
+        var data = MutableLiveData<FilterInfoResponse>()
+        service.findFilterInfo().enqueue(object : Callback<FilterInfoResponse> {
+            override fun onFailure(call: Call<FilterInfoResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<FilterInfoResponse>,
+                response: Response<FilterInfoResponse>
+            ) {
+                data.value = response.body()
+            }
+        })
+        return data
+    }
     /* fun getParkingItem(index: Int) : Parking {
          if (dataSet.find { parking -> parking.idParking == index })!=null) {
              getParkingsList()

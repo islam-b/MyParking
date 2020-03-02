@@ -6,7 +6,7 @@
     <data>
         <variable
             name="service"
-            type="com.example.myparking.models.Service"/>
+            type="com.example.myparking.models.Equipement"/>
         <variable
             name="checked"
             type="Boolean"
@@ -38,6 +38,7 @@
             android:tint="@{checked ? @color/colorPrimary : @color/inactiveDot}"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +56,7 @@
         android:layout_marginBottom="4dp"
         android:gravity="center"
         android:maxLines="2"
-        android:text="@{service.title}"
+        android:text="@{service.designation}"
         android:textColor="@{checked ? @color/colorPrimary : @color/inactiveDot}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
