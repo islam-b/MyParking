@@ -119,7 +119,12 @@ class HomeFragment : Fragment() {
     }
 
     fun goToParkingDetails( idParking: Int) {
-        startActivity(ParkingsDetailsContainer.newIntent(context!!,  mParkingListViewModel.getParkingsList().value!!, idParking))
+        val list = mParkingListViewModel.getParkingsList().value!!
+        val parking = list.find { p -> idParking == p.idParking }
+        val index = list.indexOf(parking)
+        val bundle= bundleOf("parking" to parking, "parkingIndex" to index)
+        navController.navigate(R.id.action_homeFragment_to_parkingsDetailsContainer, bundle)
+
     }
     fun goToReservationDetails( reservation: Reservation) {
         startActivity(ReservationDetailsActivity.newIntent(context!!, reservation))

@@ -12,9 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
@@ -268,12 +270,11 @@ class ParkingsMap() : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickLis
         })
         val listener = object : MyAdapter.ItemAdapterListener<Parking> {
             override fun onItemClicked(item: Parking) {
-                Log.d("Parking Model clicked", item.nom)
-                val intent = ParkingsDetailsContainer.newIntent(
-                    activity as Context,
-                    parkings!!, item.idParking!!
-                )
-                startActivity(intent)
+                val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+                val list = mParkingListViewModel.getParkingsList().value
+                val index = list?.indexOf(item)
+                val bundle= bundleOf("parking" to item, "parkingIndex" to index)
+                navController.navigate(R.id.action_mainActivity2_to_parkingsDetailsContainer, bundle)
             }
 
         }

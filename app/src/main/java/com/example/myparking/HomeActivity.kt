@@ -31,12 +31,13 @@ import kotlinx.android.synthetic.main.home_nav_layout.*
 import kotlin.math.abs
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.example.myparking.utils.AnimationUtils.convertDpToPixel
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-    OnSearchListener, AppBarLayout.OnOffsetChangedListener {
+    OnSearchListener, AppBarLayout.OnOffsetChangedListener,
+    NavController.OnDestinationChangedListener {
 
 
     private lateinit var navController: NavController
@@ -84,7 +85,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         navController = Navigation.findNavController(this,R.id.my_nav_host_fragment)
-
+        navController.addOnDestinationChangedListener(this)
         setupActionBar()
 
 
@@ -99,6 +100,24 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         invalidateOptionsMenu()
     }
+
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        when (destination.id) {
+            R.id.parkingsDetailsContainer -> {
+                val layouParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT,0)
+                collapsing_app_bar.layoutParams = layouParams
+            }
+            else ->{
+                val layouParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT,convertDpToPixel(110f))
+                collapsing_app_bar.layoutParams = layouParams
+            }
+        }
+    }
+
 
 
     private fun setupActionBar() {

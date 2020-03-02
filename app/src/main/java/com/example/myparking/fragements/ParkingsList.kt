@@ -9,12 +9,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.models.Parking
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 
 import com.example.myparking.R
 
@@ -40,12 +42,11 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
 
 
     override fun onItemClicked(item: Parking) {
+        val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
         val list = mParkingListViewModel.getParkingsList().value
-        val intent = ParkingsDetailsContainer.newIntent(
-            this.activity as Context,
-            list!!, item.idParking
-        )
-        startActivity(intent)
+        val index = list?.indexOf(item)
+        val bundle= bundleOf("parking" to item, "parkingIndex" to index)
+        navController.navigate(R.id.action_mainActivity2_to_parkingsDetailsContainer, bundle)
     }
 
 
