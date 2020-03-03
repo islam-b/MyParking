@@ -108,7 +108,8 @@ class MainActivity : Fragment(),SpaceOnClickListener {
         spaceNavigationView.addSpaceItem(SpaceItem(MAP_VIEW,MAP_VIEW_NAME, R.drawable.map_view))
         spaceNavigationView.setCentreButtonIconColorFilterEnabled(false)
         spaceNavigationView.setSpaceOnClickListener(this)
-        spaceNavigationView.changeCurrentItem(LIST_VIEW)
+        //spaceNavigationView.changeCurrentItem(LIST_VIEW)
+
 
         return rootView
     }
@@ -116,6 +117,7 @@ class MainActivity : Fragment(),SpaceOnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         spaceNavigationView.changeCurrentItem(currentItem)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,18 +151,21 @@ class MainActivity : Fragment(),SpaceOnClickListener {
      */
     override fun onItemClick(itemIndex: Int, itemName: String?) {
         var fragment: Fragment
-        currentItem = itemIndex
+
         Log.d("item ",itemIndex.toString())
         when (itemName) {
             LIST_VIEW_NAME-> {
                 Log.d("item clicked","item 0")
                 fragment = ParkingsList()
+                currentItem = itemIndex
             }
             MAP_VIEW_NAME-> {
                 fragment = ParkingsMap()
+                currentItem = itemIndex
             }
             else -> {
                 fragment = ParkingsList()
+                currentItem = itemIndex
             }
         }
         childFragmentManager.beginTransaction().replace(R.id.nav_host,fragment).commit()

@@ -17,27 +17,13 @@
         android:fitsSystemWindows="true"
         tools:context=".activities.ReservationActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar1"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:navigationIcon="@drawable/ic_back_toolbar"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:title="Réserver une place" />
-
-        </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="top"
-            android:layout_marginTop="56dp"
+
             android:background="@color/greyBg"
             android:fitsSystemWindows="true">
 

@@ -11,11 +11,15 @@ import android.widget.TimePicker
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
@@ -36,7 +40,7 @@ import kotlinx.android.synthetic.main.reservation_dialog.view.*
 import java.text.SimpleDateFormat
 
 
-class ReservationActivity : AppCompatActivity() {
+class ReservationActivity : Fragment() {
 
     private lateinit var binding: ActivityReservationBinding
     private lateinit var currentParking: Parking
@@ -45,27 +49,27 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var mDialogSuccuess : View
     val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.FRANCE)
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reservation)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar1)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.title = "Réserver une place"
+        val parking = arguments?.getParcelable<Parking>("parking") as Parking
+        currentParking = parking
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_reservation)
-        val bundle = intent.extras
-        bundle?.let {
-            bundle.apply {
-                val parking = getParcelable<Parking>("PARKING") as Parking
-                binding.parking = parking
-                currentParking = parking
-            }
-        }
+    }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_reservation, container, false)
+        binding.lifecycleOwner = activity
+        binding.parking = currentParking
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         //initTarifsLists()
         initDurationsList()
         confirm_btn.setOnClickListener {
@@ -83,43 +87,47 @@ class ReservationActivity : AppCompatActivity() {
             )
             ReservationListRepository.getInstance().getCreatedReservation(reservationRequest)
                 .observe(this, Observer<Reservation> {res ->
-                    val mBuilder = AlertDialog.Builder(this)
+                    val mBuilder = AlertDialog.Builder(context!!)
                         .setView(mDialogSuccuess)
 
                     val mAlertDialog = mBuilder.show()
                     mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
                     mDialogSuccuess.see_details_btn.setOnClickListener {
 
-                        val reservationDetailsActivity =
-                            ReservationDetailsActivity.newIntent(this, res!!)
-                        startActivity(reservationDetailsActivity)
-                        finish()
+                        goToReservationDetails(res)
 
                     }
 
                 })
-            mDialogSuccuess = LayoutInflater.from(this).inflate(R.layout.reservation_dialog, null)
-          /*  val mBuilder = AlertDialog.Builder(this)
-                .setView(mDialogSuccuess)
+            mDialogSuccuess = LayoutInflater.from(context!!).inflate(R.layout.reservation_dialog, null)
+            /*  val mBuilder = AlertDialog.Builder(this)
+                  .setView(mDialogSuccuess)
 
-            val mAlertDialog = mBuilder.show()
-            mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) */
-          /*  mDialogView.see_details_btn.setOnClickListener {
+              val mAlertDialog = mBuilder.show()
+              mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) */
+            /*  mDialogView.see_details_btn.setOnClickListener {
 
-                // real data of reseravtion later
-                // val reservation = Reservation("DZ - 12458647", "Lun, déc 16 12.40", " Lun, déc 16 13.40", currentParking)
-                val reservations = ReservationListRepository.getInstance().getReservations()
-                val reservation =
-                    reservations.find { res -> res.parking.idParking == currentParking.idParking }
-                val reservationDetailsActivity =
-                    ReservationDetailsActivity.newIntent(this, reservation!!)
-                startActivity(reservationDetailsActivity)
-                finish()
+                  // real data of reseravtion later
+                  // val reservation = Reservation("DZ - 12458647", "Lun, déc 16 12.40", " Lun, déc 16 13.40", currentParking)
+                  val reservations = ReservationListRepository.getInstance().getReservations()
+                  val reservation =
+                      reservations.find { res -> res.parking.idParking == currentParking.idParking }
+                  val reservationDetailsActivity =
+                      ReservationDetailsActivity.newIntent(this, reservation!!)
+                  startActivity(reservationDetailsActivity)
+                  finish()
 
-            }*/
+              }*/
 
         }
     }
+
+    fun goToReservationDetails(reservation: Reservation) {
+        val navController = Navigation.findNavController(binding.root)
+        val bundle = bundleOf("reservation" to reservation)
+        navController.navigate(R.id.action_reservationActivity_to_reservationDetailsActivity,bundle)
+    }
+
 
 
     fun initDurationsList() {
@@ -151,13 +159,13 @@ class ReservationActivity : AppCompatActivity() {
         val TOTAL = Duration("Temps total", "2 heures", R.drawable.ic_timer, "TIME", false)
 
         val recyclerView = duration_container
-        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         val list = arrayListOf(
             IN,
             OUT,
             TOTAL
         )
-        val context = this
+
 
 
         var adapter = DurationAdapter(list, object : MyAdapter.ItemAdapterListener<Duration> {
@@ -220,19 +228,6 @@ class ReservationActivity : AppCompatActivity() {
         }
         adapter = DurationAdapter(list, listener)
         recyclerView.adapter = adapter
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
-
-    companion object {
-        fun newIntent(context: Context, parking: Parking): Intent {
-            val intent = Intent(context, ReservationActivity::class.java)
-            intent.putExtra("PARKING", parking)
-            return intent
-        }
     }
 
 

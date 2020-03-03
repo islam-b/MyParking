@@ -94,10 +94,10 @@ class HomeFragment : Fragment() {
             goToMainActivity(LIST_VIEW)
         }
         binding.root.see_more_reservations.setOnClickListener {
-            goToReservationsListActivity() // find a way to go to right activity on backpress
+            goToReservationsListActivity()
         }
         binding.root.see_more_favorites.setOnClickListener {
-            goToMainActivity(LIST_VIEW) // change to favorites
+            goToFavoriteParkings()
         }
         binding.root.vue_carte_btn.setOnClickListener {
             goToMainActivity(MAP_VIEW)
@@ -127,7 +127,11 @@ class HomeFragment : Fragment() {
 
     }
     fun goToReservationDetails( reservation: Reservation) {
-        startActivity(ReservationDetailsActivity.newIntent(context!!, reservation))
+        val bundle= bundleOf("reservation" to reservation)
+        navController.navigate(R.id.action_homeFragment_to_reservationDetailsActivity, bundle)
+    }
+    fun goToFavoriteParkings() {
+        navController.navigate(R.id.action_homeFragment_to_favoriteParkingsActivity)
     }
 
 
@@ -172,15 +176,11 @@ class HomeFragment : Fragment() {
     fun goToMainActivity(viewType: Int) {
         val bundle= bundleOf("viewType" to viewType)
         navController.navigate(R.id.action_homeFragment_to_mainActivity2, bundle)
-//        val mainActivityIntent = MainActivity.newIntent(this, viewType)
-//        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-//        startActivity(mainActivityIntent)
+
     }
 
     fun goToReservationsListActivity() {
-        val intent = Intent(context!!, MesReservationsActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivity(intent)
+        navController.navigate(R.id.action_homeFragment_to_mesReservationsActivity)
     }
 
 

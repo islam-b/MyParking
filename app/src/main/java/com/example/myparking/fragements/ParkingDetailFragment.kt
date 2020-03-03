@@ -11,9 +11,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -63,6 +68,7 @@ class ParkingDetailFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.activity_parking_details, container, false)
        /* binding.parking = currentParking*/
+        binding.lifecycleOwner = activity
         val factory = ParkingItemViewModelFactory(currentParkingIndex, ParkingListRepository.getInstance())
 
         mParkingViewModel = ViewModelProviders.of(this, factory)
@@ -78,7 +84,11 @@ class ParkingDetailFragment : Fragment() {
 
         toolbar.inflateMenu(R.menu.parking_details_menu)
         toolbar.setNavigationIcon(R.drawable.ic_back_toolbar)
-        toolbar.setNavigationOnClickListener { activity!!.onBackPressed() }
+        toolbar.setNavigationOnClickListener {
+            val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+            navController.navigateUp()
+            //activity!!.onBackPressed()
+        }
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_share -> {
@@ -102,11 +112,15 @@ class ParkingDetailFragment : Fragment() {
 
         //reserve btn click listener
         reserver.setOnClickListener {
-            val i = ReservationActivity.newIntent(context!!,mParkingViewModel.getParkingItem().value!!)
-            startActivity(i)
+            goToReservation(mParkingViewModel.getParkingItem().value!!)
         }
     }
 
+    fun goToReservation(parking:Parking) {
+        val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+        val bundle = bundleOf("parking" to parking)
+        navController.navigate(R.id.action_parkingsDetailsContainer_to_reservationActivity,bundle)
+    }
 
     private fun showHoraireList() {
         var recyclerview = binding.root.horaire_list

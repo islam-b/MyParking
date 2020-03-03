@@ -8,14 +8,16 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <dist:module dist:instant="true" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -26,20 +28,7 @@
 
         <activity android:name=".HomeActivity" />
         <activity android:name=".activities.NoConnexionActivity" />
-        <activity android:name=".activities.MesReservationsActivity" />
-        <activity android:name=".activities.ReservationDetailsActivity" />
-        <activity
-            android:name=".activities.FavoriteParkingsActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".activities.ParkingsDetailsContainer" />
-        <activity
-            android:name=".activities.ReservationActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.SliderActivity" />
         <activity android:name=".activities.SplashActivity">
@@ -80,6 +69,22 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data android:name="com.here.android.maps.appid"
+            android:value="KHFoWjkZtNBiqhqjmcKR"/>
+        <meta-data android:name="com.here.android.maps.apptoken"
+            android:value="tJI2IP1zzj0Ffky1W-uqZg"/>
+        <meta-data android:name="com.here.android.maps.license.key"
+            android:value="fxJRO3Qo4DiwrT2xeNFjr+fexgV2wq/OzN32y8ztofGHNgBJ2ZS7McMW/nNTRnilhs4nO8hpEPJAru40SYJCMrg1AbVGVZHbjDtdyg8+RfNL5w7D/x10zb5U0WLGNvoj9G7HHgECxD8srAmTTNBl+roXEm/O/oVU7+sgxRKLeQ7J+WXRK5yGZVuhBE+AR8F1XiNoR2McaAUKAdLn36VZnMbiwzN9juY20qFu5g21biCOu4btiAvfuFuaObBQ/rxgD5Pa4uRhdoQdWNIReqHwRlT5WygYgGwmvRLaGbMsaeUwjs2T/bqwjgsG6/pUrS1dglP9o4bm+adzQW1rT6MiBm135DOivTYiC+WQMZVsS+QOEXhaE+wUqmBqMGylLelnhYyyyLNRHg3IHGL+4Q2Z4NHCWBgs1MPQCJsYXpyA3MAm9WKS/E+j5OirDhavt+VVNq/HXwdHc5nP0qQsHBs2crC55V2xgbt8dKQ2S+1Pf8/apoe6Qbg5SJW5xsJEiK0tDA2Wanrd4dO0fsFhYlhdTF68jxbCIA+4pUhUhaYIFRL9KUDFIlOYQYoXihOLh/kD9K3TJE1t0iIi51AFSeY6ggGrpwvrGwAcctkshjcLIKRcvlp7zMhn4GEEnElrUY1XbwZy1jhu7Z+KCupJjakFQ9XZ4eZSFrgfS388vf86Txc="/>
+
+        <service
+            android:name="com.here.android.mpa.service.MapService"
+            android:label="here_map_service"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="here_map_intent">
+                </action>
+            </intent-filter>
+        </service>
 
         <activity
             android:name="com.facebook.FacebookActivity"

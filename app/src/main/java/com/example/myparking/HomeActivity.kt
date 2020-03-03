@@ -33,6 +33,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.example.myparking.utils.AnimationUtils.convertDpToPixel
+import kotlinx.android.synthetic.main.activity_parking_details.*
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -107,15 +108,45 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         arguments: Bundle?
     ) {
         when (destination.id) {
+            R.id.homeFragment -> {
+                customizeToolbar("",110f,true)
+            }
             R.id.parkingsDetailsContainer -> {
-                val layouParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT,0)
-                collapsing_app_bar.layoutParams = layouParams
+                customizeToolbar("",0f,false)
+            }
+            R.id.mesReservationsActivity -> {
+                customizeToolbar("Mes réservations",56f,false)
+            }
+            R.id.favoriteParkingsActivity -> {
+                customizeToolbar("Mes parkings favoris",56f,false)
+            }
+            R.id.reservationActivity -> {
+                customizeToolbar("Réserver un parking",56f,false)
+            }
+            R.id.reservationDetailsActivity -> {
+                customizeToolbar("Détails réservations",56f,false)
             }
             else ->{
-                val layouParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT,convertDpToPixel(110f))
-                collapsing_app_bar.layoutParams = layouParams
+                customizeToolbar("",56f,false)
             }
         }
+    }
+
+    private fun customizeToolbar(title: String, height:Float, isExpanded: Boolean) {
+        val layouParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT,convertDpToPixel(height))
+        collapsing_app_bar.layoutParams = layouParams
+        search_card.visibility = if (isExpanded) {VISIBLE} else {GONE}
+        collapsing_app_bar.setExpanded(isExpanded)
+        if (title=="") {
+            logo.visibility = VISIBLE
+            frag_title.visibility = GONE
+        } else {
+            logo.visibility = GONE
+            frag_title.visibility = VISIBLE
+            frag_title.text = title
+        }
+
+
     }
 
 
@@ -178,15 +209,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * @return boolean value representing success or failure
      */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
         when (item.itemId) {
             R.id.nav_fav -> {
-                val intent= FavoriteParkingsActivity.newIntent(this)
-                startActivity(intent)
+                navController.navigate(R.id.action_homeFragment_to_favoriteParkingsActivity)
             }
             R.id.nav_reservations ->{
-                val intent = Intent(applicationContext, MesReservationsActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                startActivity(intent)
+                navController.navigate(R.id.action_homeFragment_to_mesReservationsActivity)
             }
 
         }

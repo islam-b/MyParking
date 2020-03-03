@@ -20,6 +20,18 @@
         <argument android:name="parking"
             app:argType="com.example.myparking.models.Parking"
             />
+        <action
+            android:id="@+id/action_homeFragment_to_mesReservationsActivity"
+            app:destination="@id/mesReservationsActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_reservationDetailsActivity"
+            app:destination="@id/reservationDetailsActivity" />
+        <argument android:name="reservation"
+            app:argType="com.example.myparking.models.Reservation"
+            />
+        <action
+            android:id="@+id/action_homeFragment_to_favoriteParkingsActivity"
+            app:destination="@id/favoriteParkingsActivity" />
     </fragment>
     <fragment
         android:id="@+id/mainActivity2"
@@ -37,5 +49,51 @@
     <fragment
         android:id="@+id/parkingsDetailsContainer"
         android:name="com.example.myparking.activities.ParkingsDetailsContainer"
-        android:label="ParkingsDetailsContainer" />
+        android:label="ParkingsDetailsContainer" >
+        <action
+            android:id="@+id/action_parkingsDetailsContainer_to_reservationActivity"
+            app:destination="@id/reservationActivity" />
+        <argument android:name="parking"
+            app:argType="com.example.myparking.models.Parking"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/mesReservationsActivity"
+        android:name="com.example.myparking.activities.MesReservationsActivity"
+        android:label="MesReservationsActivity" >
+        <action
+            android:id="@+id/action_mesReservationsActivity_to_reservationDetailsActivity"
+            app:destination="@id/reservationDetailsActivity" />
+        <argument android:name="reservation"
+            app:argType="com.example.myparking.models.Reservation"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/reservationDetailsActivity"
+        android:name="com.example.myparking.activities.ReservationDetailsActivity"
+        android:label="ReservationDetailsActivity" />
+    <fragment
+        android:id="@+id/favoriteParkingsActivity"
+        android:name="com.example.myparking.activities.FavoriteParkingsActivity"
+        android:label="FavoriteParkingsActivity" >
+        <action
+            android:id="@+id/action_favoriteParkingsActivity_to_parkingsDetailsContainer"
+            app:destination="@id/parkingsDetailsContainer" />
+        <argument android:name="parkingIndex"
+            android:defaultValue="0"/>
+        <argument android:name="parking"
+            app:argType="com.example.myparking.models.Parking"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/reservationActivity"
+        android:name="com.example.myparking.activities.ReservationActivity"
+        android:label="ReservationActivity" >
+        <action
+            android:id="@+id/action_reservationActivity_to_reservationDetailsActivity"
+            app:destination="@id/reservationDetailsActivity" />
+        <argument android:name="reservation"
+            app:argType="com.example.myparking.models.Reservation"
+            />
+    </fragment>
 </navigation>
