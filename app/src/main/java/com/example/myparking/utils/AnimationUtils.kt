@@ -1,5 +1,6 @@
 package com.example.myparking.utils
 
+import android.content.res.Resources
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.View.MeasureSpec.makeMeasureSpec
 import android.view.View.MeasureSpec.EXACTLY
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import kotlin.math.roundToInt
 
 
 object AnimationUtils {
@@ -67,5 +69,11 @@ object AnimationUtils {
         // Collapse speed of 1dp/ms
         a.duration = (initialHeight / v.context.resources.displayMetrics.density).toLong()
         v.startAnimation(a)
+    }
+
+    fun convertDpToPixel(dp: Float): Int {
+        val metrics = Resources.getSystem().displayMetrics
+        val px = dp * (metrics.densityDpi / 160f)
+        return px.roundToInt()
     }
 }

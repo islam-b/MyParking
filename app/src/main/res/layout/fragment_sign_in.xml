@@ -165,6 +165,7 @@
                                 android:id="@+id/login_btn"
                                 android:layout_width="match_parent"
                                 android:layout_height="64dp"
+
                                 android:backgroundTint="@color/colorAccent"
                                 android:text="@string/connecter_bn"
                                 android:theme="@style/Widget.MaterialComponents.Button"

@@ -6,11 +6,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.gms.maps.MapView
+        <!--<com.google.android.gms.maps.MapView
             android:id="@+id/mapV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center" />
+            android:layout_gravity="center" />-->
+
+        <fragment
+            class="com.here.android.mpa.mapping.AndroidXMapFragment"
+            android:id="@+id/hereMapfragment"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
 
         <include layout="@layout/bottom_sheet_layout"
              />

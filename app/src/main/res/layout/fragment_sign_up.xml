@@ -44,19 +44,66 @@
                     android:orientation="vertical">
 
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout7"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="4dp"
+                        app:layout_constraintBottom_toTopOf="@+id/fadingEdgeLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:fontFamily="sans-serif"
+                            android:text="Inscription"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView9"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="8dp"
+                            android:lines="2"
+                            android:text="Remplissez ces champs pour créer un nouveau compte."
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <com.bosphere.fadingedgelayout.FadingEdgeLayout
                         android:id="@+id/fadingEdgeLayout"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:fel_edge="bottom|top"
                         app:fel_size_bottom="20dp"
                         app:fel_size_top="20dp"
-                        app:layout_constraintBottom_toTopOf="@+id/create_account"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintBottom_toTopOf="@+id/accept_terms"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
 
                         <androidx.core.widget.NestedScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="400dp">
+                            android:layout_height="300dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -64,61 +111,21 @@
                                 android:orientation="vertical">
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:id="@+id/constraintLayout7"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginStart="16dp"
-                                    android:layout_marginTop="0dp"
-                                    android:layout_marginEnd="16dp"
-                                    android:layout_marginBottom="0dp">
-
-                                    <TextView
-                                        android:id="@+id/textView8"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
-                                        android:layout_marginTop="16dp"
-                                        android:layout_marginEnd="8dp"
-                                        android:fontFamily="sans-serif"
-                                        android:text="Inscription"
-                                        android:textColor="@color/colorPrimary"
-                                        android:textSize="24sp"
-                                        android:textStyle="bold"
-                                        app:layout_constraintBottom_toTopOf="@+id/textView9"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
-
-                                    <TextView
-                                        android:id="@+id/textView9"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
-                                        android:layout_marginTop="4dp"
-                                        android:layout_marginEnd="8dp"
-                                        android:lines="2"
-                                        android:text="Remplissez ces champs pour créer un nouveau compte."
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:padding="16dp">
+                                    android:paddingHorizontal="16dp">
 
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/textInputEditText"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
-                                        android:layout_marginEnd="8dp"
                                         android:hint="@string/lastname_hint"
-                                        app:layout_constraintBottom_toTopOf="@+id/user_fname"
-                                        app:layout_constraintEnd_toEndOf="parent"
+                                        android:layout_marginBottom="4dp"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginStart="8dp"
+                                        app:layout_constraintBottom_toTopOf="@+id/user_mail"
+                                        app:layout_constraintEnd_toStartOf="@+id/user_fname"
+                                        app:layout_constraintHorizontal_bias="0.5"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -126,44 +133,57 @@
                                         android:id="@+id/user_fname"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
-                                        android:layout_marginTop="8dp"
-                                        android:layout_marginEnd="8dp"
-                                        android:layout_marginBottom="8dp"
                                         android:hint="@string/firstname_hint"
+                                        android:layout_marginStart="4dp"
+                                        android:layout_marginBottom="4dp"
+                                        android:layout_marginEnd="8dp"
                                         app:layout_constraintBottom_toTopOf="@+id/user_mail"
                                         app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
+                                        app:layout_constraintHorizontal_bias="0.5"
+                                        app:layout_constraintStart_toEndOf="@+id/textInputEditText"
+                                        app:layout_constraintTop_toTopOf="parent" />
 
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/user_mail"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="16dp"
-                                        android:layout_marginTop="8dp"
-                                        android:layout_marginEnd="16dp"
-                                        android:layout_marginBottom="8dp"
                                         android:hint="@string/mail_hint"
-                                        android:visibility="gone"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="4dp"
+                                        app:layout_constraintBottom_toTopOf="@+id/user_num"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/user_num"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/num_hint"
+                                        android:visibility="visible"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="4dp"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginEnd="8dp"
                                         app:layout_constraintBottom_toTopOf="@+id/user_password_layout"
                                         app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintHorizontal_bias="0.5"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/user_fname" />
+                                        app:layout_constraintTop_toBottomOf="@+id/user_mail" />
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         android:id="@+id/user_password_layout"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
                                         android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="4dp"
+                                        android:layout_marginStart="8dp"
                                         android:layout_marginEnd="8dp"
-                                        android:layout_marginBottom="8dp"
                                         app:layout_constraintBottom_toTopOf="@+id/user_password_conf_layout"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/user_mail"
+                                        app:layout_constraintTop_toBottomOf="@+id/user_num"
                                         app:passwordToggleContentDescription="Password"
                                         app:passwordToggleEnabled="true"
                                         app:passwordToggleTint="@color/colorAccent">
@@ -185,13 +205,11 @@
                                         android:id="@+id/user_password_conf_layout"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
                                         android:layout_marginTop="4dp"
+                                        android:layout_marginStart="8dp"
                                         android:layout_marginEnd="8dp"
-                                        android:layout_marginBottom="8dp"
-                                        app:layout_constraintBottom_toTopOf="@+id/accept_terms"
+                                        app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintHorizontal_bias="0.5"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/user_password_layout"
                                         app:passwordToggleContentDescription="Password Confirmation"
@@ -212,20 +230,6 @@
                                     </com.google.android.material.textfield.TextInputLayout>
 
 
-                                    <CheckBox
-                                        android:id="@+id/accept_terms"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
-                                        android:layout_marginTop="8dp"
-                                        android:layout_marginEnd="8dp"
-                                        android:text="J'accepte les Termes et Conditions *"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/user_password_conf_layout" />
-
-
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -236,21 +240,51 @@
 
                     </com.bosphere.fadingedgelayout.FadingEdgeLayout>
 
-                    <Button
-                        android:id="@+id/create_account"
-                        android:layout_width="match_parent"
-                        android:layout_height="64dp"
+                    <CheckBox
+                        android:id="@+id/accept_terms"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="J'accepte les Termes et Conditions *"
                         android:layout_marginStart="24dp"
-                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="24dp"
-                        android:layout_marginBottom="16dp"
-                        android:backgroundTint="@color/colorAccent"
-                        android:text="@string/create_account_bn"
-                        android:theme="@style/Widget.MaterialComponents.Button"
-                        app:layout_constraintBottom_toTopOf="@+id/fadingEdgeLayout"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/create_account"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/fadingEdgeLayout" />
+
+                    <LinearLayout
+                        android:id="@+id/create_account"
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:layout_height="64dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/accept_terms">
+
+                        <Button
+                            android:id="@+id/singnup_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+
+                            android:backgroundTint="@color/colorAccent"
+                            android:text="@string/create_account_bn"
+                            android:theme="@style/Widget.MaterialComponents.Button" />
+
+                        <ProgressBar
+                            android:id="@+id/signUpLoading"
+                            android:layout_width="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="6dp"
+                            android:visibility="gone"
+                            android:layout_height="match_parent" />
+
+                    </LinearLayout>
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

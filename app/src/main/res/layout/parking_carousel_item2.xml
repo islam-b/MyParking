@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="parking"
-            type="com.example.myparking.models.Parking" />
+            name="routedetail"
+            type="com.example.myparking.models.RouteDetail" />
     </data>
     <androidx.cardview.widget.CardView
         android:layout_width="320dp"
@@ -246,7 +246,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_btn"
+            android:id="@+id/go_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"

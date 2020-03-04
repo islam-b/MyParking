@@ -14,27 +14,11 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar2"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:navigationIcon="@drawable/ic_back_toolbar"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:title="Détails de Réservation" />
-
-        </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:id="@+id/reservation_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="56dp"
             android:background="@color/greyBg">
 
             <LinearLayout
