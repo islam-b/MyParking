@@ -26,10 +26,10 @@ class SliderActivity : AppCompatActivity(){
     //private var dots= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PreferenceManager(this).clearreference()  // remove this to show slider again
+        //PreferenceManager(this).clearreference()  // remove this to show slider again
         if(PreferenceManager(this).checkPreference())
         {
-            goToMainActivity()
+            goToLoginActivity()
         }
         setContentView(R.layout.activity_login)
         slider_viewPager?.adapter = SlideViewPagerAdapter(layouts, this)
@@ -82,11 +82,6 @@ class SliderActivity : AppCompatActivity(){
         }
     }
 
-    private fun goToMainActivity() {
-        val mainActivityIntent = Intent(applicationContext, MainActivity::class.java)
-        startActivity(mainActivityIntent)
-        finish()
-    }
 
     private fun goToNextSlide(){
        var nextSlide = 0

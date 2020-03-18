@@ -20,7 +20,6 @@ class PreferenceManager(val context: Context){
     }
 
     fun writeDriverProfile(profile: DriverProfile) {
-        val sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_preference), Context.MODE_PRIVATE)
 
         val editor = sharedPreferences.edit()
         /*editor.putStringSet("profile", setOf(
@@ -28,27 +27,22 @@ class PreferenceManager(val context: Context){
         ))*/
         Log.d("writin to pref",profile.idAutomobiliste.toString())
         editor.putString("profile",profile.idAutomobiliste.toString())
+
         editor.apply()
+        val v = sharedPreferences.getString("profile","null  nulll")!!
+        Log.d("critten to pref",v)
     }
 
     fun destroyProfile() {
+
         val sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_preference), Context.MODE_PRIVATE)
 
         sharedPreferences.edit().remove("profile").apply()
     }
 
     fun checkDriverProfile():String {
-        val sharedPreferences = context.getSharedPreferences(context.getString(R.string.my_preference), Context.MODE_PRIVATE)
 
-//        val set = sharedPreferences.getStringSet("profile", null)
-//        return if (set!==null) {
-//            val list = set.toList()
-//            DriverProfile(
-//                list[0].toInt(),list[1],list[2],list[3],null,null
-//            )
-//        } else {
-//            null
-//        }
+
         val str = sharedPreferences.getString("profile","null")!!
         Log.d("getting pref", str)
         return str

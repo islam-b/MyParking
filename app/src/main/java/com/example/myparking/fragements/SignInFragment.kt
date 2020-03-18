@@ -64,12 +64,7 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
         savedInstanceState: Bundle?
         ): View? {
 
-        val profile = PreferenceManager(activity!!).checkDriverProfile()
-        if (profile != "null") {
-            Log.d("precious profile", profile)
-            startHomeActivity()
-        }
-        Log.d("profile null", "null")
+
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
@@ -153,7 +148,7 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
         if (response.code()==200) {
             val id = response.body()?.driverProfile?.idAutomobiliste.toString()
 
-            PreferenceManager(activity!!).writeDriverProfile(response.body()?.driverProfile!!)
+            PreferenceManager(context!!).writeDriverProfile(response.body()?.driverProfile!!)
             startHomeActivity()
         } else {
             hideLoading()
