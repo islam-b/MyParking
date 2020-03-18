@@ -35,7 +35,7 @@ class NavAppBottomDialog(val map: Map, val route: Route) : BottomSheetDialogFrag
     }
 
     fun startGMAPSNavigation()  {
-        val str = route.destination.altitude.toString()+","+route.destination.longitude.toString()
+        val str = route.destination.latitude.toString()+","+route.destination.longitude.toString()
         val gmmIntentUri = Uri.parse("google.navigation:q=$str")
         val mapIntent = Intent(ACTION_VIEW, gmmIntentUri)
         mapIntent.setPackage("com.google.android.apps.maps")

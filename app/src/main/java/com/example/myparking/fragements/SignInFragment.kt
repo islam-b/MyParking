@@ -39,6 +39,8 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
 import android.util.Base64
+import com.example.myparking.models.DriverProfile
+import com.example.myparking.models.FbSignInModelRequest
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -55,11 +57,19 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
     private lateinit var singnInLoading: ProgressBar
     private lateinit var loginManager: LoginManager
     private lateinit var profileTracker: ProfileTracker
+    var email=""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+        ): View? {
+
+        val profile = PreferenceManager(activity!!).checkDriverProfile()
+        if (profile != "null") {
+            Log.d("precious profile", profile)
+            startHomeActivity()
+        }
+        Log.d("profile null", "null")
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
@@ -74,13 +84,22 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
 
         fbLogin = view.findViewById(R.id.login_facebook)
         callbackManager = CallbackManager.Factory.create()
+        val listener =  this
         profileTracker = object: ProfileTracker() {
             override fun onCurrentProfileChanged(oldProfile: Profile?, currentProfile: Profile?) {
                 if (currentProfile!==null) {
-                    Log.d("emailId",currentProfile?.id!!)
+                    Log.d("emailId",currentProfile.id!!)
                     Log.d("emailId",currentProfile.firstName)
                     Log.d("emailId",currentProfile.lastName)
                     Log.d("emailId",currentProfile.name)
+                    val service = InjectorUtils.provideAuthService()
+                    val id = currentProfile.id!!
+                    val profile = DriverProfile(
+                        null,currentProfile.lastName,"",currentProfile.firstName,
+                        "facebook",id)
+                    showLoading()
+                    service.signInWithFb(FbSignInModelRequest(email=email,username=id,driverProfile = profile))
+                        .enqueue(listener)
                 }
 
             }
@@ -132,8 +151,9 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
     ) {
         Log.d("signinCode",response.code().toString())
         if (response.code()==200) {
-           /* val id = response.body()?.driverProfile?.idAutomobiliste.toString()
-            PreferenceManager(context!!).writeDriverId(id)*/
+            val id = response.body()?.driverProfile?.idAutomobiliste.toString()
+
+            PreferenceManager(activity!!).writeDriverProfile(response.body()?.driverProfile!!)
             startHomeActivity()
         } else {
             hideLoading()
@@ -156,12 +176,13 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
         } else {
             Log.d("errorLog",isLoggedIn.toString())
         }
+
         val request = GraphRequest.newMeRequest(accessToken,object: GraphRequest.GraphJSONObjectCallback {
             override fun onCompleted(`object`: JSONObject?, response: GraphResponse?) {
                 try {
                     val mail = `object`?.getString("email")
                     Log.i("email",mail!!)
-                    startHomeActivity()
+                    email = mail
                 } catch (e:Exception) {
 
                 }

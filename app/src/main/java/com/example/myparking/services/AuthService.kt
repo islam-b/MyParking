@@ -1,9 +1,6 @@
 package com.example.myparking.services
 
-import com.example.myparking.models.SearchModel
-import com.example.myparking.models.SignInModelRequest
-import com.example.myparking.models.SignInModelResponse
-import com.example.myparking.models.SignUpModelRequest
+import com.example.myparking.models.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -16,4 +13,7 @@ interface AuthService {
 
     @POST("register/driver/")
     fun signUp(@Body model: SignUpModelRequest): Call<Any>
+
+    @POST("api/driver/login")
+    fun signInWithFb(@Body model: FbSignInModelRequest): Call<SignInModelResponse>
 }

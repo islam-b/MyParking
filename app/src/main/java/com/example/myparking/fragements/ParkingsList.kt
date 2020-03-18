@@ -78,13 +78,9 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
     }
 
     fun initParkings() {
-        if (mAdapter == null) {
-            mAdapter = ParkingsListAdapter(parkingList, this)
-            recyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            recyclerview.adapter = mAdapter
-        } else {
-            mAdapter?.notifyDataSetChanged()
-        }
+        mAdapter = ParkingsListAdapter(parkingList, this)
+        recyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        recyclerview.adapter = mAdapter
 
     }
     private fun showProgressBar() {

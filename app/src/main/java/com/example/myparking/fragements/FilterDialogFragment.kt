@@ -65,7 +65,7 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
 
         binding = DataBindingUtil.inflate(inflater, R.layout.filter_dialog, container, false)
-        (activity as MainActivity)
+        //(activity as MainActivity)
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
         currentFilterState = ViewModelProviders.of(this.activity!!).get(FilterParkingsViewModel::class.java)
 
@@ -91,6 +91,7 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
 
         binding.root.distance_range_bar?.setOnRangeBarChangeListener(object :
             RangeBar.OnRangeBarChangeListener {
+
             override fun onTouchEnded(rangeBar: RangeBar?) {
             }
 

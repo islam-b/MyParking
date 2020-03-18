@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object InjectorUtils {
-    private val baseURL = "https://myparking-backend.herokuapp.com/"
+    private val baseURL = "http://myparking.jcloud-ver-jpe.ik-server.com/"
     private val retrofit = this.provideRetrofit()
 
     fun provideParkingListViewModelFactory(): ParkingListViewModelFactory {

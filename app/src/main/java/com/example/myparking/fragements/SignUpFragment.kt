@@ -111,7 +111,7 @@ class SignUpFragment : Fragment(), Callback<Any> {
             passwordInput.error = null
         }
         val password_conf = passwordConfInput.text.toString()
-        if (validationHelper.isNullOrEmpty(password_conf) || password!==password_conf) {
+        if ((validationHelper.isNullOrEmpty(password_conf)) || (password!=password_conf)) {
             passwordConfInput.error = "Le mot de passe ne correnspond pas"
             return false
         } else {

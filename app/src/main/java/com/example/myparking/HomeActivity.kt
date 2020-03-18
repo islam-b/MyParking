@@ -32,7 +32,9 @@ import kotlin.math.abs
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.example.myparking.activities.LoginActivity
 import com.example.myparking.utils.AnimationUtils.convertDpToPixel
+import com.example.myparking.utils.PreferenceManager
 import kotlinx.android.synthetic.main.activity_parking_details.*
 
 
@@ -217,13 +219,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_reservations ->{
                 navController.navigate(R.id.action_homeFragment_to_mesReservationsActivity)
             }
+            R.id.nav_logout -> {
+                PreferenceManager(this).destroyProfile()
+                signOut()
+            }
 
         }
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
-
+    fun signOut() {
+        val loginAct = Intent(this, LoginActivity::class.java)
+        loginAct.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(loginAct)
+    }
 
 
     /**

@@ -294,7 +294,7 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
 
-        mParkingListViewModel = ViewModelProviders.of(this, factory)
+        mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
 
         mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
