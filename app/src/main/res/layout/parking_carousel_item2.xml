@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="routedetail"
-            type="com.example.myparking.models.RouteDetail" />
+            name="parking"
+            type="com.example.myparking.models.Parking" />
     </data>
     <androidx.cardview.widget.CardView
         android:layout_width="320dp"

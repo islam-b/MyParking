@@ -120,7 +120,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lines="1"
-                    android:text="@{parking.adresse.substring(0,16)}"
+                    android:ellipsize="end"
+                    android:text="@{parking.adresse}"
                     android:textSize="12sp" />
 
                 <!--<TextView

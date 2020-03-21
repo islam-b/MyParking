@@ -9,6 +9,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <!--<com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:paddingTop="16dp"
@@ -42,7 +44,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+            android:id="@+id/home_activity_content"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
 
@@ -384,6 +386,19 @@
     </androidx.core.widget.NestedScrollView>
 
 
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/shimmer_home_activity">
+        <include
+            layout="@layout/placeholder_home_activity"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

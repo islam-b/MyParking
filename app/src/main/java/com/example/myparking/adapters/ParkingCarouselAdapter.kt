@@ -6,31 +6,59 @@ import com.example.myparking.R
 import com.example.myparking.databinding.ParkingCarouselItem2Binding
 import com.example.myparking.databinding.ParkingCarouselItemBinding
 import com.example.myparking.fragements.NavAppBottomDialog
+import com.example.myparking.fragements.NavigationListener
 import com.example.myparking.models.Parking
 
 import com.example.myparking.models.ParkingModel
 import com.example.myparking.models.RouteDetail
 import com.google.android.gms.dynamic.SupportFragmentWrapper
+import com.here.android.mpa.common.GeoCoordinate
+import com.here.android.mpa.mapping.MapRoute
+import com.here.android.mpa.routing.CoreRouter
+import com.here.android.mpa.routing.Route
+import com.here.android.mpa.routing.RouteResult
+import com.here.android.mpa.routing.RoutingError
 import kotlinx.android.synthetic.main.parking_carousel_item2.view.*
 
-class ParkingCarouselAdapter(val routeDetailsList:ArrayList<RouteDetail>,
-                             val listener:ItemAdapterListener<RouteDetail>) :
-    MyAdapter<RouteDetail, ParkingCarouselItem2Binding>(routeDetailsList,
-        R.layout.parking_carousel_item2,listener) {
+class ParkingCarouselAdapter(val parkings:ArrayList<Parking>,
+                             val navigationListener: NavigationListener) :
+    MyAdapter<Parking, ParkingCarouselItem2Binding>(parkings,
+        R.layout.parking_carousel_item2,navigationListener) {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val routeDetail = routeDetailsList[position]
-        holder.binding.routedetail = routeDetail
+        val parking = parkings[position]
+        holder.binding.parking = parking
         //holder.binding.root.parking_img.setImageResource(R.drawable.parking_p)
         holder.binding.root.setOnClickListener {
-            listener.onItemClicked(routeDetailsList[position])
+            navigationListener.onItemClicked(parkings[position])
         }
         holder.binding.root.go_to.setOnClickListener {
-            NavAppBottomDialog(routeDetail.map, routeDetail.route).show(frgManager, "CHOOSE_NAV_APP")
+            navigationListener.showNavigationChoice()
         }
+
     }
 
-    lateinit var frgManager: FragmentManager
+
+    private lateinit var route: Route
+
+    fun calcualteRoute(currentCooridinates: GeoCoordinate,target:Parking, listener: CoreRouter.Listener ) {
+        val points = arrayListOf<GeoCoordinate>(
+            GeoCoordinate(currentCooridinates.latitude, currentCooridinates.longitude),
+            GeoCoordinate(target.lattitude, target.longitude)
+        )
+    }
+
+    fun onProgress(progress: Int) {
+
+    }
+
+    fun onCalculateRouteFinished(p0: MutableList<RouteResult>?, p1: RoutingError?) {
+
+    }
+
+
+
+    //lateinit var frgManager: FragmentManager
 
 
 }

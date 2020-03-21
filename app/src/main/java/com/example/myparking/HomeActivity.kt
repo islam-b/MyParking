@@ -31,10 +31,13 @@ import kotlinx.android.synthetic.main.home_nav_layout.*
 import kotlin.math.abs
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.location.Location
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.example.myparking.activities.LoginActivity
+import com.example.myparking.fragements.OnLocationListener
 import com.example.myparking.utils.AnimationUtils.convertDpToPixel
 import com.example.myparking.utils.PreferenceManager
+import com.google.android.gms.location.LocationCallback
 import kotlinx.android.synthetic.main.activity_parking_details.*
 
 
@@ -56,6 +59,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         MapsUtils.initLocationProvider(this)
+        MapsUtils.getLastLocation(this,object:LocationCallback(){
+
+        } ,object :OnLocationListener{
+            override fun onLocationReady(location: Location) {
+
+            }
+
+        })
         Places.initialize(applicationContext, "AIzaSyCDbn_Le90eo8Ry1UEb5GFYIz80Dv4INdY")
         // Create a new Places client instance
         val placesClient = Places.createClient(this)

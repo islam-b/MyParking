@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -28,6 +29,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.here.android.mpa.common.ApplicationContext
 
 
 object MapsUtils {
@@ -50,8 +52,8 @@ object MapsUtils {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun requestPermissions(fragment: Fragment) {
-        fragment.requestPermissions(
+    private fun requestPermissions(app: AppCompatActivity) {
+            app.requestPermissions(
             arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -89,7 +91,7 @@ object MapsUtils {
                 ContextCompat.startActivity(context, intent, null)
             }
         } else {
-            requestPermissions(listener as Fragment)
+            requestPermissions(context as AppCompatActivity)
         }
     }
 

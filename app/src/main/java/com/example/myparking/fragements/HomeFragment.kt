@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -71,9 +73,11 @@ class HomeFragment : Fragment() {
             .get(ParkingListViewModel::class.java)
         mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
         {list ->
+            hideLoading()
             val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
             mParkingListAdapter?.updateList(ArrayList(newList.takeLast(3)))
             mFavoriteParkings?.updateList(ArrayList(newList.take(3)))
+
         })
         val factoryReservation = ReservationListViewModelFactory(1, ReservationListRepository.getInstance())
 
@@ -81,9 +85,11 @@ class HomeFragment : Fragment() {
             .get(ReservationListViewModel::class.java)
         mReservationListViewModel.getReservationsList().observe(this, Observer<ArrayList<Reservation>>
         {list->
+            hideLoading()
             val newList = list.sortedWith(compareBy{df.parse(it.dateEntreePrevue)})
             mReservationListAdapter?.updateList(ArrayList(list.take(3)))
         })
+        showLoading()
         initNearParkings()
         initReservations()
         initFavoriteParkings()
@@ -182,6 +188,20 @@ class HomeFragment : Fragment() {
     fun goToReservationsListActivity() {
         navController.navigate(R.id.action_homeFragment_to_mesReservationsActivity)
     }
+
+    fun showLoading() {
+        binding.root.home_activity_content.visibility = GONE
+        binding.root.shimmer_home_activity.visibility = VISIBLE
+        binding.root.shimmer_home_activity.startShimmer()
+    }
+
+    fun hideLoading() {
+        binding.root.shimmer_home_activity.stopShimmer()
+        binding.root.shimmer_home_activity.visibility = GONE
+        binding.root.home_activity_content.visibility = VISIBLE
+
+    }
+
 
 
 }

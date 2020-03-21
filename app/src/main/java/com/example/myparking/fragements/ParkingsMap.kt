@@ -1,6 +1,7 @@
 package com.example.myparking.fragements
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PointF
 import android.location.Location
@@ -16,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
@@ -28,32 +30,24 @@ import com.example.myparking.adapters.OnSearchListener
 import com.example.myparking.adapters.ParkingCarouselAdapter
 import com.example.myparking.databinding.FragmentParkingsMapBinding
 import com.example.myparking.databinding.ParkingCarouselItem2Binding
-import com.example.myparking.databinding.ParkingCarouselItemBinding
 
 import com.example.myparking.models.Parking
 import com.example.myparking.models.ParkingModel
 import com.example.myparking.models.RouteDetail
 import com.example.myparking.models.SearchResult
 import com.example.myparking.repositories.ParkingListRepository
-import com.example.myparking.utils.DataSource
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.MapsInitializer
-import com.google.android.gms.maps.MapView
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.here.android.mpa.common.*
 import com.here.android.mpa.common.MapSettings.setIsolatedDiskCacheRootPath
+import com.here.android.mpa.guidance.NavigationManager
 import com.here.android.mpa.mapping.*
 import com.here.android.mpa.mapping.Map
+import com.here.android.mpa.odml.MapLoader
+import com.here.android.mpa.odml.MapPackage
 import com.here.android.mpa.routing.*
 import com.yarolegovich.discretescrollview.DiscreteScrollView
 import com.yarolegovich.discretescrollview.InfiniteScrollAdapter
@@ -77,9 +71,10 @@ import java.math.BigDecimal
  * @property parkings The List of parkings
  * @property binding Binding data with the view
  */
-class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickListener ,GoogleMap.OnMapClickListener,*/
-    OnLocationListener , OnSearchListener, OnEngineInitListener,
-    PositioningManager.OnPositionChangedListener, MapGesture.OnGestureListener {
+class ParkingsMap() : Fragment(),
+    OnSearchListener, OnEngineInitListener, NavigationListener,
+    PositioningManager.OnPositionChangedListener, MapGesture.OnGestureListener, MapLoader.Listener {
+
 
 
     private var listDetails = arrayListOf<RouteDetail>()
@@ -88,11 +83,10 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
     private  var mAdapter: ParkingCarouselAdapter? = null
 
-    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<RouteDetail, ParkingCarouselItem2Binding>.MyViewHolder>
-
+    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<Parking, ParkingCarouselItem2Binding>.MyViewHolder>
     private lateinit var mMap: Map
     private lateinit var mMapView: AndroidXMapFragment
-    private lateinit var pstManager: PositioningManager
+    private var pstManager: PositioningManager? = null
     private lateinit var router: CoreRouter
     private var parkings: ArrayList<Parking> = arrayListOf()
     private var markers: ArrayList<MapMarker> = arrayListOf()
@@ -103,43 +97,9 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     override fun onSearchClick(searchResult: SearchResult) {
 
-        /*val pos= LatLng(searchResult.position[0], searchResult.position[1])
-        mMap.addMarker(
-            MarkerOptions()
-                .position(pos)
-                .title(searchResult.categoryTitle)
-                .icon(
-                    BitmapDescriptorFactory.fromBitmap(
-                        MapsUtils.createCustomMarker(
-                            context, mMapView,
-                            R.color.authorized, ""
-                        )
-                    )
-                )
-        ).tag = searchResult
-        //mMap.addMarker(MarkerOptions().position(myLocation).title("Marker in my location"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(pos))
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f))*/
-    }
-
-    fun getSearchListner():OnSearchListener {
-        return this
-    }
-    /**
-     * Request location from Maps Util
-     * @see com.example.myparking.utils.MapsUtils.getLastLocation
-     */
-    fun requestLocation() {
-        val listener = this
-        if (context!=null) {
-            MapsUtils.getLastLocation(context!!, object : LocationCallback() {
-                override fun onLocationResult(p0: LocationResult?) {
-                    listener.onLocationReady(p0?.lastLocation!!)
-                }
-            }, this)
-        }
 
     }
+
 
     /**
      * Initialize the map view when map configuration is ready
@@ -183,80 +143,13 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     }
 
-    /**
-     * Triggered when the user clickes on a parking marker
-     * @param p0 The marker (pin) of the parking
-     * @return boolean value representing the state of the action triggered (succeed or failed)
-     */
-    /*override fun onMarkerClick(p0: Marker?): Boolean {
-        Log.d("dialod not ", "not")
-        //val parking = p0?.tag as ParkingModel
-//        ParkingBottomSheet.newInstance(parking).show(activity?.supportFragmentManager,"ActionBottomDialog")
-        val obj = p0?.tag
-        if (obj is Parking) {
-            val target = parkings.indexOf(obj)
-            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-                carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(target))
-            }else {
-                carousel.scrollToPosition(infiniteAdapter.getClosestPosition(target))
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-        } else if (obj is SearchResult) {
-
-        }
-
-        return false
-    }*/
-
-    /**
-     * Triggered when the user clicks on the map
-     * @param p0 Coordinates (Lat and Long)
-     */
-    /*override fun onMapClick(p0: LatLng?) {
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-    }*/
-
-
-    /**
-     * Show the current position when the location is ready
-     * @see com.example.myparking.utils.MapsUtils.getLastLocation
-     * @param location Coordinates (Lat and Long)
-     */
-    override fun onLocationReady(location: Location) {
-        /*Log.d("here", "mylocation")
-        mMap.isMyLocationEnabled = true
-        val myLocation = LatLng(location.latitude, location.longitude)
-        //mMap.addMarker(MarkerOptions().position(myLocation).title("Marker in my location"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation))
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(13.0f))*/
-    }
-
-    /**
-     * Handle the result of the permission request
-     * @param requestCode Code of the request
-     * @param permissions List of permissions codes
-     * @param grantResults Result of permissions request (Granted or Refused)
-     */
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("PERMIH", "PERM")
-        if (requestCode == MapsUtils.PERMISSION_ID) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                this.requestLocation()
-            }
-        }
-    }
 
     /**
      * Triggered when the fragment is resumed
      */
     override fun onResume() {
         super.onResume()
-        this.requestLocation()
+
 
     }
 
@@ -300,36 +193,16 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
         mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
         {
             parkings=it
-            if (mapInitialized) {
-                initiliazeRouteInfos()
-            } else {
-                mMapView.init(this)
-
-            }
-
+            mAdapter?.updateList(it)
+            setupMarkers()
 
         })
-        val listener = object : MyAdapter.ItemAdapterListener<Parking> {
-            override fun onItemClicked(item: Parking) {
-                val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
-                val list = mParkingListViewModel.getParkingsList().value
-                val index = list?.indexOf(item)
-                val bundle= bundleOf("parking" to item, "parkingIndex" to index)
-                navController.navigate(R.id.action_mainActivity2_to_parkingsDetailsContainer, bundle)
-            }
 
-        }
-        mAdapter = ParkingCarouselAdapter(listDetails, object :MyAdapter.ItemAdapterListener<RouteDetail>{
-            override fun onItemClicked(item: RouteDetail) {
-                // fill up later
-            }
+        mAdapter = ParkingCarouselAdapter(parkings, this)
 
-        })
-        mAdapter?.frgManager = childFragmentManager
 
-        infiniteAdapter = InfiniteScrollAdapter.wrap(
-            mAdapter!!
-        )
+
+        infiniteAdapter = InfiniteScrollAdapter.wrap(mAdapter!!)
 
         val llBottomSheet =  mView.findViewById<LinearLayout>(R.id.bottom_sheet)
 
@@ -341,117 +214,98 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
 
 
-
-
-        val success = setIsolatedDiskCacheRootPath(
-                context?.applicationContext?.getExternalFilesDir(null)?.path + File.separator + ".here-maps",
-        "here_map_intent")
-
-
-
-
-
-
-        /*mMapView.onResume()
-
-        try {
-            MapsInitializer.initialize(activity!!.applicationContext)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        mMapView.getMapAsync(this)*/
+        initMapEngine()
 
 
         return mView
     }
 
-    fun initiliazeRouteInfos() {
+    fun initMapEngine() {
+       // val diskCacheRoot = activity!!.filesDir.path + File.separator + ".isolated-here-maps"
+        // Retrieve intent name from manifest
+        //var intentName = "here_map_intent"
+        /*try {
+            val ai = activity!!.packageManager.getApplicationInfo(activity!!.packageName, PackageManager.GET_META_DATA)
+            val bundle = ai.metaData
+            intentName = bundle.getString("INTENT_NAME")!!
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.e("map cache error", "Failed to find intent name, NameNotFound: " + e.message)
+        }*/
 
-        mMap.removeMapObjects(markers.toList())
-        markers.clear()
-        listDetails.clear()
+        //val success = setIsolatedDiskCacheRootPath(diskCacheRoot, intentName)
+        val success = setIsolatedDiskCacheRootPath(
+            context?.applicationContext?.getExternalFilesDir(null)?.path + File.separator + ".here-maps",
+            "here_map_intent")
 
-        if (mapInitialized && parkings.isNotEmpty()) {
-            val currentCooridinates = pstManager.position.coordinate
-            calculateRoute(0,currentCooridinates)
+
+        if (mapInitialized) {
+            setupMarkers()
+        } else {
+            mMapView.init(this)
+
         }
-    }
 
-    fun calculateRoute(index: Int, currentCooridinates: GeoCoordinate) {
-        val target = parkings[index]
-        var next = -1
-        if (index<parkings.size-1) next = index+1
-        val points = arrayListOf<GeoCoordinate>(
-            GeoCoordinate(currentCooridinates.latitude, currentCooridinates.longitude),
-            GeoCoordinate(target.lattitude, target.longitude)
-        )
-
-        val routePlan = RoutePlan()
-        routePlan.addWaypoint(RouteWaypoint(points[0]))
-        routePlan.addWaypoint(RouteWaypoint(points[1]))
-
-        val routeOptions = RouteOptions()
-        routeOptions.transportMode = RouteOptions.TransportMode.CAR
-        routeOptions.routeType = RouteOptions.Type.BALANCED
-
-        routePlan.routeOptions = routeOptions
-
-        router.calculateRoute(routePlan, object: CoreRouter.Listener {
-            override fun onCalculateRouteFinished(
-                p0: MutableList<RouteResult>?,
-                p1: RoutingError?
-            ) {
-                if (p1 == RoutingError.NONE) {
-                    listDetails.add(RouteDetail(target,p0?.get(0)?.route!!,mMap))
-                    mAdapter?.notifyDataSetChanged()
-                    infiniteAdapter.notifyDataSetChanged()
-                    val icon = Image()
-                    val prc = ((BigDecimal(target.nbPlaces).minus(BigDecimal(target.nbPlacesDisponibles)))
-                        .div(BigDecimal(target.nbPlaces)) * BigDecimal(100)).toInt().toString() +"%"
-                    icon.bitmap =  MapsUtils.createCustomMarker(
-                        context!!, binding.root as ViewGroup,
-                        R.color.colorPrimary, prc
-                    )
-                    val marker = MapMarker(GeoCoordinate(target.lattitude, target.longitude),icon)
-                    mMap.addMapObject(marker)
-                    markers.add(marker)
-                    if (next>0) calculateRoute(next,currentCooridinates)
-                } else {
-                    Log.i("errorRoute",p1.toString())
-                }
-            }
-
-            override fun onProgress(p0: Int) {
-            }
-
-        })
     }
 
     var mapInitialized=false
+    private lateinit var mapLoader: MapLoader
     override fun onEngineInitializationCompleted(p0: OnEngineInitListener.Error?) {
+        Log.d("error engine type",p0?.name.toString())
         if (p0 == OnEngineInitListener.Error.NONE) {
             // now the map is ready to be used
 
-            pstManager = PositioningManager.getInstance()
-            pstManager.start(PositioningManager.LocationMethod.GPS_NETWORK_INDOOR)
-            pstManager.addListener(
-                WeakReference<PositioningManager.OnPositionChangedListener>(this))
+           /* mapLoader = MapLoader.getInstance()
+            mapLoader.addListener(this)
+            mapLoader.mapPackages*/
+
             mMapView.mapGesture.addOnGestureListener(this,100,false)
             mMap = mMapView.map
+
+            pstManager = PositioningManager.getInstance()
+            pstManager?.start(PositioningManager.LocationMethod.GPS_NETWORK_INDOOR)
+            pstManager?.addListener(
+                WeakReference<PositioningManager.OnPositionChangedListener>(this))
+
+
+
             mMapView.positionIndicator.isVisible = true
             mMap.projectionMode = Map.Projection.MERCATOR
-//            mMap.zoomLevel = 13.0
-//            mMap.setCenter(GeoCoordinate(36.7553388,3.0605876), Map.Animation.NONE)
+           mMap.zoomLevel = 13.0
+            mMap.setCenter(GeoCoordinate(36.7553388,3.0605876), Map.Animation.NONE)
 
             mapInitialized = true
             router = CoreRouter()
 
+            setupMarkers()
             // ...
         } else {
             Log.d("errorHere",p0?.details.toString())
         }
 
     }
+
+    fun setupMarkers() {
+        if (mapInitialized && parkings.isNotEmpty()) {
+            mMap.removeMapObjects(markers.toList())
+            markers.clear()
+            parkings.forEach {target->
+                val icon = Image()
+                val prc = ((BigDecimal(target.nbPlaces).minus(BigDecimal(target.nbPlacesDisponibles)))
+                    .div(BigDecimal(target.nbPlaces)) * BigDecimal(100)).toInt().toString() +"%"
+                icon.bitmap =  MapsUtils.createCustomMarker(
+                    context!!, binding.root as ViewGroup,
+                    R.color.colorPrimary, prc
+                )
+                val marker = MapMarker(GeoCoordinate(target.lattitude, target.longitude),icon)
+                mMap.addMapObject(marker)
+                markers.add(marker)
+            }
+        }
+    }
+
+
+
+
 
     var firstPos = true
     override fun onPositionFixChanged(
@@ -474,7 +328,7 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
             p1?.let {
                 mMap.zoomLevel = 14.0
                 mMap.setCenter(GeoCoordinate(it.coordinate.latitude,it.coordinate.longitude), Map.Animation.BOW)
-                initiliazeRouteInfos()
+
             }
 
         }
@@ -487,7 +341,28 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 if ((viewObj as MapObject).type == MapObject.Type.MARKER) {
 
                     val index = markers.indexOf(viewObj)
-                    val target = mAdapter!!.routeDetailsList[index]
+                    val target =parkings[index]
+
+                    // show loading in carousel
+
+                    calculateRoute(target, object:CoreRouter.Listener {
+                        override fun onCalculateRouteFinished(
+                            p0: MutableList<RouteResult>?,
+                            p1: RoutingError?
+                        ) {
+                            if (p1 == RoutingError.NONE) {
+                                if (route!=null) mMap.removeMapObject(route)
+                                route = MapRoute(p0!![0].route)
+                                mMap.addMapObject(route)
+                            }
+                            Log.d("error route",p1?.name)
+                        }
+
+                        override fun onProgress(p0: Int) {
+                            Log.d("doin0g"," soemthing")
+                        }
+
+                    })
 
                     Log.d("indexHERE", index.toString())
                         if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
@@ -497,13 +372,6 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                         }
 
-                    if (route!=null) mMap.removeMapObject(route)
-                    route = MapRoute(target.route)
-                    mMap.addMapObject(route)
-
-
-
-
                 }
             }
         }
@@ -511,19 +379,6 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
         return true
     }
 
-//    override fun onCalculateRouteFinished(p0: MutableList<RouteResult>?, p1: RoutingError?) {
-//        if (p1 == RoutingError.NONE) {
-//            if (route!=null) mMap.removeMapObject(route)
-//            route = MapRoute(p0?.get(0)?.route)
-//            mMap.addMapObject(route)
-//        } else {
-//            Log.i("errorRoute",p1.toString())
-//        }
-//    }
-//
-//    override fun onProgress(p0: Int) {
-//        Log.d("PROGRESS",p0.toString())
-//    }
 
     /**
      * Triggered when the main view is created
@@ -546,25 +401,40 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 .build()
         )
 
-      /*  carousel.addOnItemChangedListener { p0, p1 ->
-            val realPos = infiniteAdapter.getRealPosition(p1)
-            Log.d("position", realPos.toString())
-            val marker = markers[realPos]
+        carousel.addOnItemChangedListener { p0, p1 ->
 
-            /*mMap.animateCamera(
-                CameraUpdateFactory.newLatLng(marker.position),
-                500,
-                object : GoogleMap.CancelableCallback {
-                    override fun onFinish() {
-                        marker.showInfoWindow()
+            if (mapInitialized) {
+                val realPos = infiniteAdapter.getRealPosition(p1)
+                Log.d("position", realPos.toString())
+                val target = parkings[realPos]
+
+                calculateRoute(target, object : CoreRouter.Listener {
+                    override fun onCalculateRouteFinished(
+                        p0: MutableList<RouteResult>?,
+                        p1: RoutingError?
+                    ) {
+                        if (p1 == RoutingError.NONE) {
+                            if (route != null) mMap.removeMapObject(route)
+                            route = MapRoute(p0!![0].route)
+                            mMap.addMapObject(route)
+                        }
+                        Log.d("error route", p1?.name)
                     }
 
-                    override fun onCancel() {
-
+                    override fun onProgress(p0: Int) {
+                        Log.d("doin0g", " soemthing")
                     }
 
-                })*/
-        }*/
+                })
+                mMap.zoomLevel = 14.0
+                mMap.setCenter(
+                    GeoCoordinate(target.lattitude, target.longitude),
+                    Map.Animation.LINEAR
+                )
+            }
+
+
+        }
     }
 
     override fun onLongPressRelease() {
@@ -650,6 +520,102 @@ class ParkingsMap() : Fragment(), /*OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }
     }
 
+    override fun onCheckForUpdateComplete(
+        p0: Boolean,
+        p1: String?,
+        p2: String?,
+        p3: MapLoader.ResultCode?
+    ) {
+
+    }
+
+    override fun onInstallMapPackagesComplete(p0: MapPackage?, p1: MapLoader.ResultCode?) {
+
+    }
+
+    override fun onUninstallMapPackagesComplete(p0: MapPackage?, p1: MapLoader.ResultCode?) {
+
+    }
+
+    override fun onGetMapPackagesComplete(p0: MapPackage?, p1: MapLoader.ResultCode?) {
+
+    }
+
+    override fun onPerformMapDataUpdateComplete(p0: MapPackage?, p1: MapLoader.ResultCode?) {
+
+    }
+
+    override fun onProgress(p0: Int) {
+       Log.d("installation or download",p0.toString())
+    }
+
+    override fun onInstallationSize(p0: Long, p1: Long) {
+
+    }
+
+
+    override fun calculateRoute(target:Parking, listener: CoreRouter.Listener ) {
+        if (pstManager!=null) {
+
+
+            val currentCooridinates = pstManager?.position?.coordinate
+            val points = arrayListOf<GeoCoordinate>(
+                GeoCoordinate(currentCooridinates!!.latitude, currentCooridinates.longitude),
+                GeoCoordinate(target.lattitude, target.longitude)
+            )
+            val routePlan = RoutePlan()
+            routePlan.addWaypoint(RouteWaypoint(points[0]))
+            routePlan.addWaypoint(RouteWaypoint(points[1]))
+
+            val routeOptions = RouteOptions()
+            routeOptions.transportMode = RouteOptions.TransportMode.CAR
+            routeOptions.routeType = RouteOptions.Type.BALANCED
+
+            routePlan.routeOptions = routeOptions
+
+            router.calculateRoute(routePlan, listener)
+        }
+    }
+
+
+    override fun onItemClicked(item: Parking) {
+        val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+        val list = mParkingListViewModel.getParkingsList().value
+        val index = list?.indexOf(item)
+        val bundle= bundleOf("parking" to item, "parkingIndex" to index)
+        navController.navigate(R.id.action_mainActivity2_to_parkingsDetailsContainer, bundle)
+    }
+
+    override fun showNavigationChoice() {
+        NavAppBottomDialog(this).show(childFragmentManager, "CHOOSE_NAV_APP")
+    }
+
+    override fun startGMAPSNavigation()  {
+        val str = route?.route?.destination?.latitude.toString()+","+route?.route?.destination?.longitude.toString()
+        val gmmIntentUri = Uri.parse("google.navigation:q=$str")
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+        context?.startActivity(mapIntent)
+
+    }
+    override fun startMyParkingNavigation()  {
+        val navigationManager = NavigationManager.getInstance()
+
+        mMap.mapScheme = Map.Scheme.CARNAV_DAY
+        mMap.addSchemeChangedListener {
+            Log.d("nav","here schem nav")
+            (childFragmentManager.findFragmentByTag("CHOOSE_NAV_APP") as DialogFragment).dismiss()
+            navigationManager.setMap(mMap)
+            val error = navigationManager.startNavigation(route?.route)
+            mMap.zoomLevel = 18.0
+            mMap.setCenter(route?.route?.start, Map.Animation.BOW)
+            NavigationManager.getInstance().mapUpdateMode = NavigationManager.MapUpdateMode.ROADVIEW
+            Log.d("errorNav", error.toString())
+        }
+
+
+    }
+
 
 }
 
@@ -664,4 +630,10 @@ interface OnLocationListener {
     fun onLocationReady(location: Location)
 }
 
+interface NavigationListener: MyAdapter.ItemAdapterListener<Parking> {
+    fun calculateRoute(target:Parking, listener: CoreRouter.Listener )
+    fun showNavigationChoice()
+    fun startGMAPSNavigation()
+    fun startMyParkingNavigation()
+}
 

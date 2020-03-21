@@ -24,6 +24,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a'
+            universalApk false
+        }
     }
     dataBinding {
         enabled = true
@@ -60,6 +69,7 @@ dependencies {
     implementation 'com.appyvet:materialrangebar:1.4.7'
     implementation 'com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0'
     implementation 'com.yarolegovich:discrete-scrollview:1.4.9'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 

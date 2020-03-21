@@ -58,6 +58,7 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
     private lateinit var loginManager: LoginManager
     private lateinit var profileTracker: ProfileTracker
     var email=""
+    private lateinit var rootView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +69,7 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
+        rootView = view
         signInButton = view.findViewById(R.id.login_btn)
         singnInLoading = view.findViewById(R.id.signInLoading)
         signInButton.setOnClickListener {
@@ -92,6 +94,7 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
                     val profile = DriverProfile(
                         null,currentProfile.lastName,"",currentProfile.firstName,
                         "facebook",id)
+                    singnInLoading = rootView.findViewById(R.id.signInLoading)
                     showLoading()
                     service.signInWithFb(FbSignInModelRequest(email=email,username=id,driverProfile = profile))
                         .enqueue(listener)
@@ -151,6 +154,7 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
             PreferenceManager(context!!).writeDriverProfile(response.body()?.driverProfile!!)
             startHomeActivity()
         } else {
+            Log.d("error" , response.errorBody()?.string()!!)
             hideLoading()
             SignInErrorDialog("Nom d'utilisateur ou mot de passe incorrect.").show(childFragmentManager,"SIGN_IN_ERROR")
         }
