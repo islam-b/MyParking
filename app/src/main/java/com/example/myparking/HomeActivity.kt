@@ -42,7 +42,7 @@ import kotlinx.android.synthetic.main.activity_parking_details.*
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-    OnSearchListener, AppBarLayout.OnOffsetChangedListener,
+    AppBarLayout.OnOffsetChangedListener,
     NavController.OnDestinationChangedListener {
 
 
@@ -94,7 +94,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         search_input.setOnClickListener {
-            val dialog = SearchDialogFragment(this)
+            val dialog = SearchDialogFragment()
             dialog.show(supportFragmentManager, dialog.TAG1)
         }
 
@@ -202,7 +202,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_search -> {
                 Log.d("CLICK", "SEARCH BTN CLICKED")
-                val dialog = SearchDialogFragment(this)
+                val dialog = SearchDialogFragment()
                 dialog.show(supportFragmentManager, dialog.TAG1)
                 //onSearchRequested()
                 //startAutoCompleteIntent()
@@ -212,9 +212,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return false
     }
 
-    override fun onSearchClick(searchResult: SearchResult) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+
 
     /**
      * This function manage the drawer layout navigation, it perform actions according to selected items from the drawer navigation

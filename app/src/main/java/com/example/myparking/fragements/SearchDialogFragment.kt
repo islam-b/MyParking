@@ -14,13 +14,17 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myparking.MainActivity.Companion.MAP_VIEW
 import com.example.myparking.R
 import com.example.myparking.adapters.OnSearchListener
 import com.example.myparking.adapters.SearchAdapter
+import com.example.myparking.fragements.ParkingsMap.Companion.SEARCH_ACTION
 import com.example.myparking.models.SearchModel
 import com.example.myparking.models.SearchResult
 import com.example.myparking.services.ParkingService
@@ -30,16 +34,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchDialogFragment(val listener: OnSearchListener): DialogFragment(), OnSearchListener {
+class SearchDialogFragment: DialogFragment(), OnSearchListener {
 
-    override fun onSearchClick(searchResult: SearchResult) {
-        dismiss()
-        listener.onSearchClick(searchResult)
-    }
+
 
     val TAG1 = "SearchDialogFragment"
     lateinit var service: ParkingService
     lateinit var recyclerView: RecyclerView
+
+    override fun onSearchClick(searchResult: SearchResult) {
+        dismiss()
+        val args = bundleOf("viewType" to MAP_VIEW, "actionType" to SEARCH_ACTION,
+            "data" to searchResult)
+        val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+        navController.navigate(R.id.action_global_mainActivity2, args)
+
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

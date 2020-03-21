@@ -57,43 +57,12 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 class MainActivity : Fragment(),SpaceOnClickListener {
 
 
-    private lateinit var searchListener: OnSearchListener
+
     private var currentItem = LIST_VIEW
     private lateinit var spaceNavigationView : SpaceNavigationView
     private lateinit var rootView: View
 
-    /**
-     * This function initialize the main activity:
-     * - Initializing Google Maps Configuratino
-     * - Initializing Toolbars and navigation
-     * - Starting the activity as List view
-     */
 
-
-     fun no(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //NetworkUtil.registerConnectivityNetworkMonitor(this)
-
-
-        // registerReceiver(networkReceiver, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
-
-//        val toolbar: Toolbar = findViewById(R.id.toolbar)
-//        setSupportActionBar(toolbar)
-
-
-
-
-//        val navigationView: NavigationView = findViewById(R.id.side_view)
-//        navigationView.setNavigationItemSelectedListener(this)
-
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        supportActionBar?.setHomeButtonEnabled(true)
-
-//        toolbar.setNavigationIcon(R.drawable.ic_menu)
-
-
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -160,7 +129,9 @@ class MainActivity : Fragment(),SpaceOnClickListener {
                 currentItem = itemIndex
             }
             MAP_VIEW_NAME-> {
-                fragment = ParkingsMap()
+                val actionType = arguments?.getInt("actionType")
+                val data = arguments?.get("data")
+                fragment = ParkingsMap(actionType, data)
                 currentItem = itemIndex
             }
             else -> {

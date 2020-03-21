@@ -16,15 +16,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.navigateUp
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myparking.MainActivity.Companion.MAP_VIEW
 
 import com.example.myparking.R
 import com.example.myparking.activities.ReservationActivity
 import com.example.myparking.adapters.*
+import com.example.myparking.fragements.ParkingsMap.Companion.NAVIGATION_ACTION
 import com.example.myparking.models.*
 import com.example.myparking.repositories.ParkingListRepository
 
@@ -46,7 +50,7 @@ class ParkingDetailFragment : Fragment() {
 
 
     private lateinit var binding: ActivityParkingDetailsBinding
-    private var currentParkingIndex: Int = 5
+    private var currentParkingIndex: Int =0
 
     private lateinit var mParkingViewModel : ParkingItemViewModel
     private var mAdapterTarif: TarifsAdapter? = null
@@ -97,6 +101,14 @@ class ParkingDetailFragment : Fragment() {
                 }
             }
             false
+        }
+        binding.root.navigate_btn.setOnClickListener {
+            val args = bundleOf("viewType" to MAP_VIEW, "actionType" to NAVIGATION_ACTION,
+                "data" to mParkingViewModel.getParking())
+
+            val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+            navController.navigate(R.id.action_global_mainActivity2, args)
+
         }
         return binding.root
     }

@@ -21,6 +21,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
@@ -36,6 +37,7 @@ import com.example.myparking.models.ParkingModel
 import com.example.myparking.models.RouteDetail
 import com.example.myparking.models.SearchResult
 import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.utils.CustomMarker
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
@@ -71,13 +73,11 @@ import java.math.BigDecimal
  * @property parkings The List of parkings
  * @property binding Binding data with the view
  */
-class ParkingsMap() : Fragment(),
-    OnSearchListener, OnEngineInitListener, NavigationListener,
+class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
+    OnEngineInitListener, NavigationListener,
     PositioningManager.OnPositionChangedListener, MapGesture.OnGestureListener, MapLoader.Listener {
 
 
-
-    private var listDetails = arrayListOf<RouteDetail>()
 
     private lateinit var carousel: DiscreteScrollView
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
@@ -89,59 +89,15 @@ class ParkingsMap() : Fragment(),
     private var pstManager: PositioningManager? = null
     private lateinit var router: CoreRouter
     private var parkings: ArrayList<Parking> = arrayListOf()
-    private var markers: ArrayList<MapMarker> = arrayListOf()
+    private var markers: ArrayList<CustomMarker> = arrayListOf()
     private var route: MapRoute? = null
     private lateinit var mView : View
     private lateinit var binding: FragmentParkingsMapBinding
     private lateinit var mParkingListViewModel: ParkingListViewModel
 
-    override fun onSearchClick(searchResult: SearchResult) {
+    private var destination: SearchResult? = null
 
 
-    }
-
-
-    /**
-     * Initialize the map view when map configuration is ready
-     * @param p0 Google Map (Parameters)
-     */
-    fun onMapReady() {
-        Log.d("htest", "hhh here")
-        Log.d("null context", context.toString())
-        Log.d("null view", mView.toString())
-        /*mMap = p0
-        this.requestLocation()
-        mMap.setOnMarkerClickListener(this)
-        mMap.setOnMapClickListener(this)
-        mMap.setMinZoomPreference(10.0f)
-        mMap.setMaxZoomPreference(20.0f)*/
-        var r = 0
-        parkings?.forEach {
-            val icon = Image()
-            val prc = ((BigDecimal(it.nbPlaces).minus(BigDecimal(it.nbPlacesDisponibles)))
-                .div(BigDecimal(it.nbPlaces)) * BigDecimal(100)).toInt().toString() +"%"
-            icon.bitmap =  MapsUtils.createCustomMarker(
-                context!!, mView as ViewGroup,
-                R.color.colorPrimary, prc
-            )
-            val marker = MapMarker(GeoCoordinate(it.lattitude, it.longitude),icon)
-            mMap.addMapObject(marker)
-            /*val pin = mMap.addMarker(
-                MarkerOptions()
-                    .position(LatLng(it.lattitude, it.longitude))
-                    .title(it.nom)
-                    .icon(
-                        BitmapDescriptorFactory.fromBitmap(
-
-                        )
-                    )
-            )*/
-            //marker.tag = it
-            markers.add(marker)
-            r++
-        }
-
-    }
 
 
     /**
@@ -240,6 +196,7 @@ class ParkingsMap() : Fragment(),
 
         if (mapInitialized) {
             setupMarkers()
+            handleAction()
         } else {
             mMapView.init(this)
 
@@ -277,6 +234,9 @@ class ParkingsMap() : Fragment(),
             router = CoreRouter()
 
             setupMarkers()
+
+            handleAction()
+
             // ...
         } else {
             Log.d("errorHere",p0?.details.toString())
@@ -296,11 +256,80 @@ class ParkingsMap() : Fragment(),
                     context!!, binding.root as ViewGroup,
                     R.color.colorPrimary, prc
                 )
-                val marker = MapMarker(GeoCoordinate(target.lattitude, target.longitude),icon)
+                val marker = CustomMarker(GeoCoordinate(target.lattitude, target.longitude),icon,
+                    PlaceType.PARKING, target)
                 mMap.addMapObject(marker)
                 markers.add(marker)
             }
         }
+    }
+
+
+
+    fun handleAction() {
+        if (data != null && actionType != null) {
+            when (actionType) {
+                NO_ACTION -> {
+
+                }
+                SEARCH_ACTION -> {
+                    Log.d("search action", "action")
+                    this.destination = data as SearchResult
+                    markDestination()
+                }
+                NAVIGATION_ACTION -> {
+                    val target = data as Parking
+                    val index = parkings.indexOf(target)
+                    // show loading in carousel
+                    calculateRoute(target, object : CoreRouter.Listener {
+                        override fun onCalculateRouteFinished(
+                            p0: MutableList<RouteResult>?,
+                            p1: RoutingError?
+                        ) {
+                            if (p1 == RoutingError.NONE) {
+                                if (route != null) mMap.removeMapObject(route)
+                                route = MapRoute(p0!![0].route)
+                                mMap.addMapObject(route)
+                                mMap.setCenter(GeoCoordinate(target.lattitude, target.longitude), Map.Animation.BOW)
+                            }
+                            Log.d("error route", p1?.name)
+                        }
+
+                        override fun onProgress(p0: Int) {
+                            Log.d("doin0g", " soemthing")
+                        }
+
+                    })
+
+                    Log.d("indexHERE", index.toString())
+                    if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                        carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(index))
+                    } else {
+                        carousel.scrollToPosition(infiniteAdapter.getClosestPosition(index))
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    }
+                }
+            }
+        }
+    }
+
+    fun markDestination() {
+        val icon = Image()
+        val title = "D"
+        icon.bitmap =  MapsUtils.createCustomMarker(
+            context!!, binding.root as ViewGroup,
+            R.color.centre_button_color, title
+        )
+        val geo = GeoCoordinate(destination!!.position[0], destination!!.position[1])
+        val marker = CustomMarker(geo, icon,PlaceType.DESTINATION, destination!!)
+        mMap.addMapObject(marker)
+        markers.add(marker)
+        mMap.zoomLevel = 14.0
+        mMap.setCenter(
+            GeoCoordinate(geo),
+            Map.Animation.LINEAR
+        )
+
     }
 
 
@@ -321,7 +350,7 @@ class ParkingsMap() : Fragment(),
         p1: GeoPosition?,
         p2: Boolean
     ) {
-        if (firstPos) {
+        if (firstPos && (actionType==null || actionType==0)) {
             firstPos = false
 
 
@@ -339,38 +368,47 @@ class ParkingsMap() : Fragment(),
         for (viewObj in p0!!) {
             if (viewObj.baseType == ViewObject.Type.USER_OBJECT) {
                 if ((viewObj as MapObject).type == MapObject.Type.MARKER) {
+                        if (viewObj is CustomMarker) {
+                            if (viewObj.customType == PlaceType.PARKING) {
 
-                    val index = markers.indexOf(viewObj)
-                    val target =parkings[index]
+                                val target = viewObj.data as Parking
+                                val index = parkings.indexOf(target)
 
-                    // show loading in carousel
+                                // show loading in carousel
 
-                    calculateRoute(target, object:CoreRouter.Listener {
-                        override fun onCalculateRouteFinished(
-                            p0: MutableList<RouteResult>?,
-                            p1: RoutingError?
-                        ) {
-                            if (p1 == RoutingError.NONE) {
-                                if (route!=null) mMap.removeMapObject(route)
-                                route = MapRoute(p0!![0].route)
-                                mMap.addMapObject(route)
+                                calculateRoute(target, object:CoreRouter.Listener {
+                                    override fun onCalculateRouteFinished(
+                                        p0: MutableList<RouteResult>?,
+                                        p1: RoutingError?
+                                    ) {
+                                        if (p1 == RoutingError.NONE) {
+                                            if (route!=null) mMap.removeMapObject(route)
+                                            route = MapRoute(p0!![0].route)
+                                            mMap.addMapObject(route)
+                                        }
+                                        Log.d("error route",p1?.name)
+                                    }
+
+                                    override fun onProgress(p0: Int) {
+                                        Log.d("doin0g"," soemthing")
+                                    }
+
+                                })
+
+                                Log.d("indexHERE", index.toString())
+                                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                                    carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(index))
+                                } else {
+                                    carousel.scrollToPosition(infiniteAdapter.getClosestPosition(index))
+                                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                                }
+                            } else {
+
                             }
-                            Log.d("error route",p1?.name)
-                        }
-
-                        override fun onProgress(p0: Int) {
-                            Log.d("doin0g"," soemthing")
-                        }
-
-                    })
-
-                    Log.d("indexHERE", index.toString())
-                        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-                            carousel.smoothScrollToPosition(infiniteAdapter.getClosestPosition(index))
                         } else {
-                            carousel.scrollToPosition(infiniteAdapter.getClosestPosition(index))
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
                         }
+
 
                 }
             }
@@ -509,16 +547,6 @@ class ParkingsMap() : Fragment(),
 
 
 
-    companion object {
-        fun getListener():OnSearchListener  {
-            return object : OnSearchListener {
-                override fun onSearchClick(searchResult: SearchResult) {
-
-                }
-
-            }
-        }
-    }
 
     override fun onCheckForUpdateComplete(
         p0: Boolean,
@@ -566,6 +594,9 @@ class ParkingsMap() : Fragment(),
             val routePlan = RoutePlan()
             routePlan.addWaypoint(RouteWaypoint(points[0]))
             routePlan.addWaypoint(RouteWaypoint(points[1]))
+            if (destination!=null) {
+                routePlan.addWaypoint(RouteWaypoint(GeoCoordinate(destination!!.position[0],destination!!.position[1])))
+            }
 
             val routeOptions = RouteOptions()
             routeOptions.transportMode = RouteOptions.TransportMode.CAR
@@ -613,6 +644,20 @@ class ParkingsMap() : Fragment(),
             Log.d("errorNav", error.toString())
         }
 
+
+
+    }
+
+
+    companion object {
+
+        const val NO_ACTION = 0
+        const val SEARCH_ACTION = 1
+        const val NAVIGATION_ACTION = 2
+
+        enum class PlaceType {
+            PARKING, DESTINATION
+        }
 
     }
 

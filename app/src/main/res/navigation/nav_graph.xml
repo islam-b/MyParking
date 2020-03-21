@@ -96,4 +96,13 @@
             app:argType="com.example.myparking.models.Reservation"
             />
     </fragment>
+    <action
+        android:id="@+id/action_global_mainActivity2"
+        app:destination="@id/mainActivity2" />
+    <argument android:name="viewType"
+        android:defaultValue="0"/>
+    <argument android:name="actionType"
+        android:defaultValue="0"/>
+    <argument android:name="data"
+            />
 </navigation>

@@ -1,5 +1,10 @@
 package com.example.myparking.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
+
+@Parcelize
 data class SearchResult(
     val title:String,
     val highlightedTitle: String,
@@ -8,9 +13,9 @@ data class SearchResult(
     val resultType: String,
     val highlightedVicinity: String,
     val vicinity: String,
-    val position: Array<Double>,
+    val position: @RawValue Array<Double>,
     val category: String,
     val categoryTitle: String,
     val id: String,
     val distance: Int
-)
+): Parcelable
