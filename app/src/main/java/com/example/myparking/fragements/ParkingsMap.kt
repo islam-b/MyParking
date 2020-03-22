@@ -373,11 +373,11 @@ class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
             firstPos = false
 
 
-            /*p1?.let {
+            p1?.let {
                 mMap.zoomLevel = 14.0
                 mMap.setCenter(GeoCoordinate(it.coordinate.latitude,it.coordinate.longitude), Map.Animation.BOW)
 
-            }*/
+            }
 
         }
 
