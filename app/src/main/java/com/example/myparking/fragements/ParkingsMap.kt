@@ -13,6 +13,8 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
@@ -41,6 +43,7 @@ import com.example.myparking.utils.CustomMarker
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
+import com.facebook.shimmer.ShimmerFrameLayout
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.here.android.mpa.common.*
@@ -150,6 +153,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
         {
             parkings=it
             mAdapter?.updateList(it)
+            if (mapInitialized) hideLoading()
             setupMarkers()
 
         })
@@ -195,13 +199,28 @@ class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
 
 
         if (mapInitialized) {
+            hideLoading()
             setupMarkers()
             handleAction()
         } else {
+            showLoading()
             mMapView.init(this)
 
         }
 
+    }
+
+    fun showLoading() {
+        val ph=mView.findViewById<ShimmerFrameLayout>(R.id.map_shimmer)
+        ph.visibility = VISIBLE
+        //mView.findViewById<View>(R.id.hereMapfragment).visibility = GONE
+        ph.startShimmer()
+    }
+    fun hideLoading() {
+        val ph=mView.findViewById<ShimmerFrameLayout>(R.id.map_shimmer)
+        ph.stopShimmer()
+        //mView.findViewById<View>(R.id.hereMapfragment).visibility = VISIBLE
+        ph.visibility = GONE
     }
 
     var mapInitialized=false
@@ -229,7 +248,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
             mMap.projectionMode = Map.Projection.MERCATOR
            mMap.zoomLevel = 13.0
             mMap.setCenter(GeoCoordinate(36.7553388,3.0605876), Map.Animation.NONE)
-
+            hideLoading()
             mapInitialized = true
             router = CoreRouter()
 
@@ -354,11 +373,11 @@ class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
             firstPos = false
 
 
-            p1?.let {
+            /*p1?.let {
                 mMap.zoomLevel = 14.0
                 mMap.setCenter(GeoCoordinate(it.coordinate.latitude,it.coordinate.longitude), Map.Animation.BOW)
 
-            }
+            }*/
 
         }
 

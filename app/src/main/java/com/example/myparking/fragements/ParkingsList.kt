@@ -1,13 +1,15 @@
 package com.example.myparking.fragements
 
-import android.annotation.SuppressLint
+
 import com.example.myparking.databinding.FragmentParkingsListBinding
-import android.content.Context
+
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,8 +22,6 @@ import androidx.navigation.Navigation
 
 import com.example.myparking.R
 
-import com.example.myparking.activities.ParkingsDetailsContainer
-
 
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.ParkingsListAdapter
@@ -29,6 +29,7 @@ import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import kotlinx.android.synthetic.main.fragment_parkings_list.*
+import kotlinx.android.synthetic.main.fragment_parkings_list.view.*
 
 
 class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
@@ -84,10 +85,16 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
 
     }
     private fun showProgressBar() {
-        progress_bar?.visibility = View.VISIBLE
+        recyclerview.visibility= GONE
+        binding.root.shimmer_parking_list.visibility= VISIBLE
+        binding.root.shimmer_parking_list.startShimmer()
     }
 
     private fun hideProgressBar() {
-        progress_bar?.visibility = View.GONE
+        binding.root.shimmer_parking_list.startShimmer()
+        binding.root.shimmer_parking_list.visibility= GONE
+        recyclerview.visibility= VISIBLE
+
+
     }
 }

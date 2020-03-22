@@ -16,8 +16,22 @@
             class="com.here.android.mpa.mapping.AndroidXMapFragment"
             android:id="@+id/hereMapfragment"
             android:layout_gravity="center"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map_shimmer"
+            android:layout_gravity="center">
+            <ImageView
+                android:layout_marginBottom="46dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/map_placeholder"/>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
 
         <include layout="@layout/bottom_sheet_layout"
