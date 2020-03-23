@@ -145,7 +145,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun customizeToolbar(title: String, height:Float, isExpanded: Boolean) {
+    fun customizeToolbar(title: String, height:Float, isExpanded: Boolean) {
         val layouParams = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT,convertDpToPixel(height))
         collapsing_app_bar.layoutParams = layouParams
         search_card.visibility = if (isExpanded) {VISIBLE} else {GONE}

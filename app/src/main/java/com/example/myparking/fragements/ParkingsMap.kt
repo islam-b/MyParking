@@ -16,7 +16,10 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -26,6 +29,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myparking.HomeActivity
 import com.example.myparking.R
 import com.example.myparking.activities.ParkingsDetailsContainer
 import com.example.myparking.adapters.MyAdapter
@@ -40,6 +44,7 @@ import com.example.myparking.models.RouteDetail
 import com.example.myparking.models.SearchResult
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.CustomMarker
+import com.example.myparking.utils.ForegroundService
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
@@ -54,15 +59,19 @@ import com.here.android.mpa.mapping.Map
 import com.here.android.mpa.odml.MapLoader
 import com.here.android.mpa.odml.MapPackage
 import com.here.android.mpa.routing.*
+import com.luseen.spacenavigation.SpaceNavigationView
 import com.yarolegovich.discretescrollview.DiscreteScrollView
 import com.yarolegovich.discretescrollview.InfiniteScrollAdapter
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.bottom_sheet_layout.view.*
 import kotlinx.android.synthetic.main.fragment_parkings_map.view.*
+import org.w3c.dom.Text
 import java.io.File
 import java.lang.ref.WeakReference
 import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * The map fragment , containing a map with parking pins
@@ -76,7 +85,7 @@ import java.math.BigDecimal
  * @property parkings The List of parkings
  * @property binding Binding data with the view
  */
-class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
+class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : Fragment(),
     OnEngineInitListener, NavigationListener,
     PositioningManager.OnPositionChangedListener, MapGesture.OnGestureListener, MapLoader.Listener {
 
@@ -593,7 +602,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
     }
 
     override fun onProgress(p0: Int) {
-       Log.d("installation or download",p0.toString())
+       Log.d("download",p0.toString())
     }
 
     override fun onInstallationSize(p0: Long, p1: Long) {
@@ -601,7 +610,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
     }
 
 
-    override fun calculateRoute(target:Parking, listener: CoreRouter.Listener ) {
+    fun calculateRoute(target:Parking, listener: CoreRouter.Listener ) {
         if (pstManager!=null) {
 
 
@@ -648,27 +657,110 @@ class ParkingsMap(val actionType: Int?, val data: Any?) : Fragment(),
         context?.startActivity(mapIntent)
 
     }
+    private lateinit var navEventsListener : NavigationManager.NewInstructionEventListener
+
     override fun startMyParkingNavigation()  {
+
+
+
+        val inst_txt = mView.findViewById<TextView>(R.id.nav_instruction)
+        val inst_ico = mView.findViewById<ImageView>(R.id.nav_icon)
+        val inst_dist = mView.findViewById<TextView>(R.id.nav_dist)
+
         val navigationManager = NavigationManager.getInstance()
 
-        mMap.mapScheme = Map.Scheme.CARNAV_DAY
+        navEventsListener = object:NavigationManager.NewInstructionEventListener() {
+            override fun onNewInstructionEvent() {
+                val maneuver = navigationManager.nextManeuver
+                if (maneuver != null) {
+                    if (maneuver.action == Maneuver.Action.END) {
+                        // notify the user that the route is complete
+                        NavigationManager.getInstance().stop()
+                        setNormalView()
+                        stopForegroundService()
+                    }
+
+                    inst_txt.text = MapsUtils.getInstructionText(maneuver.action!!)
+                    inst_ico.setImageResource(MapsUtils.getNavigationIcon(maneuver.icon!!))
+                    inst_dist.text = "${maneuver.distanceToNextManeuver} mètres"
+                    /*Log.d("man",maneuver.action.toString())
+                    Log.d("man_icon",maneuver.icon.toString())
+                    Log.d("man_dist",maneuver.distanceToNextManeuver.toString())
+                    Log.d("roadname",maneuver.roadName.toString())*/
+
+                }
+            }
+        }
+        setNavigationView()
+
         mMap.addSchemeChangedListener {
             Log.d("nav","here schem nav")
             (childFragmentManager.findFragmentByTag("CHOOSE_NAV_APP") as DialogFragment).dismiss()
             navigationManager.setMap(mMap)
-            val error = navigationManager.startNavigation(route?.route)
-            mMap.zoomLevel = 18.0
-            mMap.setCenter(route?.route?.start, Map.Animation.BOW)
-            NavigationManager.getInstance().mapUpdateMode = NavigationManager.MapUpdateMode.ROADVIEW
+
+
+            navigationManager.addNewInstructionEventListener(WeakReference(navEventsListener))
+            startForegroundService()
+            val error = navigationManager.simulate(route?.route,60)
+
             Log.d("errorNav", error.toString())
         }
 
+    }
+
+    private fun setNavigationView() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        mMap.mapScheme = Map.Scheme.CARNAV_DAY
+        parentView.findViewById<SpaceNavigationView>(R.id.nav_view).visibility = GONE
+        (activity as HomeActivity).customizeToolbar("",0f,false)
+        mView.findViewById<CardView>(R.id.nav_top_section).visibility = VISIBLE
+        mMap.zoomLevel = 18.0
+        mMap.tilt = 60.0f
+        mMap.setCenter(route?.route?.start, Map.Animation.BOW)
+        NavigationManager.getInstance().mapUpdateMode = NavigationManager.MapUpdateMode.POSITION_ANIMATION
+    }
+
+    private fun setNormalView() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        mMap.mapScheme = Map.Scheme.NORMAL_DAY
+        parentView.findViewById<SpaceNavigationView>(R.id.nav_view).visibility = VISIBLE
+        (activity as HomeActivity).customizeToolbar("",56f,false)
+        mView.findViewById<CardView>(R.id.nav_top_section).visibility = GONE
+        mMap.zoomLevel = 18.0
+        mMap.tilt = 0f
+        NavigationManager.getInstance().mapUpdateMode = NavigationManager.MapUpdateMode.ROADVIEW
+    }
 
 
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopForegroundService()
+    }
+
+    var m_foregroundServiceStarted = false
+    fun startForegroundService() {
+        if (!m_foregroundServiceStarted) {
+            m_foregroundServiceStarted = true
+            val startIntent =  Intent(context!!, ForegroundService::class.java)
+            startIntent.action = ForegroundService.START_ACTION
+            context!!.applicationContext.startService(startIntent)
+        }
+    }
+
+    fun stopForegroundService() {
+        if (m_foregroundServiceStarted) {
+            m_foregroundServiceStarted = false
+            val stopIntent =  Intent(context!!, ForegroundService::class.java)
+            stopIntent.action = ForegroundService.STOP_ACTION
+            context!!.applicationContext.startService(stopIntent)
+        }
     }
 
 
     companion object {
+
 
         const val NO_ACTION = 0
         const val SEARCH_ACTION = 1
@@ -695,7 +787,6 @@ interface OnLocationListener {
 }
 
 interface NavigationListener: MyAdapter.ItemAdapterListener<Parking> {
-    fun calculateRoute(target:Parking, listener: CoreRouter.Listener )
     fun showNavigationChoice()
     fun startGMAPSNavigation()
     fun startMyParkingNavigation()

@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,6 +31,8 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.here.android.mpa.common.ApplicationContext
+import com.here.android.mpa.routing.Maneuver
+import com.here.android.mpa.routing.Maneuver.Action.*
 
 
 object MapsUtils {
@@ -139,5 +142,222 @@ object MapsUtils {
 
         return bitmap
 
+    }
+
+    @DrawableRes
+    fun getNavigationIcon(icon: Maneuver.Icon):  Int {
+        when(icon) {
+            Maneuver.Icon.CHANGE_LINE -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.UNDEFINED -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.GO_STRAIGHT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.UTURN_RIGHT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.UTURN_LEFT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.KEEP_RIGHT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.LIGHT_RIGHT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.QUITE_RIGHT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.HEAVY_RIGHT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.KEEP_MIDDLE -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.KEEP_LEFT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.LIGHT_LEFT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.QUITE_LEFT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.HEAVY_LEFT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ENTER_HIGHWAY_RIGHT_LANE -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ENTER_HIGHWAY_LEFT_LANE -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.LEAVE_HIGHWAY_RIGHT_LANE -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.LEAVE_HIGHWAY_LEFT_LANE -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.HIGHWAY_KEEP_RIGHT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.HIGHWAY_KEEP_LEFT -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_1 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_2 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_3 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_4 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_5 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_6 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_7 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_8 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_9 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_10 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_11 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_12 -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_1_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_2_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_3_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_4_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_5_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_6_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_7_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_8_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_9_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_10_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_11_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.ROUNDABOUT_12_LH -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.START -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.END -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.FERRY -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.PASS_STATION -> {
+                return R.drawable.triplearrow
+            }
+            Maneuver.Icon.HEAD_TO -> {
+                return R.drawable.triplearrow
+            }
+        }
+    }
+
+    fun getInstructionText(action: Maneuver.Action?) : String {
+        var txt = ""
+        when (action) {
+            UNDEFINED -> {
+                txt = ""
+            }
+            NO_ACTION -> {
+                txt = ""
+            }
+            END -> {
+                txt = "Vous avez atteint la destination."
+            }
+            STOPOVER -> {
+                txt = "Arrétez vous."
+            }
+            JUNCTION -> {
+                txt = "Attention intersection"
+            }
+            ROUNDABOUT -> {
+                txt = "Attention rond point."
+            }
+            UTURN -> {
+                txt = "Faites demi-tour."
+            }
+            ENTER_HIGHWAY_FROM_RIGHT -> {
+                txt = "Entrez sur l'autouroute de la droite."
+            }
+            ENTER_HIGHWAY_FROM_LEFT -> {
+                txt = "Entrez sur l'autouroute de la gauche."
+            }
+            ENTER_HIGHWAY -> {
+                txt = "Entrez sur l'autouroute."
+            }
+            LEAVE_HIGHWAY -> {
+                txt = "Quitez l'autouroute."
+            }
+            CHANGE_HIGHWAY -> {
+                txt = "Changez l'autouroute."
+            }
+            CONTINUE_HIGHWAY -> {
+                txt = "Continuez sur la route."
+            }
+            FERRY -> {
+                txt = "Attention, chemin de fer."
+            }
+            PASS_JUNCTION -> {
+                txt = "Continuez sur la route."
+            }
+            HEAD_TO -> {
+                txt = "Continuez droit devant."
+            }
+            PASS_STATION -> {
+                txt = "Continuez sur la route."
+            }
+            CHANGE_LINE -> {
+                txt = "Changez la file"
+            }
+            INVALID -> {
+                txt = ""
+            }
+        }
+        return txt
     }
 }

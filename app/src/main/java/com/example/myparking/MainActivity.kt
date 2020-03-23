@@ -131,7 +131,7 @@ class MainActivity : Fragment(),SpaceOnClickListener {
             MAP_VIEW_NAME-> {
                 val actionType = arguments?.getInt("actionType")
                 val data = arguments?.get("data")
-                fragment = ParkingsMap(actionType, data)
+                fragment = ParkingsMap(actionType, data,rootView)
                 currentItem = itemIndex
             }
             else -> {
