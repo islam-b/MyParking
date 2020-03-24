@@ -22,8 +22,8 @@ import kotlinx.android.synthetic.main.parking_carousel_item2.view.*
 
 class ParkingCarouselAdapter(val parkings:ArrayList<Parking>,
                              val navigationListener: NavigationListener) :
-    MyAdapter<Parking, ParkingCarouselItem2Binding>(parkings,
-        R.layout.parking_carousel_item2,navigationListener) {
+    MyAdapter<Parking, ParkingCarouselItemBinding>(parkings,
+        R.layout.parking_carousel_item,navigationListener) {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val parking = parkings[position]

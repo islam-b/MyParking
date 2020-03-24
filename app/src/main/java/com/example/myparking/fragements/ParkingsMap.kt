@@ -37,6 +37,7 @@ import com.example.myparking.adapters.OnSearchListener
 import com.example.myparking.adapters.ParkingCarouselAdapter
 import com.example.myparking.databinding.FragmentParkingsMapBinding
 import com.example.myparking.databinding.ParkingCarouselItem2Binding
+import com.example.myparking.databinding.ParkingCarouselItemBinding
 
 import com.example.myparking.models.Parking
 import com.example.myparking.models.ParkingModel
@@ -95,7 +96,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
     private  var mAdapter: ParkingCarouselAdapter? = null
 
-    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<Parking, ParkingCarouselItem2Binding>.MyViewHolder>
+    private lateinit var infiniteAdapter: InfiniteScrollAdapter<MyAdapter<Parking, ParkingCarouselItemBinding>.MyViewHolder>
     private lateinit var mMap: Map
     private lateinit var mMapView: AndroidXMapFragment
     private var pstManager: PositioningManager? = null
