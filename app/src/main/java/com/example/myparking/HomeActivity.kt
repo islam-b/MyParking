@@ -33,9 +33,11 @@ import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.location.Location
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.os.bundleOf
 import com.example.myparking.activities.LoginActivity
 import com.example.myparking.fragements.OnLocationListener
 import com.example.myparking.utils.AnimationUtils.convertDpToPixel
+import com.example.myparking.utils.MapAction
 import com.example.myparking.utils.PreferenceManager
 import com.google.android.gms.location.LocationCallback
 import kotlinx.android.synthetic.main.activity_parking_details.*
@@ -227,6 +229,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_reservations ->{
                 navController.navigate(R.id.action_homeFragment_to_mesReservationsActivity)
+            }
+            R.id.nav_find_my_car -> {
+                val args = bundleOf("viewType" to MainActivity.MAP_VIEW, "actionType" to MapAction.MARK_CAR)
+                navController.navigate(R.id.action_global_mainActivity2, args)
             }
             R.id.nav_logout -> {
                 PreferenceManager(this).destroyProfile()

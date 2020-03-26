@@ -15,10 +15,12 @@ import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,6 +33,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.here.android.mpa.common.ApplicationContext
+import com.here.android.mpa.common.Image
 import com.here.android.mpa.routing.Maneuver
 import com.here.android.mpa.routing.Maneuver.Action.*
 
@@ -113,16 +116,25 @@ object MapsUtils {
 
     }
 
-    fun createCustomMarker(context: Context, parent: ViewGroup,@ColorRes color: Int, text: String): Bitmap {
+    fun createCustomMarker(context: Context, parent: ViewGroup, @LayoutRes layout:Int, @ColorRes color: Int, text: String): Bitmap {
 
         val marker = LayoutInflater.from(context).inflate(
-            R.layout.pin_layout,
-                parent, false
-            )
+            layout,
+            parent, false
+        )
 
-        val markerImage = marker.findViewById<TextView>(R.id.pin_text)
-        markerImage.backgroundTintList = ContextCompat.getColorStateList(context,color)
-        markerImage.text = text
+        when(layout) {
+            R.layout.pin_layout -> {
+                val markerImage = marker.findViewById<TextView>(R.id.pin_text)
+                markerImage.backgroundTintList = ContextCompat.getColorStateList(context,color)
+                markerImage.text = text
+            }
+            R.layout.car_marker_layout -> {
+                val img = marker.findViewById<ImageView>(R.id.car_marker)
+                img.setColorFilter(ContextCompat.getColor(context,color))
+            }
+        }
+
 
         val displayMetrics = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)

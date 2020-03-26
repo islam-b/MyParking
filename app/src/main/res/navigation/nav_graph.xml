@@ -102,7 +102,7 @@
     <argument android:name="viewType"
         android:defaultValue="0"/>
     <argument android:name="actionType"
-        android:defaultValue="0"/>
+        app:argType="com.example.myparking.utils.MapAction"/>
     <argument android:name="data"
             />
 </navigation>

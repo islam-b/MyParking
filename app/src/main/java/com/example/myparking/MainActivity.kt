@@ -34,6 +34,7 @@ import com.example.myparking.models.ParkingModel
 
 import com.example.myparking.models.SearchModel
 import com.example.myparking.models.SearchResult
+import com.example.myparking.utils.MapAction
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.utils.NetworkReceiver
 import com.google.android.libraries.places.api.Places
@@ -129,7 +130,7 @@ class MainActivity : Fragment(),SpaceOnClickListener {
                 currentItem = itemIndex
             }
             MAP_VIEW_NAME-> {
-                val actionType = arguments?.getInt("actionType")
+                val actionType = arguments?.get("actionType") as MapAction?
                 val data = arguments?.get("data")
                 fragment = ParkingsMap(actionType, data,rootView)
                 currentItem = itemIndex

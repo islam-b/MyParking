@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.parking_item.view.*
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.myparking.MainActivity
 import com.example.myparking.fragements.ParkingsMap
+import com.example.myparking.utils.MapAction
 
 
 class ParkingsListAdapter(var parkingsList : ArrayList<Parking>,
@@ -31,7 +32,7 @@ class ParkingsListAdapter(var parkingsList : ArrayList<Parking>,
     }
 
     fun navigateToParking(target:Parking) {
-        val args = bundleOf("viewType" to MainActivity.MAP_VIEW, "actionType" to ParkingsMap.NAVIGATION_ACTION,
+        val args = bundleOf("viewType" to MainActivity.MAP_VIEW, "actionType" to MapAction.NAVIGATION_ACTION,
             "data" to target)
 
         val activity = (listener as Fragment).activity!!

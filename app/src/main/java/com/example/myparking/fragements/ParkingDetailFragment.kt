@@ -28,9 +28,9 @@ import com.example.myparking.MainActivity.Companion.MAP_VIEW
 import com.example.myparking.R
 import com.example.myparking.activities.ReservationActivity
 import com.example.myparking.adapters.*
-import com.example.myparking.fragements.ParkingsMap.Companion.NAVIGATION_ACTION
 import com.example.myparking.models.*
 import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.utils.MapAction
 
 import com.example.myparking.utils.loadBackground
 import com.example.myparking.viewmodels.ParkingItemViewModel
@@ -103,7 +103,7 @@ class ParkingDetailFragment : Fragment() {
             false
         }
         binding.root.navigate_btn.setOnClickListener {
-            val args = bundleOf("viewType" to MAP_VIEW, "actionType" to NAVIGATION_ACTION,
+            val args = bundleOf("viewType" to MAP_VIEW, "actionType" to MapAction.NAVIGATION_ACTION,
                 "data" to mParkingViewModel.getParking())
 
             val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)

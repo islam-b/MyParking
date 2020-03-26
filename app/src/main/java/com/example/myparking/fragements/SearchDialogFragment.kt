@@ -24,11 +24,11 @@ import com.example.myparking.MainActivity.Companion.MAP_VIEW
 import com.example.myparking.R
 import com.example.myparking.adapters.OnSearchListener
 import com.example.myparking.adapters.SearchAdapter
-import com.example.myparking.fragements.ParkingsMap.Companion.SEARCH_ACTION
 import com.example.myparking.models.SearchModel
 import com.example.myparking.models.SearchResult
 import com.example.myparking.services.ParkingService
 import com.example.myparking.utils.InjectorUtils
+import com.example.myparking.utils.MapAction
 import kotlinx.android.synthetic.main.search_dialog_layout.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +44,7 @@ class SearchDialogFragment: DialogFragment(), OnSearchListener {
 
     override fun onSearchClick(searchResult: SearchResult) {
         dismiss()
-        val args = bundleOf("viewType" to MAP_VIEW, "actionType" to SEARCH_ACTION,
+        val args = bundleOf("viewType" to MAP_VIEW, "actionType" to MapAction.SEARCH_ACTION,
             "data" to searchResult)
         val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
         navController.navigate(R.id.action_global_mainActivity2, args)

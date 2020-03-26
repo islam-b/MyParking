@@ -47,6 +47,8 @@ import com.example.myparking.models.SearchResult
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.CustomMarker
 import com.example.myparking.utils.ForegroundService
+import com.example.myparking.utils.MapAction
+import com.example.myparking.utils.MapAction.*
 import com.example.myparking.utils.MapsUtils
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
@@ -88,7 +90,7 @@ import kotlin.collections.ArrayList
  * @property parkings The List of parkings
  * @property binding Binding data with the view
  */
-class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : Fragment(),
+class ParkingsMap(val actionType: MapAction?, val data: Any?, val parentView:View) : Fragment(),
     OnEngineInitListener, NavigationListener,
     PositioningManager.OnPositionChangedListener, MapGesture.OnGestureListener, MapLoader.Listener {
 
@@ -106,6 +108,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
     private var parkings: ArrayList<Parking> = arrayListOf()
     private var markers: ArrayList<CustomMarker> = arrayListOf()
     private var destinationMarker : CustomMarker? = null
+    private var carMarker : CustomMarker? = null
     private var route: MapRoute? = null
     private lateinit var mView : View
     private lateinit var binding: FragmentParkingsMapBinding
@@ -285,7 +288,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
                 val prc = ((BigDecimal(target.nbPlaces).minus(BigDecimal(target.nbPlacesDisponibles)))
                     .div(BigDecimal(target.nbPlaces)) * BigDecimal(100)).toInt().toString() +"%"
                 icon.bitmap =  MapsUtils.createCustomMarker(
-                    context!!, binding.root as ViewGroup,
+                    context!!, binding.root as ViewGroup,R.layout.pin_layout,
                     R.color.colorPrimary, prc
                 )
                 val marker = CustomMarker(GeoCoordinate(target.lattitude, target.longitude),icon,
@@ -342,15 +345,34 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
                         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
+                MARK_CAR -> {
+                  if (pstManager!==null) {
+                      saveCarLocation()
+                  } else {
+                      // show message dialog
+                  }
+                }
+                FIND_CAR -> {
+
+                }
             }
         }
+    }
+
+    fun saveCarLocation() {
+        val currentPos = pstManager?.position!!.coordinate
+        val icone = Image()
+        icone.bitmap = MapsUtils.createCustomMarker(context!!,binding.root as ViewGroup,
+            R.layout.car_marker_layout, R.color.authorized, "")
+        carMarker = CustomMarker(currentPos, icone,PlaceType.CAR_LOCATION,currentPos)
+        mMap.addMapObject(carMarker)
     }
 
     fun markDestination() {
         val icon = Image()
         val title = "D"
         icon.bitmap =  MapsUtils.createCustomMarker(
-            context!!, binding.root as ViewGroup,
+            context!!, binding.root as ViewGroup,R.layout.pin_layout,
             R.color.centre_button_color, title
         )
         val geo = GeoCoordinate(destination!!.position[0], destination!!.position[1])
@@ -370,7 +392,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
 
             mAdapter!!.setDestination(destination)
             val bitmap =  MapsUtils.createCustomMarker(
-                context!!, binding.root as ViewGroup,
+                context!!, binding.root as ViewGroup,R.layout.pin_layout,
                 R.color.centre_button_color, "D"
             )
             mView.findViewById<ImageView>(R.id.destination_ico).setImageBitmap(bitmap)
@@ -417,14 +439,16 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
         p1: GeoPosition?,
         p2: Boolean
     ) {
-        if (firstPos && (actionType==null || actionType==0)) {
+        if (firstPos && (actionType==null || actionType== NO_ACTION)) {
             firstPos = false
 
 
             p1?.let {
                 mMap.zoomLevel = 14.0
-                mMap.setCenter(GeoCoordinate(it.coordinate.latitude,it.coordinate.longitude), Map.Animation.BOW)
-
+                mMap.setCenter(
+                    GeoCoordinate(it.coordinate.latitude, it.coordinate.longitude),
+                    Map.Animation.BOW
+                )
             }
 
         }
@@ -832,15 +856,9 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
 
     companion object {
 
-
-        const val NO_ACTION = 0
-        const val SEARCH_ACTION = 1
-        const val NAVIGATION_ACTION = 2
-
         enum class PlaceType {
-            PARKING, DESTINATION
+            PARKING, DESTINATION, CAR_LOCATION
         }
-
     }
 
 
