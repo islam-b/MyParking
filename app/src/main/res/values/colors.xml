@@ -12,6 +12,6 @@
     <color name="filterBg">#f5f5f5</color>
     <color name="inactiveDot">#BEBEBE</color>
     <color name="facebook">#4267B2</color>
-
+    <color name="inactive_route_inco">#777</color>
     <color name="placeholder">#dadada</color>
 </resources>

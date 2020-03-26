@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.adapters.ImageViewBindingAdapter
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -67,6 +68,7 @@ import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.bottom_sheet_layout.view.*
 import kotlinx.android.synthetic.main.fragment_parkings_map.view.*
+import net.cachapa.expandablelayout.ExpandableLayout
 import org.w3c.dom.Text
 import java.io.File
 import java.lang.ref.WeakReference
@@ -103,6 +105,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
     private lateinit var router: CoreRouter
     private var parkings: ArrayList<Parking> = arrayListOf()
     private var markers: ArrayList<CustomMarker> = arrayListOf()
+    private var destinationMarker : CustomMarker? = null
     private var route: MapRoute? = null
     private lateinit var mView : View
     private lateinit var binding: FragmentParkingsMapBinding
@@ -305,6 +308,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
                     Log.d("search action", "action")
                     this.destination = data as SearchResult
                     markDestination()
+                    initDestinationTopInfo()
                 }
                 NAVIGATION_ACTION -> {
                     val target = data as Parking
@@ -351,14 +355,48 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
         )
         val geo = GeoCoordinate(destination!!.position[0], destination!!.position[1])
         val marker = CustomMarker(geo, icon,PlaceType.DESTINATION, destination!!)
-        mMap.addMapObject(marker)
-        markers.add(marker)
+        destinationMarker = marker
+        mMap.addMapObject(destinationMarker)
         mMap.zoomLevel = 14.0
         mMap.setCenter(
             GeoCoordinate(geo),
             Map.Animation.LINEAR
         )
 
+    }
+
+    fun initDestinationTopInfo() {
+        if(destination!==null) {
+
+            mAdapter!!.setDestination(destination)
+            val bitmap =  MapsUtils.createCustomMarker(
+                context!!, binding.root as ViewGroup,
+                R.color.centre_button_color, "D"
+            )
+            mView.findViewById<ImageView>(R.id.destination_ico).setImageBitmap(bitmap)
+            mView.findViewById<TextView>(R.id.destination_txt).text = destination!!.title
+            showDestinationTopInfo(true)
+            mView.findViewById<ImageView>(R.id.destination_close).setOnClickListener {
+                onCloseDestinationInfo()
+            }
+
+        }
+    }
+
+
+    fun onCloseDestinationInfo() {
+        hideDestinationTopInfo(true)
+        mMap.removeMapObject(route)
+        mMap.removeMapObject(destinationMarker)
+        route = null
+        destinationMarker = null
+        destination = null
+        if (pstManager!==null) {
+            mMap.setCenter(GeoCoordinate(pstManager?.position?.coordinate?.latitude!!,
+                pstManager?.position?.coordinate?.longitude!!), Map.Animation.BOW)
+        }
+
+        mAdapter!!.setDestination(null)
     }
 
 
@@ -431,6 +469,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
                                     carousel.scrollToPosition(infiniteAdapter.getClosestPosition(index))
                                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                                 }
+                                mView.findViewById<ExpandableLayout>(R.id.destination_top_info).collapse()
                             } else {
 
                             }
@@ -504,34 +543,57 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
         }
     }
 
+
+    fun hideDestinationTopInfo(animate: Boolean) {
+        val expandable =  mView.findViewById<ExpandableLayout>(R.id.destination_top_info)
+        expandable.collapse(animate)
+    }
+
+    fun showDestinationTopInfo(animate: Boolean) {
+        val expandable =  mView.findViewById<ExpandableLayout>(R.id.destination_top_info)
+        if (destination!==null && !expandable.isExpanded) {
+           expandable.expand(animate)
+        }
+    }
+
     override fun onLongPressRelease() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
+
     }
 
     override fun onRotateEvent(p0: Float): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
        return false
     }
 
     override fun onMultiFingerManipulationStart() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
     }
 
     override fun onPinchLocked() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
     }
 
     override fun onPinchZoomEvent(p0: Float, p1: PointF?): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
         return false
     }
 
     override fun onTapEvent(p0: PointF?): Boolean {
         if (mMap.getSelectedObjects(p0).isEmpty()) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            showDestinationTopInfo(true)
         } else {
             val obj = mMap.getSelectedObjects(p0)[0]
-            if (obj !is MapMarker || !markers.contains(obj)) bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            if (obj !is MapMarker || !markers.contains(obj)) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                showDestinationTopInfo(true)
+            }
         }
 
 
@@ -540,37 +602,45 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
 
     override fun onPanStart() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
     }
 
     override fun onMultiFingerManipulationEnd() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
     }
 
     override fun onDoubleTapEvent(p0: PointF?): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
         return false
     }
 
     override fun onPanEnd() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
     }
 
     override fun onTiltEvent(p0: Float): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
         return false
     }
 
     override fun onRotateLocked() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
     }
 
     override fun onLongPressEvent(p0: PointF?): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
         return false
     }
 
     override fun onTwoFingerTapEvent(p0: PointF?): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        showDestinationTopInfo(true)
         return false
     }
 
@@ -623,7 +693,7 @@ class ParkingsMap(val actionType: Int?, val data: Any?, val parentView:View) : F
             val routePlan = RoutePlan()
             routePlan.addWaypoint(RouteWaypoint(points[0]))
             routePlan.addWaypoint(RouteWaypoint(points[1]))
-            if (destination!=null) {
+            if (destination!=null && target.isWalkable()) {
                 routePlan.addWaypoint(RouteWaypoint(GeoCoordinate(destination!!.position[0],destination!!.position[1])))
             }
 
