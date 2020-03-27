@@ -1,12 +1,13 @@
 package com.example.myparking.adapters
 
 import com.example.myparking.R
+import com.example.myparking.activities.FavortieParkingListener
 import com.example.myparking.databinding.FavoriteParkingItemBinding
 import com.example.myparking.models.Parking
 import kotlinx.android.synthetic.main.favorite_parking_item.view.*
 
 
-class FavoriteParkingAdapter(val parkingList:ArrayList<Parking>, val listener:ItemAdapterListener<Parking>) :
+class FavoriteParkingAdapter(val parkingList:ArrayList<Parking>, val listener: FavortieParkingListener) :
     MyAdapter<Parking, FavoriteParkingItemBinding>(parkingList,
         R.layout.favorite_parking_item,listener) {
 
@@ -15,6 +16,9 @@ class FavoriteParkingAdapter(val parkingList:ArrayList<Parking>, val listener:It
         holder.binding.root.parking_img.setImageResource(R.drawable.parking_p)
         holder.binding.root.setOnClickListener {
             listener.onItemClicked(parkingList[position])
+        }
+        holder.binding.root.delete_fav_btn.setOnClickListener {
+            listener.removeFromFavorite(parkingList[position])
         }
     }
 

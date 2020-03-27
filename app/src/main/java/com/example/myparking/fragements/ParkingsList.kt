@@ -19,20 +19,33 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import com.example.myparking.MainActivity
 
 import com.example.myparking.R
+import com.example.myparking.adapters.FavoriteParkingAdapter
 
 
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.ParkingsListAdapter
+import com.example.myparking.repositories.FavoriteParkingRepository
 import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.utils.InjectorUtils
+import com.example.myparking.utils.MapAction
+import com.example.myparking.utils.PreferenceManager
+import com.example.myparking.viewmodels.FavoriteParkingViewModel
+import com.example.myparking.viewmodels.FavoriteParkingViewModelFactory
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import kotlinx.android.synthetic.main.fragment_parkings_list.*
 import kotlinx.android.synthetic.main.fragment_parkings_list.view.*
+import retrofit2.Callback
+import com.google.android.material.snackbar.Snackbar
 
 
-class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
+
+
+class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, ParkingItemListener {
+
 
     private var parkingList: ArrayList<Parking> = ArrayList<Parking>()
     private lateinit var binding: FragmentParkingsListBinding
@@ -40,6 +53,7 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
     private var mAdapter: ParkingsListAdapter? = null
 
     private lateinit var mParkingListViewModel: ParkingListViewModel
+    private lateinit var mFavoriteParkingViewModel: FavoriteParkingViewModel
 
 
     override fun onItemClicked(item: Parking) {
@@ -75,6 +89,10 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
         Log.d("step","5")
         initParkings()
         Log.d("step","6")
+        val id = PreferenceManager(context!!).checkDriverProfile().toInt()
+        val factoryFav= FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(),id)
+        mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryFav)
+            .get(FavoriteParkingViewModel::class.java)
         return binding.root
     }
 
@@ -97,4 +115,29 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
 
 
     }
+
+    override fun navigateToParking(parking: Parking) {
+        val args = bundleOf("viewType" to MainActivity.MAP_VIEW, "actionType" to MapAction.NAVIGATION_ACTION,
+            "data" to parking)
+
+        val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+        navController.navigate(R.id.action_global_mainActivity2, args)
+    }
+
+    override fun addToFavorites(parking: Parking) {
+
+        mFavoriteParkingViewModel.addToFavorite(parking.idParking).observe(this, Observer<String>{
+            if (it!==null && it!="") {
+                val snackbar = Snackbar
+                    .make(binding.root, it, Snackbar.LENGTH_LONG)
+                snackbar.show()
+            }
+        })
+
+    }
+
+}
+interface ParkingItemListener : MyAdapter.ItemAdapterListener<Parking> {
+    fun navigateToParking(parking: Parking)
+    fun addToFavorites(parking: Parking)
 }

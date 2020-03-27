@@ -24,19 +24,22 @@ import com.example.myparking.adapters.HomeParkingAdapter
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.databinding.ActivityFavoriteParkingsBinding
 import com.example.myparking.models.Parking
+import com.example.myparking.repositories.FavoriteParkingRepository
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.DataSource
-import com.example.myparking.viewmodels.ParkingListViewModel
-import com.example.myparking.viewmodels.ParkingListViewModelFactory
-import com.example.myparking.viewmodels.ReservationListViewModel
+import com.example.myparking.utils.PreferenceManager
+import com.example.myparking.viewmodels.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.debug.activity_favorite_parkings.*
 import kotlinx.android.synthetic.debug.activity_favorite_parkings.view.*
 
-class FavoriteParkingsActivity : Fragment(), MyAdapter.ItemAdapterListener<Parking> {
+class FavoriteParkingsActivity : Fragment(), MyAdapter.ItemAdapterListener<Parking>,
+    FavortieParkingListener {
 
-private lateinit var binding : ActivityFavoriteParkingsBinding
 
-    private lateinit var mParkingListViewModel: ParkingListViewModel
+    private lateinit var binding : ActivityFavoriteParkingsBinding
+
+    private lateinit var mFavoriteParkingViewModel: FavoriteParkingViewModel
     private lateinit var mFavoriteParkingsAdapter: FavoriteParkingAdapter
 
     override fun onCreateView(
@@ -47,11 +50,12 @@ private lateinit var binding : ActivityFavoriteParkingsBinding
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_favorite_parkings, container, false)
         binding.lifecycleOwner = activity
 
-        val factoryParking = ParkingListViewModelFactory(ParkingListRepository.getInstance())
-        mParkingListViewModel = ViewModelProviders.of(this, factoryParking)
-            .get(ParkingListViewModel::class.java)
+        val id = PreferenceManager(context!!).checkDriverProfile().toInt()
+        val factoryParking = FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(),id)
+        mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryParking)
+            .get(FavoriteParkingViewModel::class.java)
                 mFavoriteParkingsAdapter = FavoriteParkingAdapter(ArrayList<Parking>(),this)
-        mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
+        mFavoriteParkingViewModel.getFavoriteParkings().observe(this, Observer<ArrayList<Parking>>
         {list ->
             val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
             mFavoriteParkingsAdapter.updateList(ArrayList(newList))
@@ -73,11 +77,24 @@ private lateinit var binding : ActivityFavoriteParkingsBinding
 
     override fun onItemClicked(item: Parking) {
         Log.d("parking clicked", "cc")
-        val list = mParkingListViewModel.getParkingsList().value!!
+        val list = mFavoriteParkingViewModel.getFavoriteParkings().value!!
         val index = list.indexOf(item)
         val bundle= bundleOf("parking" to item, "parkingIndex" to index)
         val navController = Navigation.findNavController(binding.root)
         navController.navigate(R.id.action_favoriteParkingsActivity_to_parkingsDetailsContainer, bundle)
     }
 
+    override fun removeFromFavorite(parking: Parking) {
+        mFavoriteParkingViewModel.removeFromFavorites(parking.idParking).observe(this, Observer<String>{
+            if (it!==null && it!="") {
+                val snackbar = Snackbar
+                    .make(binding.root, it, Snackbar.LENGTH_LONG)
+                snackbar.show()
+            }
+        })
+    }
+
+}
+interface FavortieParkingListener : MyAdapter.ItemAdapterListener<Parking> {
+    fun removeFromFavorite(parking: Parking)
 }

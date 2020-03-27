@@ -10,12 +10,16 @@ import com.example.myparking.utils.loadImage
 import kotlinx.android.synthetic.main.parking_item.view.*
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.myparking.MainActivity
+import com.example.myparking.fragements.ParkingItemListener
 import com.example.myparking.fragements.ParkingsMap
 import com.example.myparking.utils.MapAction
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ParkingsListAdapter(var parkingsList : ArrayList<Parking>,
-                       val listener: ItemAdapterListener<Parking>
+                       val listener: ParkingItemListener
                        ): MyAdapter<Parking, ParkingItemBinding>(parkingsList, R.layout.parking_item, listener)
 {
     private val viewBinderHelper = ViewBinderHelper()
@@ -27,17 +31,10 @@ class ParkingsListAdapter(var parkingsList : ArrayList<Parking>,
             listener.onItemClicked(parkingsList[position])
         }
         holder.binding.root.start_itin_btn.setOnClickListener {
-            navigateToParking(parkingsList[position])
+            listener.navigateToParking(parkingsList[position])
+        }
+        holder.binding.root.add_fav_btn.setOnClickListener {
+            listener.addToFavorites(parkingsList[position])
         }
     }
-
-    fun navigateToParking(target:Parking) {
-        val args = bundleOf("viewType" to MainActivity.MAP_VIEW, "actionType" to MapAction.NAVIGATION_ACTION,
-            "data" to target)
-
-        val activity = (listener as Fragment).activity!!
-        val navController = Navigation.findNavController(activity,R.id.my_nav_host_fragment)
-        navController.navigate(R.id.action_global_mainActivity2, args)
-    }
-
 }

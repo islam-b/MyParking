@@ -1,11 +1,8 @@
 package com.example.myparking.services
 
-import com.example.myparking.models.FilterInfoResponse
-import com.example.myparking.models.Parking
-import com.example.myparking.models.SearchModel
+import com.example.myparking.models.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 interface ParkingService {
@@ -21,5 +18,16 @@ interface ParkingService {
 
     @GET("filterInfos/?start=36.705039%2C3.173912")
     fun findFilterInfo(): Call<FilterInfoResponse>
+
+
+
+    @GET("favoris/")
+    fun getFavorites(@Query("automobiliste") idAutomobilistte:Int): Call<FavoritesResponse>
+
+    @POST("favoris/")
+    fun addFavorite(@Query("automobiliste") idAutomobilistte: Int, @Body body: AddFavRequest): Call<Parking>
+
+    @HTTP(method = "DELETE", path = "favoris/", hasBody = true)
+    fun deleteFavorite(@Query("automobiliste") idAutomobilistte: Int, @Body body: AddFavRequest): Call<Parking>
 
 }
