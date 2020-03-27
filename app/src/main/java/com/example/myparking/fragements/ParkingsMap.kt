@@ -90,7 +90,7 @@ import kotlin.collections.ArrayList
  * @property parkings The List of parkings
  * @property binding Binding data with the view
  */
-class ParkingsMap(val actionType: MapAction?, val data: Any?, val parentView:View) : Fragment(),
+class ParkingsMap(val parentView:View) : Fragment(),
     OnEngineInitListener, NavigationListener,
     PositioningManager.OnPositionChangedListener, MapGesture.OnGestureListener, MapLoader.Listener {
 
@@ -116,6 +116,8 @@ class ParkingsMap(val actionType: MapAction?, val data: Any?, val parentView:Vie
 
     private var destination: SearchResult? = null
 
+    private var actionType: MapAction? = null
+    private var data: Any? = null
 
 
 
@@ -188,6 +190,9 @@ class ParkingsMap(val actionType: MapAction?, val data: Any?, val parentView:Vie
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
+
+        actionType = arguments?.get("actionType") as MapAction?
+        data = arguments?.get("data")
 
 
         initMapEngine()
@@ -533,7 +538,8 @@ class ParkingsMap(val actionType: MapAction?, val data: Any?, val parentView:Vie
 
         carousel.addOnItemChangedListener { p0, p1 ->
 
-            if (mapInitialized) {
+            if (mapInitialized &&  infiniteAdapter.itemCount>0) {
+
                 val realPos = infiniteAdapter.getRealPosition(p1)
                 Log.d("position", realPos.toString())
                 val target = parkings[realPos]

@@ -20,6 +20,7 @@ import android.widget.CursorAdapter
 import android.widget.ListAdapter
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
@@ -62,6 +63,8 @@ class MainActivity : Fragment(),SpaceOnClickListener {
     private var currentItem = LIST_VIEW
     private lateinit var spaceNavigationView : SpaceNavigationView
     private lateinit var rootView: View
+    private var mapView: ParkingsMap? = null
+    private var listView : ParkingsList? = null
 
 
 
@@ -70,7 +73,7 @@ class MainActivity : Fragment(),SpaceOnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.activity_main2,container,false)
+        rootView = inflater.inflate(R.layout.activity_main,container,false)
 
         spaceNavigationView = rootView.findViewById(R.id.nav_view)
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState)
@@ -120,27 +123,41 @@ class MainActivity : Fragment(),SpaceOnClickListener {
      * @param itemName the name (tag) of the view selected
      */
     override fun onItemClick(itemIndex: Int, itemName: String?) {
-        var fragment: Fragment
+        var fragment: Fragment?
 
         Log.d("item ",itemIndex.toString())
         when (itemName) {
             LIST_VIEW_NAME-> {
-                Log.d("item clicked","item 0")
-                fragment = ParkingsList()
+                mapView?.let{ childFragmentManager.beginTransaction().hide(it).commit() }
+                if (listView==null) {
+                    listView = ParkingsList()
+                    childFragmentManager.beginTransaction().add(R.id.nav_host,listView!!).commit()
+                }
+                else {
+                    childFragmentManager.beginTransaction().show(listView!!).commit()
+                }
                 currentItem = itemIndex
             }
             MAP_VIEW_NAME-> {
-                val actionType = arguments?.get("actionType") as MapAction?
-                val data = arguments?.get("data")
-                fragment = ParkingsMap(actionType, data,rootView)
-                currentItem = itemIndex
-            }
-            else -> {
-                fragment = ParkingsList()
+                listView?.let{ childFragmentManager.beginTransaction().hide(it).commit() }
+                if (mapView==null) {
+                    mapView = ParkingsMap(rootView)
+                    mapView!!.arguments = arguments
+                    childFragmentManager.beginTransaction().add(R.id.nav_host,mapView!!).commit()
+                }
+                else {
+                    mapView!!.arguments = arguments
+                    childFragmentManager.beginTransaction().show(mapView!!).commit()
+                    mapView!!.handleAction()
+                }
+
+
+
+
                 currentItem = itemIndex
             }
         }
-        childFragmentManager.beginTransaction().replace(R.id.nav_host,fragment).commit()
+
     }
 
 
