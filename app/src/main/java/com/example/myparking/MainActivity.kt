@@ -129,6 +129,7 @@ class MainActivity : Fragment(),SpaceOnClickListener {
         when (itemName) {
             LIST_VIEW_NAME-> {
                 mapView?.let{ childFragmentManager.beginTransaction().hide(it).commit() }
+                arguments = null
                 if (listView==null) {
                     listView = ParkingsList()
                     childFragmentManager.beginTransaction().add(R.id.nav_host,listView!!).commit()
@@ -146,7 +147,8 @@ class MainActivity : Fragment(),SpaceOnClickListener {
                     childFragmentManager.beginTransaction().add(R.id.nav_host,mapView!!).commit()
                 }
                 else {
-                    mapView!!.arguments = arguments
+                    //mapView!!.arguments?.putBundle("params", bundle)
+                    mapView!!.setAction(arguments)
                     childFragmentManager.beginTransaction().show(mapView!!).commit()
                     mapView!!.handleAction()
                 }

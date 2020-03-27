@@ -191,14 +191,25 @@ class ParkingsMap(val parentView:View) : Fragment(),
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
 
-        actionType = arguments?.get("actionType") as MapAction?
-        data = arguments?.get("data")
+
+        setAction(arguments)
 
 
         initMapEngine()
 
 
         return mView
+    }
+
+    fun setAction(arguments: Bundle?) {
+        if (arguments==null) {
+            actionType = NO_ACTION
+            data = null
+        } else {
+            actionType = arguments.get("actionType") as MapAction?
+            data = arguments.get("data")
+        }
+
     }
 
     fun initMapEngine() {
