@@ -100,6 +100,12 @@
                 android:layout_marginBottom="52dp">
 
             </androidx.recyclerview.widget.RecyclerView>
+            <include
+                android:id="@+id/nothing_found"
+                layout="@layout/nothing_found_layout"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
 

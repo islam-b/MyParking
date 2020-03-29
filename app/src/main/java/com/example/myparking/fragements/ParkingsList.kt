@@ -45,7 +45,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, ParkingItemListener {
 
-
+    private var isLoading = false
     private var parkingList: ArrayList<Parking> = ArrayList<Parking>()
     private lateinit var binding: FragmentParkingsListBinding
     private lateinit var recyclerview: RecyclerView
@@ -81,8 +81,12 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         {
             Log.d("ViewModelChanged", it?.size?.toString()!!)
                 mAdapter?.updateList(it)
-
-            hideProgressBar()
+                hideProgressBar()
+                if (it.size>0) {
+                    hideNothingFound()
+                } else {
+                    showNothingFound()
+                }
 
         })
         mParkingListViewModel.getFilterState().observe(this, Observer<FilterParkingsModel> {
@@ -108,12 +112,14 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
 
     }
     private fun showProgressBar() {
+        isLoading = true
         recyclerview.visibility= GONE
         binding.root.shimmer_parking_list.visibility= VISIBLE
         binding.root.shimmer_parking_list.startShimmer()
     }
 
     private fun hideProgressBar() {
+        isLoading = false
         binding.root.shimmer_parking_list.startShimmer()
         binding.root.shimmer_parking_list.visibility= GONE
         recyclerview.visibility= VISIBLE
@@ -191,6 +197,15 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         {
             mParkingListViewModel.postFilteredList(it)
         })
+    }
+
+    private fun showNothingFound() {
+        binding.root.parkings_list.visibility = GONE
+        binding.root.nothing_found.visibility = VISIBLE
+    }
+    private fun hideNothingFound() {
+        binding.root.parkings_list.visibility = VISIBLE
+        binding.root.nothing_found.visibility = GONE
     }
 
 }
