@@ -27,15 +27,14 @@ import com.example.myparking.adapters.FavoriteParkingAdapter
 
 import com.example.myparking.adapters.MyAdapter
 import com.example.myparking.adapters.ParkingsListAdapter
+import com.example.myparking.models.FilterParkingsModel
 import com.example.myparking.repositories.FavoriteParkingRepository
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.InjectorUtils
 import com.example.myparking.utils.MapAction
 import com.example.myparking.utils.PreferenceManager
-import com.example.myparking.viewmodels.FavoriteParkingViewModel
-import com.example.myparking.viewmodels.FavoriteParkingViewModelFactory
-import com.example.myparking.viewmodels.ParkingListViewModel
-import com.example.myparking.viewmodels.ParkingListViewModelFactory
+import com.example.myparking.viewmodels.*
+import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_parkings_list.*
 import kotlinx.android.synthetic.main.fragment_parkings_list.view.*
 import retrofit2.Callback
@@ -86,6 +85,12 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
             hideProgressBar()
 
         })
+        mParkingListViewModel.getFilterState().observe(this, Observer<FilterParkingsModel> {
+            fillFiltersInfoSection(it)
+        })
+        binding.root.clear_filters.setOnClickListener {
+            upadateList(FilterParkingsModel())
+        }
         Log.d("step","5")
         initParkings()
         Log.d("step","6")
@@ -134,6 +139,58 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
             }
         })
 
+    }
+
+    fun fillFiltersInfoSection(filterState: FilterParkingsModel) {
+        var count = 0
+        binding.root.chipGroup.removeAllViews()
+        if (filterState.minPrice!==null || filterState.maxPrice!==null) {
+            binding.root.chipGroup.addView(createFiterChip("Prix")  {
+                filterState.maxPrice = null
+                filterState.minPrice  =null
+                upadateList(filterState)
+            })
+            count += 1
+        }
+        if (filterState.minDistance!==null || filterState.maxDistance!==null) {
+            binding.root.chipGroup.addView(createFiterChip("Distance")  {
+                filterState.minDistance = null
+                filterState.maxDistance  =null
+                upadateList(filterState)
+
+            })
+            count += 1
+        }
+        if (filterState.equipements !== null) {
+            binding.root.chipGroup.addView(createFiterChip("Equipements")  {
+                filterState.equipements = null
+                upadateList(filterState)
+            })
+            count += 1
+        }
+        if (count>0) {
+            binding.root.filter_count.text = "($count)"
+            binding.root.filter_info.visibility = VISIBLE
+        } else {
+            binding.root.filter_info.visibility = GONE
+
+        }
+    }
+
+    private fun createFiterChip(text:String, onClose: (View) -> Unit):Chip {
+        val chip = Chip(context!!,null,R.style.Widget_MaterialComponents_Chip_Entry)
+        chip.isClickable = true
+        chip.isCloseIconVisible = true
+        chip.text= text
+        chip.setOnCloseIconClickListener(onClose)
+        return chip
+    }
+
+    private fun upadateList(filterState: FilterParkingsModel) {
+        mParkingListViewModel.receiveFilter(filterState).observe(this, Observer<ArrayList<Parking>>
+        {
+            mParkingListViewModel.postFilteredList(it)
+        })
     }
 
 }
