@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 
 interface ParkingService {
-    @GET("parking/?start=36.734473%2C3.152525")
+    @GET("parking/?start=36.7275137%2C3.0448746")
     fun findParkings(@Query("minPrice") minPrice: Int?,
                      @Query("maxPrice") maxPrice: Int?,
                      @Query(value ="equipements", encoded = true) equipements: String?,

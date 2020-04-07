@@ -7,7 +7,7 @@
         type="com.example.myparking.viewmodels.FilterParkingsViewModel" />
     <variable
         name="filterInfo"
-        type="com.example.myparking.models.FilterInfoResponse" />
+        type="com.example.myparking.models.FilterParkingsModel" />
 </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -114,10 +114,10 @@
                         android:layout_width="100dp"
                         android:layout_height="40dp"
 
-                        android:background="@drawable/checked_distance_btn"
+                        android:background="@{filterInfo.sort == 1 ? @drawable/checked_distance_btn : @drawable/unchecked_distance_btn}"
                         android:gravity="center"
                         android:text="DISTANCE"
-                        android:textColor="@color/white"
+                        android:textColor="@{filterInfo.sort ==2 ? @color/colorPrimary : @color/white }"
                         />
 
                     <TextView
@@ -125,11 +125,11 @@
                         android:layout_width="100dp"
                         android:layout_height="40dp"
 
-                        android:background="@drawable/unchecked_price_btn"
+                        android:background="@{filterInfo.sort == 2 ? @drawable/checked_price_btn : @drawable/unchecked_price_btn}"
                         android:gravity="center"
 
                         android:text="PRIX"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@{filterInfo.sort ==1 ? @color/colorPrimary : @color/white }" />
 
 
                 </LinearLayout>
@@ -170,7 +170,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:checked="@={filterViewModel.distanceCheck}"
+                        android:checked="@{filterInfo.checkedDistance}"
                         >
 
                     </CheckBox>
@@ -201,7 +201,7 @@
                             android:id="@+id/distance_range_bar"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:tickEnd="@{filterInfo !=null ? filterInfo.getDistanceMax() : 35000.0F}"
+                            app:mrb_tickEnd="90000"
                             app:mrb_tickStart="50"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -268,7 +268,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:checked="@{filterViewModel.priceIsChecked()}"
+                        android:checked="@{filterInfo.checkedPrice}"
                         >
 
                     </CheckBox>
@@ -303,7 +303,7 @@
                             android:id="@+id/price_range_bar"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:tickEnd="@{filterInfo !=null ? filterInfo.getPriceMax(): 30000.0F}"
+                            app:mrb_tickEnd="3000"
                             app:mrb_tickStart="50"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -367,7 +367,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:checked="@{filterViewModel.serviceIsChecked()}">
+                        android:checked="@{filterInfo.checkedEquipements}"
+                        >
 
                     </CheckBox>
 

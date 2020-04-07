@@ -1,5 +1,6 @@
 package com.example.myparking.adapters
 
+import android.util.Log
 import com.example.myparking.databinding.ServiceItemBinding
 import com.example.myparking.R
 import com.example.myparking.models.Equipement
@@ -13,6 +14,8 @@ class ServiceAdapter(var servicesList : ArrayList<Equipement>,
     MyAdapter<Equipement, ServiceItemBinding>(servicesList, R.layout.service_item,listener)  {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        Log.d("position", position.toString())
+        Log.d("checked", servicesList[position].checked.toString())
         holder.binding.service = servicesList[position]
         holder.binding.checked = servicesList[position].checked
         //holder.binding.root.service_icon.setImageResource(servicesList[position].icon)

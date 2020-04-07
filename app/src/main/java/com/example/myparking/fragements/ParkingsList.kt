@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.models.Parking
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
@@ -41,8 +42,6 @@ import retrofit2.Callback
 import com.google.android.material.snackbar.Snackbar
 
 
-
-
 class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, ParkingItemListener {
 
     private var isLoading = false
@@ -50,16 +49,16 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
     private lateinit var binding: FragmentParkingsListBinding
     private lateinit var recyclerview: RecyclerView
     private var mAdapter: ParkingsListAdapter? = null
-
+    private lateinit var currentFilterState: FilterParkingsViewModel
     private lateinit var mParkingListViewModel: ParkingListViewModel
     private lateinit var mFavoriteParkingViewModel: FavoriteParkingViewModel
 
 
     override fun onItemClicked(item: Parking) {
-        val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+        val navController = Navigation.findNavController(activity!!, R.id.my_nav_host_fragment)
         val list = mParkingListViewModel.getParkingsList().value
         val index = list?.indexOf(item)
-        val bundle= bundleOf("parking" to item, "parkingIndex" to index)
+        val bundle = bundleOf("parking" to item, "parkingIndex" to index)
         navController.navigate(R.id.action_mainActivity2_to_parkingsDetailsContainer, bundle)
     }
 
@@ -72,34 +71,50 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_list, container, false)
 
-        recyclerview = binding.parkingsList
+        recyclerview = binding.root.parkings_list
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
         showProgressBar()
-        mParkingListViewModel.mParkingList.observe(this, Observer<ArrayList<Parking>>
+        currentFilterState =
+            ViewModelProviders.of(this.activity!!).get(FilterParkingsViewModel::class.java)
+        val filtersStored = PreferenceManager(context!!).getFilterInitialInfo()
+        currentFilterState.postFilterParkingsState(filtersStored)
+        Log.d("currentFilterss", filtersStored.toString())
+//        currentFilterState.postFilterParkingsState(filtersStored)
+        this.upadateList(filtersStored)
+        mParkingListViewModel.getParkingsList().observe(viewLifecycleOwner, Observer<ArrayList<Parking>>
         {
             Log.d("ViewModelChanged", it?.size?.toString()!!)
-                mAdapter?.updateList(it)
-                hideProgressBar()
-                if (it.size>0) {
-                    hideNothingFound()
-                } else {
-                    showNothingFound()
-                }
+            Log.d("parkingss", it.toString())
+            parkingList = it
+            mAdapter?.updateList(it)
+            hideProgressBar()
+            if (it.size > 0) {
+                hideNothingFound()
+            } else {
+                showNothingFound()
+            }
 
         })
-        mParkingListViewModel.getFilterState().observe(this, Observer<FilterParkingsModel> {
-            fillFiltersInfoSection(it)
-        })
+        mParkingListViewModel.getFilterState()
+            .observe(viewLifecycleOwner, Observer<FilterParkingsModel> {
+                Log.d("statefilterinlist", it.toString())
+                fillFiltersInfoSection(it)
+            })
+
         binding.root.clear_filters.setOnClickListener {
+
+            currentFilterState.postFilterParkingsState(FilterParkingsModel())
             upadateList(FilterParkingsModel())
+            PreferenceManager(context!!).writeFilterInfo(FilterParkingsModel())
         }
-        Log.d("step","5")
+        Log.d("step", "5")
         initParkings()
-        Log.d("step","6")
+        Log.d("step", "6")
         val id = PreferenceManager(context!!).checkDriverProfile().toInt()
-        val factoryFav= FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(),id)
+        val factoryFav =
+            FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(), id)
         mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryFav)
             .get(FavoriteParkingViewModel::class.java)
         return binding.root
@@ -111,34 +126,37 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         recyclerview.adapter = mAdapter
 
     }
+
     private fun showProgressBar() {
         isLoading = true
-        recyclerview.visibility= GONE
-        binding.root.shimmer_parking_list.visibility= VISIBLE
+        recyclerview.visibility = GONE
+        binding.root.shimmer_parking_list.visibility = VISIBLE
         binding.root.shimmer_parking_list.startShimmer()
     }
 
     private fun hideProgressBar() {
         isLoading = false
         binding.root.shimmer_parking_list.startShimmer()
-        binding.root.shimmer_parking_list.visibility= GONE
-        recyclerview.visibility= VISIBLE
+        binding.root.shimmer_parking_list.visibility = GONE
+        recyclerview.visibility = VISIBLE
 
 
     }
 
     override fun navigateToParking(parking: Parking) {
-        val args = bundleOf("viewType" to MainActivity.MAP_VIEW, "actionType" to MapAction.NAVIGATION_ACTION,
-            "data" to parking)
+        val args = bundleOf(
+            "viewType" to MainActivity.MAP_VIEW, "actionType" to MapAction.NAVIGATION_ACTION,
+            "data" to parking
+        )
 
-        val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
+        val navController = Navigation.findNavController(activity!!, R.id.my_nav_host_fragment)
         navController.navigate(R.id.action_global_mainActivity2, args)
     }
 
     override fun addToFavorites(parking: Parking) {
 
-        mFavoriteParkingViewModel.addToFavorite(parking.idParking).observe(this, Observer<String>{
-            if (it!==null && it!="") {
+        mFavoriteParkingViewModel.addToFavorite(parking.idParking).observe(this, Observer<String> {
+            if (it !== null && it != "") {
                 val snackbar = Snackbar
                     .make(binding.root, it, Snackbar.LENGTH_LONG)
                 snackbar.show()
@@ -150,31 +168,41 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
     fun fillFiltersInfoSection(filterState: FilterParkingsModel) {
         var count = 0
         binding.root.chipGroup.removeAllViews()
-        if (filterState.minPrice!==null || filterState.maxPrice!==null) {
-            binding.root.chipGroup.addView(createFiterChip("Prix")  {
+        // we have to set wht are the initial values as cosnts
+        if (filterState.checkedPrice && (filterState.minPrice !== null || filterState.maxPrice !== null)) {
+            binding.root.chipGroup.addView(createFiterChip("Prix") {
                 filterState.maxPrice = null
-                filterState.minPrice  =null
+                filterState.minPrice = null
+                filterState.checkedPrice = false
+                currentFilterState.postFilterParkingsState(filterState)
                 upadateList(filterState)
+                PreferenceManager(context!!).writeFilterInfo(filterState) // update pref info
             })
             count += 1
         }
-        if (filterState.minDistance!==null || filterState.maxDistance!==null) {
-            binding.root.chipGroup.addView(createFiterChip("Distance")  {
+        if (filterState.checkedDistance && (filterState.minDistance !== null || filterState.maxDistance !== null)) {
+            binding.root.chipGroup.addView(createFiterChip("Distance") {
                 filterState.minDistance = null
-                filterState.maxDistance  =null
+                filterState.maxDistance = null
+                filterState.checkedDistance = false
+                currentFilterState.postFilterParkingsState(filterState)
                 upadateList(filterState)
+                PreferenceManager(context!!).writeFilterInfo(filterState) // update pref info
 
             })
             count += 1
         }
-        if (filterState.equipements !== null) {
-            binding.root.chipGroup.addView(createFiterChip("Equipements")  {
+        if (filterState.checkedEquipements && filterState.equipements !== null) {
+            binding.root.chipGroup.addView(createFiterChip("Equipements") {
                 filterState.equipements = null
+                filterState.checkedEquipements = false
+                currentFilterState.postFilterParkingsState(filterState)
                 upadateList(filterState)
+                PreferenceManager(context!!).writeFilterInfo(filterState) // update pref info
             })
             count += 1
         }
-        if (count>0) {
+        if (count > 0) {
             binding.root.filter_count.text = "($count)"
             binding.root.filter_info.visibility = VISIBLE
         } else {
@@ -183,32 +211,41 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         }
     }
 
-    private fun createFiterChip(text:String, onClose: (View) -> Unit):Chip {
-        val chip = Chip(context!!,null,R.style.Widget_MaterialComponents_Chip_Entry)
+    private fun createFiterChip(text: String, onClose: (View) -> Unit): Chip {
+        val chip = Chip(context!!, null, R.style.Widget_MaterialComponents_Chip_Entry)
         chip.isClickable = true
         chip.isCloseIconVisible = true
-        chip.text= text
+        chip.text = text
         chip.setOnCloseIconClickListener(onClose)
         return chip
     }
 
     private fun upadateList(filterState: FilterParkingsModel) {
-        mParkingListViewModel.receiveFilter(filterState).observe(this, Observer<ArrayList<Parking>>
-        {
-            mParkingListViewModel.postFilteredList(it)
-        })
+        mParkingListViewModel.receiveFilter(filterState)
+            .observe(viewLifecycleOwner, Observer<ArrayList<Parking>>
+            {
+                mParkingListViewModel.postFilteredList(it)
+
+            })
+    }
+
+    private fun pushNewFilterValue(filters: FilterParkingsModel) {
+
+        currentFilterState.postFilterParkingsState(filters)
     }
 
     private fun showNothingFound() {
         binding.root.parkings_list.visibility = GONE
         binding.root.nothing_found.visibility = VISIBLE
     }
+
     private fun hideNothingFound() {
         binding.root.parkings_list.visibility = VISIBLE
         binding.root.nothing_found.visibility = GONE
     }
 
 }
+
 interface ParkingItemListener : MyAdapter.ItemAdapterListener<Parking> {
     fun navigateToParking(parking: Parking)
     fun addToFavorites(parking: Parking)

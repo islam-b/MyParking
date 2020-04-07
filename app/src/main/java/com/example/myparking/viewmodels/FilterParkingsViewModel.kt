@@ -10,16 +10,20 @@ import androidx.lifecycle.ViewModel
 import com.example.myparking.models.FilterInfoResponse
 import com.example.myparking.models.FilterParkingsModel
 import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.utils.PreferenceManager
 import java.util.*
 
 class FilterParkingsViewModel(): ViewModel(){
 
-    private var filterMainInfo = ParkingListRepository.getInstance().getFilterInfo()
+    private var filterMainInfo = ParkingListRepository.getInstance().getFilterInfo() // for equipemnt list , from data base min and max a discuter
     private var filterParkingsState = MutableLiveData<FilterParkingsModel> ()
-    var distanceCheck = filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null
+//    var distanceCheck = filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null
     init {
         filterParkingsState.value = FilterParkingsModel()
     }
+   /* fun setInitialFilters(filters: FilterParkingsModel) {
+        filterParkingsState.value = filters
+    }*/
     fun getFilterMainInfo(): LiveData<FilterInfoResponse> {
         return filterMainInfo
     }
@@ -29,39 +33,38 @@ class FilterParkingsViewModel(): ViewModel(){
 
     fun postFilterParkingsState(filterParkingsModel: FilterParkingsModel) {
         filterParkingsState.value = filterParkingsModel
-        if (filterParkingsState.value?.minDistance!=null) Log.d("PostedFilter", filterParkingsState.value?.minDistance.toString())
-        else Log.d("PostedFilter", "null")
-        distanceCheck =  filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null
+        Log.d("postedFilterState", filterParkingsModel.toString())
+       // distanceCheck =  filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null
     }
 
-    fun distanceIsChecked() : Boolean {
-        if (filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null) return true
-        return false
-        return distanceCheck
-    }
-    fun priceIsChecked() : Boolean {
-        if (filterParkingsState.value?.minPrice!=null || filterParkingsState.value?.maxPrice!= null) return true
-        return false
-    }
-    fun serviceIsChecked(): Boolean {
-        if (filterParkingsState.value?.equipements == null ||filterParkingsState.value?.equipements == "" ) return false
-        return true
-    }
-    fun distanceIsCheckedContainer(): String {
-        if (distanceIsChecked()) return "true"
-        return "false"
-    }
-    fun priceIsCheckedContainer(): String {
-        if(priceIsChecked()) return "true"
-        return "false"
-    }
-    fun serviceIsCheckedContainer(): String {
-        if(serviceIsChecked()) return "true"
-        return "false"
-    }
-    fun changeDistanceChecked(isChecked: Boolean) {
-        distanceCheck= isChecked
-    }
+//    fun distanceIsChecked() : Boolean {
+//        if (filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null) return true
+//        return false
+//        return distanceCheck
+//    }
+//    fun priceIsChecked() : Boolean {
+//        if (filterParkingsState.value?.minPrice!=null || filterParkingsState.value?.maxPrice!= null) return true
+//        return false
+//    }
+//    fun serviceIsChecked(): Boolean {
+//        if (filterParkingsState.value?.equipements == null ||filterParkingsState.value?.equipements == "" ) return false
+//        return true
+//    }
+//    fun distanceIsCheckedContainer(): String {
+//        if (distanceIsChecked()) return "true"
+//        return "false"
+//    }
+//    fun priceIsCheckedContainer(): String {
+//        if(priceIsChecked()) return "true"
+//        return "false"
+//    }
+//    fun serviceIsCheckedContainer(): String {
+//        if(serviceIsChecked()) return "true"
+//        return "false"
+//    }
+//    fun changeDistanceChecked(isChecked: Boolean) {
+//        distanceCheck= isChecked
+//    }
   /*  @Bindable
     fun getDistanceChecked(): Boolean {
         return chec

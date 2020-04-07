@@ -36,7 +36,7 @@ class FavoriteParkingRepository{
             ) {
 
                 //dataSet = ArrayList(response.body()!!)
-                dataSet.value = response.body()!!.favoris
+                dataSet?.value = response?.body()!!.favoris
             }
         })
         return dataSet

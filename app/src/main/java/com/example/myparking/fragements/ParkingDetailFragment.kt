@@ -78,7 +78,7 @@ class ParkingDetailFragment : Fragment() {
         mParkingViewModel = ViewModelProviders.of(this, factory)
             .get(ParkingItemViewModel::class.java)
 
-        mParkingViewModel.getParkingItem().observe(this, Observer<Parking>
+        mParkingViewModel.getParkingItem().observe(viewLifecycleOwner, Observer<Parking>
         {
             mAdapterTarif?.updateList(it.tarifs)
 

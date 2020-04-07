@@ -30,10 +30,14 @@ class ParkingListRepository { // maybe add dao
     fun getParkingsList(filterStateLiveData: MutableLiveData<FilterParkingsModel>): MutableLiveData<ArrayList<Parking>> {
         var filterState = FilterParkingsModel()
         filterStateLiveData?.let { filterState = filterStateLiveData?.value!! }
-        if (filterState.maxDistance != null && filterState.maxPrice != null && filterState.equipements != null) {
-            Log.d("filterStateValueInRepoo", filterState.maxDistance.toString())
-            Log.d("filterStateValueInPrice", filterState.maxPrice.toString())
-            Log.d("filterStateValueIn2", filterState.equipements)
+        if(!filterState.checkedEquipements) filterState.equipements=null
+        if(!filterState.checkedPrice) {
+            filterState.minPrice = null
+            filterState.maxPrice = null
+        }
+        if(!filterState.checkedDistance) {
+            filterState.minDistance = null
+            filterState.maxDistance = null
         }
         var data = MutableLiveData<ArrayList<Parking>>()
 
@@ -55,7 +59,16 @@ class ParkingListRepository { // maybe add dao
 
                 dataSet = ArrayList(response.body()!!)
                 Log.d("ViewModelReRequest", dataSet.size.toString())
-                data.value = dataSet
+                if(filterState.sort==1) {
+                    Log.d("ViewModelReRequestSort", "distance")
+                    val newList =  ArrayList(dataSet.sortedWith(compareBy { it.routeInfo?.walkingDistance }))
+                    data.value = newList
+                }else {
+                    Log.d("ViewModelReRequestSort", "price")
+                    val newList = ArrayList(dataSet?.sortedWith(compareBy {it.tarifs?.get(0).prix}))
+                    data.value = newList
+                }
+
 
             }
         })
