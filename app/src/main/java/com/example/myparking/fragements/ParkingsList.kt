@@ -11,6 +11,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -155,10 +156,11 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         navController.navigate(R.id.action_global_mainActivity2, args)
     }
 
-    override fun addToFavorites(parking: Parking) {
+    override fun addToFavorites(parking: Parking, hideLoading: () -> Unit) {
 
         mFavoriteParkingViewModel.addToFavorite(parking.idParking).observe(this, Observer<String> {
             if (it !== null && it != "") {
+                hideLoading()
                 val snackbar = Snackbar
                     .make(binding.root, it, Snackbar.LENGTH_LONG)
                 snackbar.show()
@@ -250,5 +252,5 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
 
 interface ParkingItemListener : MyAdapter.ItemAdapterListener<Parking> {
     fun navigateToParking(parking: Parking)
-    fun addToFavorites(parking: Parking)
+    fun addToFavorites(parking: Parking, hideLoading: () -> Unit)
 }

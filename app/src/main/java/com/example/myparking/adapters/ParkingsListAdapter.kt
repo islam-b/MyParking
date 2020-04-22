@@ -1,5 +1,7 @@
 package com.example.myparking.adapters
 
+import android.view.View.*
+import android.widget.ProgressBar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -34,7 +36,12 @@ class ParkingsListAdapter(var parkingsList : ArrayList<Parking>,
             listener.navigateToParking(parkingsList[position])
         }
         holder.binding.root.add_fav_btn.setOnClickListener {
-            listener.addToFavorites(parkingsList[position])
+            holder.binding.root.fav_progress.visibility = VISIBLE
+            holder.binding.root.add_fav_btn.visibility = INVISIBLE
+            listener.addToFavorites(parkingsList[position]) {
+                holder.binding.root.fav_progress.visibility = GONE
+                holder.binding.root.add_fav_btn.visibility = VISIBLE
+            }
         }
     }
 }

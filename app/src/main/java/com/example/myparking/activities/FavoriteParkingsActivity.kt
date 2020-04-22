@@ -87,9 +87,10 @@ class FavoriteParkingsActivity : Fragment(), MyAdapter.ItemAdapterListener<Parki
         navController.navigate(R.id.action_favoriteParkingsActivity_to_parkingsDetailsContainer, bundle)
     }
 
-    override fun removeFromFavorite(parking: Parking) {
+    override fun removeFromFavorite(parking: Parking,hideLoading: ()->Unit) {
         mFavoriteParkingViewModel.removeFromFavorites(parking.idParking).observe(this, Observer<String>{
             if (it!==null && it!="") {
+                hideLoading()
                 val snackbar = Snackbar
                     .make(binding.root, it, Snackbar.LENGTH_LONG)
                 snackbar.show()
@@ -99,5 +100,5 @@ class FavoriteParkingsActivity : Fragment(), MyAdapter.ItemAdapterListener<Parki
 
 }
 interface FavortieParkingListener : MyAdapter.ItemAdapterListener<Parking> {
-    fun removeFromFavorite(parking: Parking)
+    fun removeFromFavorite(parking: Parking, hideLoading: ()->Unit)
 }

@@ -1,5 +1,7 @@
 package com.example.myparking.adapters
 
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.example.myparking.R
 import com.example.myparking.activities.FavortieParkingListener
 import com.example.myparking.databinding.FavoriteParkingItemBinding
@@ -18,7 +20,12 @@ class FavoriteParkingAdapter(val parkingList:ArrayList<Parking>, val listener: F
             listener.onItemClicked(parkingList[position])
         }
         holder.binding.root.delete_fav_btn.setOnClickListener {
-            listener.removeFromFavorite(parkingList[position])
+            holder.binding.root.delete_fev_progress.visibility = VISIBLE
+            holder.binding.root.delete_fav_btn.visibility = GONE
+            listener.removeFromFavorite(parkingList[position]) {
+                holder.binding.root.delete_fev_progress.visibility = GONE
+                holder.binding.root.delete_fav_btn.visibility = VISIBLE
+            }
         }
     }
 

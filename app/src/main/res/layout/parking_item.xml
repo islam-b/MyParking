@@ -20,12 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
+
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/white"
-            >
+                >
 
                 <ImageButton
                     android:id="@+id/add_fav_btn"
@@ -55,6 +57,13 @@
                     app:layout_constraintStart_toEndOf="@id/add_fav_btn"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <ProgressBar
+                android:id="@+id/fav_progress"
+                android:visibility="gone"
+                android:layout_marginLeft="16dp"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"/>
         </FrameLayout>
 
         <!--Main layout -->
@@ -182,6 +191,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
