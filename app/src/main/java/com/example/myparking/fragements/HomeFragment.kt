@@ -24,19 +24,15 @@ import com.example.myparking.R
 import com.example.myparking.activities.MesReservationsActivity
 import com.example.myparking.activities.ParkingsDetailsContainer
 import com.example.myparking.activities.ReservationDetailsActivity
-import com.example.myparking.adapters.HomeFavoriteParkingAdapter
-import com.example.myparking.adapters.HomeParkingAdapter
-import com.example.myparking.adapters.HomeReservationAdapter
-import com.example.myparking.adapters.MyAdapter
+import com.example.myparking.adapters.*
 import com.example.myparking.databinding.ActivityHomeBinding
 import com.example.myparking.models.Parking
 import com.example.myparking.models.Reservation
+import com.example.myparking.repositories.FavoriteParkingRepository
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.repositories.ReservationListRepository
-import com.example.myparking.viewmodels.ParkingListViewModel
-import com.example.myparking.viewmodels.ParkingListViewModelFactory
-import com.example.myparking.viewmodels.ReservationListViewModel
-import com.example.myparking.viewmodels.ReservationListViewModelFactory
+import com.example.myparking.utils.PreferenceManager
+import com.example.myparking.viewmodels.*
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home.view.*
 import java.text.SimpleDateFormat
@@ -49,9 +45,11 @@ class HomeFragment : Fragment() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var mParkingListViewModel: ParkingListViewModel
     private lateinit var mReservationListViewModel: ReservationListViewModel
+    private lateinit var mFavoriteParkingViewModel: FavoriteParkingViewModel
     private lateinit var mParkingListAdapter: HomeParkingAdapter
     private lateinit var mReservationListAdapter: HomeReservationAdapter
     private var nearParkingList = ArrayList<Parking>()
+    private var favoriteParkings = ArrayList<Parking>()
     private var recentReservationList = ArrayList<Reservation>()
     val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.FRANCE)
 
@@ -66,8 +64,10 @@ class HomeFragment : Fragment() {
 
         //for navigation
         initNavigation(view)
+        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
+        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
 
-        val factoryParking = ParkingListViewModelFactory(ParkingListRepository.getInstance())
+        val factoryParking = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation,null)
 
         mParkingListViewModel = ViewModelProviders.of(this, factoryParking)
             .get(ParkingListViewModel::class.java)
@@ -76,7 +76,7 @@ class HomeFragment : Fragment() {
             hideLoading()
             val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
             mParkingListAdapter?.updateList(ArrayList(newList.takeLast(3)))
-            mFavoriteParkings?.updateList(ArrayList(newList.take(3)))
+
 
         })
         val factoryReservation = ReservationListViewModelFactory(1, ReservationListRepository.getInstance())
@@ -89,6 +89,19 @@ class HomeFragment : Fragment() {
             val newList = list.sortedWith(compareBy{df.parse(it.dateEntreePrevue)})
             mReservationListAdapter?.updateList(ArrayList(list.take(3)))
         })
+
+
+        val factoryFav = FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(),idDriver,lastLocation,null)
+        mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryFav)
+            .get(FavoriteParkingViewModel::class.java)
+
+        mFavoriteParkingViewModel.getFavoriteParkings().observe(this, Observer<ArrayList<Parking>>
+        {list ->
+            val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
+            mFavoriteParkings.updateList(ArrayList(newList.take(3)))
+        })
+
+
         showLoading()
         initNearParkings()
         initReservations()
@@ -165,7 +178,7 @@ class HomeFragment : Fragment() {
     }
     fun initFavoriteParkings() {
         home_favorites_list.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
-        mFavoriteParkings = HomeFavoriteParkingAdapter(nearParkingList /* to chnage */,object:
+        mFavoriteParkings = HomeFavoriteParkingAdapter(favoriteParkings ,object:
             MyAdapter.ItemAdapterListener<Parking> {
             override fun onItemClicked(item: Parking) {
                 goToParkingDetails(item.idParking)

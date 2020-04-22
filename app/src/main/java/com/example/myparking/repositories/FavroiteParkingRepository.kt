@@ -23,9 +23,9 @@ class FavoriteParkingRepository{
         service = InjectorUtils.provideParkingService()
     }
 
-    fun getFavoriteParkings(idAutomobiliste: Int): MutableLiveData<ArrayList<Parking>> {
+    fun getFavoriteParkings(idAutomobiliste: Int, lastLocation: String?, destination: String?): MutableLiveData<ArrayList<Parking>> {
 
-        service.getFavorites(idAutomobiliste).enqueue(object : Callback<FavoritesResponse> {
+        service.getFavorites(idAutomobiliste,lastLocation,destination).enqueue(object : Callback<FavoritesResponse> {
             override fun onFailure(call: Call<FavoritesResponse>, t: Throwable) {
                 Log.d("idAut",idAutomobiliste.toString())
                 Log.d("fav error",t.message)
@@ -42,7 +42,7 @@ class FavoriteParkingRepository{
         return dataSet
     }
 
-    fun addToFavorites(idAutomobiliste: Int, idParking:Int): MutableLiveData<String> {
+    fun addToFavorites(idAutomobiliste: Int, idParking:Int,lastLocation: String?, destination: String?): MutableLiveData<String> {
         var data = MutableLiveData<String>()
         service.addFavorite(idAutomobiliste, AddFavRequest(arrayListOf(idParking))).enqueue(object : Callback<Parking>{
             override fun onFailure(call: Call<Parking>, t: Throwable) {
@@ -54,7 +54,7 @@ class FavoriteParkingRepository{
                 Log.d("fav body",response.body().toString())
                if (response.code()==200 || response.code()==201) {
                    data.value = "Parking ajouté à vos favoris."
-                   getFavoriteParkings(idAutomobiliste)
+                   getFavoriteParkings(idAutomobiliste,lastLocation,destination)
                } else {
                    data.value = "Echec! Veuillez réessayez."
                }
@@ -64,7 +64,7 @@ class FavoriteParkingRepository{
         return data
     }
 
-    fun removeFromFavorites(idAutomobiliste: Int, idParking:Int): MutableLiveData<String> {
+    fun removeFromFavorites(idAutomobiliste: Int, idParking:Int,lastLocation: String?, destination: String?): MutableLiveData<String> {
         var data = MutableLiveData<String>()
         service.deleteFavorite(idAutomobiliste, AddFavRequest(arrayListOf(idParking))).enqueue(object : Callback<Parking>{
             override fun onFailure(call: Call<Parking>, t: Throwable) {
@@ -76,7 +76,7 @@ class FavoriteParkingRepository{
                 Log.d("fav body",response.body().toString())
                 if (response.code()==200 || response.code()==201) {
                     data.value = "Parking supprimé de vos favoris."
-                    getFavoriteParkings(idAutomobiliste)
+                    getFavoriteParkings(idAutomobiliste,lastLocation,destination)
                 } else {
                     data.value = "Echec! Veuillez réessayez."
                 }

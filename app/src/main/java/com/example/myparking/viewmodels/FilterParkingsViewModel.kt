@@ -7,22 +7,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.myparking.models.Automobiliste
 import com.example.myparking.models.FilterInfoResponse
 import com.example.myparking.models.FilterParkingsModel
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.PreferenceManager
 import java.util.*
 
-class FilterParkingsViewModel(): ViewModel(){
+class FilterParkingsViewModel(var idAutomobiliste: Int, var start: String?): ViewModel(){
 
-    private var filterMainInfo = ParkingListRepository.getInstance().getFilterInfo() // for equipemnt list , from data base min and max a discuter
+
+
+    private var filterMainInfo = ParkingListRepository.getInstance().getFilterInfo(idAutomobiliste,start) // for equipemnt list , from data base min and max a discuter
     private var filterParkingsState = MutableLiveData<FilterParkingsModel> ()
 //    var distanceCheck = filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null
     init {
         filterParkingsState.value = FilterParkingsModel()
     }
    /* fun setInitialFilters(filters: FilterParkingsModel) {
-        filterParkingsState.value = filters
+        filterParkingsState.value = filter
     }*/
     fun getFilterMainInfo(): LiveData<FilterInfoResponse> {
         return filterMainInfo

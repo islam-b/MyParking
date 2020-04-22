@@ -68,16 +68,19 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         savedInstanceState: Bundle?
     ): View? {
         Log.d("OnCreateViewList", "parkiings")
+        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
+        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_list, container, false)
 
         recyclerview = binding.root.parkings_list
-        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation, null)
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
         showProgressBar()
+        val filterVMFactory = FilterParkingViewModelFactory(idDriver,lastLocation)
         currentFilterState =
-            ViewModelProviders.of(this.activity!!).get(FilterParkingsViewModel::class.java)
+            ViewModelProviders.of(this.activity!!,filterVMFactory).get(FilterParkingsViewModel::class.java)
         val filtersStored = PreferenceManager(context!!).getFilterInitialInfo()
         currentFilterState.postFilterParkingsState(filtersStored)
         Log.d("currentFilterss", filtersStored.toString())
@@ -112,9 +115,8 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         Log.d("step", "5")
         initParkings()
         Log.d("step", "6")
-        val id = PreferenceManager(context!!).checkDriverProfile().toInt()
         val factoryFav =
-            FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(), id)
+            FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(), idDriver, lastLocation, null)
         mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryFav)
             .get(FavoriteParkingViewModel::class.java)
         return binding.root

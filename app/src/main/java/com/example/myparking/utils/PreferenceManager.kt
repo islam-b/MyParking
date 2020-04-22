@@ -2,6 +2,7 @@ package com.example.myparking.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Location
 import android.util.Log
 import com.example.myparking.R
 import com.example.myparking.models.DriverProfile
@@ -31,6 +32,17 @@ class PreferenceManager(val context: Context){
         editor.apply()
         val v = sharedPreferences.getString("profile","null  nulll")!!
         Log.d("critten to pref",v)
+    }
+    fun writeLastLocation(location: Location) {
+        val editor = sharedPreferences.edit()
+        val str = location.latitude.toString()+","+location.longitude.toString()
+        Log.d("last location", str)
+        editor.putString("location",str)
+        editor.apply()
+    }
+    fun getLastLocationStr():String? {
+        val location = sharedPreferences.getString("location",null)
+        return location
     }
     fun writeFilterInfo(filter: FilterParkingsModel) {
         val editor = sharedPreferences.edit()

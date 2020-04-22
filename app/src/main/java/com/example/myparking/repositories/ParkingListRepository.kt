@@ -27,7 +27,7 @@ class ParkingListRepository { // maybe add dao
     }
 
 
-    fun getParkingsList(filterStateLiveData: MutableLiveData<FilterParkingsModel>): MutableLiveData<ArrayList<Parking>> {
+    fun getParkingsList(filterStateLiveData: MutableLiveData<FilterParkingsModel>,idAutomobiliste: Int,start: String?, destination:String?): MutableLiveData<ArrayList<Parking>> {
         var filterState = FilterParkingsModel()
         filterStateLiveData?.let { filterState = filterStateLiveData?.value!! }
         if(!filterState.checkedEquipements) filterState.equipements=null
@@ -41,8 +41,9 @@ class ParkingListRepository { // maybe add dao
         }
         var data = MutableLiveData<ArrayList<Parking>>()
 
+        Log.d("params values",idAutomobiliste.toString())
         /*if (dataSet.size == 0 || dataSet.isEmpty()) {*/
-        service.findParkings(
+        service.findParkings(idAutomobiliste, start, destination ,
             filterState.minPrice,
             filterState.maxPrice,
             filterState.equipements,
@@ -56,7 +57,8 @@ class ParkingListRepository { // maybe add dao
                 call: Call<List<Parking>>,
                 response: Response<List<Parking>>
             ) {
-
+                Log.d("code body",response.code().toString())
+                Log.d("text body",response.toString())
                 dataSet = ArrayList(response.body()!!)
                 Log.d("ViewModelReRequest", dataSet.size.toString())
                 if(filterState.sort==1) {
@@ -78,17 +80,18 @@ class ParkingListRepository { // maybe add dao
           return data*/
     }
 
-    fun getFilterInfo() : MutableLiveData<FilterInfoResponse> {
-        var data = MutableLiveData<FilterInfoResponse>()
-        service.findFilterInfo().enqueue(object : Callback<FilterInfoResponse> {
+    fun getFilterInfo(idAutomobiliste:Int, start: String?) : MutableLiveData<FilterInfoResponse> {
+        var data = MutableLiveData<FilterInfoResponse>(FilterInfoResponse())
+        service.findFilterInfo(idAutomobiliste,start).enqueue(object : Callback<FilterInfoResponse> {
             override fun onFailure(call: Call<FilterInfoResponse>, t: Throwable) {
-
             }
 
             override fun onResponse(
                 call: Call<FilterInfoResponse>,
                 response: Response<FilterInfoResponse>
             ) {
+                Log.d("info params filter", idAutomobiliste.toString() +" "+start)
+                Log.d("filter infos", response.body().toString())
                 data.value = response.body()
             }
         })

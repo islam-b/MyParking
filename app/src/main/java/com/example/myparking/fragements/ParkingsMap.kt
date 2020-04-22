@@ -1,14 +1,11 @@
 package com.example.myparking.fragements
 
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.PointF
 import android.location.Location
 
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,34 +19,22 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.adapters.ImageViewBindingAdapter
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.HomeActivity
 import com.example.myparking.R
-import com.example.myparking.activities.ParkingsDetailsContainer
 import com.example.myparking.adapters.MyAdapter
-import com.example.myparking.adapters.OnSearchListener
 import com.example.myparking.adapters.ParkingCarouselAdapter
 import com.example.myparking.databinding.FragmentParkingsMapBinding
-import com.example.myparking.databinding.ParkingCarouselItem2Binding
 import com.example.myparking.databinding.ParkingCarouselItemBinding
 
 import com.example.myparking.models.Parking
-import com.example.myparking.models.ParkingModel
-import com.example.myparking.models.RouteDetail
 import com.example.myparking.models.SearchResult
 import com.example.myparking.repositories.ParkingListRepository
-import com.example.myparking.utils.CustomMarker
-import com.example.myparking.utils.ForegroundService
-import com.example.myparking.utils.MapAction
+import com.example.myparking.utils.*
 import com.example.myparking.utils.MapAction.*
-import com.example.myparking.utils.MapsUtils
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -69,13 +54,10 @@ import com.yarolegovich.discretescrollview.InfiniteScrollAdapter
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.bottom_sheet_layout.view.*
-import kotlinx.android.synthetic.main.fragment_parkings_map.view.*
 import net.cachapa.expandablelayout.ExpandableLayout
-import org.w3c.dom.Text
 import java.io.File
 import java.lang.ref.WeakReference
 import java.math.BigDecimal
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -152,6 +134,8 @@ class ParkingsMap(val parentView:View) : Fragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
+        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
         // Inflate the layout for this fragment
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
@@ -162,7 +146,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
         mMapView = childFragmentManager.findFragmentById(R.id.hereMapfragment) as AndroidXMapFragment
 
-        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation,null)
 
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
@@ -301,7 +285,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
             markers.clear()
             parkings.forEach {target->
                 val icon = Image()
-                val prc = ((BigDecimal(target.nbPlaces).minus(BigDecimal(target.nbPlacesDisponibles)))
+                val prc = ((BigDecimal(target.nbPlaces).minus(BigDecimal(target.nbPlacesLibres)))
                     .div(BigDecimal(target.nbPlaces)) * BigDecimal(100)).toInt().toString() +"%"
                 icon.bitmap =  MapsUtils.createCustomMarker(
                     context!!, binding.root as ViewGroup,R.layout.pin_layout,

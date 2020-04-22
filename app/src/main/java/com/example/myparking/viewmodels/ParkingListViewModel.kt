@@ -6,17 +6,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.navigation.ActivityNavigator
 import com.example.myparking.models.*
 import com.example.myparking.repositories.ParkingListRepository
 
-class ParkingListViewModel (private val parkingListRepository: ParkingListRepository) : ViewModel() {
+class ParkingListViewModel (private val parkingListRepository: ParkingListRepository, val idAutomobiliste: Int, var start: String?, var destination: String?) : ViewModel() {
     private var filterState : MutableLiveData<FilterParkingsModel>
     var mParkingList: MutableLiveData<ArrayList<Parking>>
 
     init {
         filterState = MutableLiveData()
         filterState.value = FilterParkingsModel()
-        mParkingList = parkingListRepository.getParkingsList(filterState)
+        mParkingList = parkingListRepository.getParkingsList(filterState, idAutomobiliste, start, destination)
 
     }
     fun getParkingsList(): MutableLiveData<ArrayList<Parking>> { // why mutubale.
@@ -26,7 +27,7 @@ class ParkingListViewModel (private val parkingListRepository: ParkingListReposi
 
    fun receiveFilter(newFilterState : FilterParkingsModel): MutableLiveData<ArrayList<Parking>> {
        filterState.value = newFilterState
-      return  parkingListRepository.getParkingsList(filterState)
+      return  parkingListRepository.getParkingsList(filterState,idAutomobiliste, start, destination)
 
     }
    fun postFilteredList(newFilteredList: ArrayList<Parking>) {

@@ -1,12 +1,7 @@
 package com.example.myparking.models
 
 import android.os.Parcelable
-import android.widget.ImageView
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.Glide
-import androidx.databinding.BindingAdapter
 import kotlin.math.roundToInt
 
 @Parcelize
@@ -15,7 +10,7 @@ data class Parking
     val idParking: Int,
     val nbEtages: String,
     val nbPlaces: String,
-    val nbPlacesDisponibles: String,
+    val nbPlacesLibres: String,
     val nom: String,
     val adresse: String,
     val imageUrl: String,
@@ -43,26 +38,36 @@ data class Parking
     val termes: ArrayList<String>? = null*/
 ):Parcelable {
     fun getDistance(): String {
-        if (routeInfo?.canWalk!!) {
-            return "%.2f Km -".format(routeInfo.walkingDistance.toFloat().div(1000)!!)
-        }
-        return "%.2f Km -".format(routeInfo.travelDistance.toFloat().div(1000)!!)
+        if( routeInfo!=null) {
+            if (routeInfo?.canWalk!!) {
+                return "%.2f Km -".format(routeInfo.walkingDistance.toFloat().div(1000)!!)
+            }
+            return "%.2f Km -".format(routeInfo.travelDistance.toFloat().div(1000)!!)
+        } else return ""
+
 
     }
 
     fun getTime(): String {
-        if (routeInfo?.canWalk!!) {
-            return " %d min.".format(routeInfo.walkingTime.div(60))
-        }
-        return " %d min.".format(routeInfo.travelTime.div(60)!!)
+        if( routeInfo!=null) {
+            if (routeInfo?.canWalk!!) {
+                return " %d min.".format(routeInfo.walkingTime.div(60))
+            }
+            return " %d min.".format(routeInfo.travelTime.div(60)!!)
+        }else return ""
 
     }
     fun isWalkable() : Boolean {
-        return routeInfo?.canWalk!!
+        if( routeInfo!=null) {
+            return  routeInfo.canWalk
+        } else {
+            return  false
+        }
+
     }
 
     fun getCapacity() : String {
-        val percentage =  nbPlacesDisponibles.toFloat().div(nbPlaces.toFloat()) * 100
+        val percentage =  nbPlacesLibres.toFloat().div(nbPlaces.toFloat()) * 100
         return " - "+percentage.roundToInt().toString() + "%"
     }
 }

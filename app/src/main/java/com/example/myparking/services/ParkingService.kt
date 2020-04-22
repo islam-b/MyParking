@@ -6,8 +6,11 @@ import retrofit2.http.*
 
 
 interface ParkingService {
-    @GET("parking/?start=36.7275137%2C3.0448746")
-    fun findParkings(@Query("minPrice") minPrice: Int?,
+    @GET("parking/")
+    fun findParkings(@Query("automobiliste") idAutomobilistte: Int?,
+                     @Query("start") start: String?,
+                     @Query("destination") destination: String?,
+                    @Query("minPrice") minPrice: Int?,
                      @Query("maxPrice") maxPrice: Int?,
                      @Query(value ="equipements", encoded = true) equipements: String?,
                      @Query("minDistance") minDistance: Int?,
@@ -16,13 +19,16 @@ interface ParkingService {
     @GET("search")
     fun searchPlaces(@Query("query") keyword:String): Call<SearchModel>
 
-    @GET("filterInfos/?start=36.705039%2C3.173912")
-    fun findFilterInfo(): Call<FilterInfoResponse>
+    @GET("filterInfos/")
+    fun findFilterInfo(@Query("automobiliste") idAutomobilistte: Int?,
+                       @Query("start") start: String?): Call<FilterInfoResponse>
 
 
 
     @GET("favoris/")
-    fun getFavorites(@Query("automobiliste") idAutomobilistte:Int): Call<FavoritesResponse>
+    fun getFavorites(@Query("automobiliste") idAutomobilistte:Int,
+                     @Query("start") start: String?,
+                     @Query("destination") destination: String?): Call<FavoritesResponse>
 
     @POST("favoris/")
     fun addFavorite(@Query("automobiliste") idAutomobilistte: Int, @Body body: AddFavRequest): Call<Parking>

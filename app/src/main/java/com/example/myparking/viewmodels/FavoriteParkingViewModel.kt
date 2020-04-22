@@ -6,12 +6,13 @@ import com.example.myparking.models.Parking
 import com.example.myparking.repositories.FavoriteParkingRepository
 import com.example.myparking.repositories.ParkingListRepository
 
-class FavoriteParkingViewModel(private val favroriteParkingsRepository: FavoriteParkingRepository,val idAutomobiliste: Int) : ViewModel() {
+class FavoriteParkingViewModel(private val favroriteParkingsRepository: FavoriteParkingRepository,val idAutomobiliste: Int, var lastLocation: String?,
+                                var destination: String?) : ViewModel() {
 
     var mFavoriteList: MutableLiveData<ArrayList<Parking>>
 
    init {
-       mFavoriteList = favroriteParkingsRepository.getFavoriteParkings(idAutomobiliste)
+       mFavoriteList = favroriteParkingsRepository.getFavoriteParkings(idAutomobiliste, lastLocation, destination)
    }
 
     fun getFavoriteParkings(): MutableLiveData<ArrayList<Parking>> {
@@ -19,11 +20,11 @@ class FavoriteParkingViewModel(private val favroriteParkingsRepository: Favorite
     }
 
     fun addToFavorite(idParking:Int): MutableLiveData<String> {
-        return favroriteParkingsRepository.addToFavorites(idAutomobiliste,idParking)
+        return favroriteParkingsRepository.addToFavorites(idAutomobiliste,idParking, lastLocation, destination)
     }
 
     fun removeFromFavorites(idParking:Int): MutableLiveData<String> {
-        return favroriteParkingsRepository.removeFromFavorites(idAutomobiliste,idParking)
+        return favroriteParkingsRepository.removeFromFavorites(idAutomobiliste,idParking, lastLocation, destination)
     }
 
 }

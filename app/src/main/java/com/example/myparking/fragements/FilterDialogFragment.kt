@@ -39,6 +39,7 @@ import com.example.myparking.MainActivity
 import com.example.myparking.models.*
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.PreferenceManager
+import com.example.myparking.viewmodels.FilterParkingViewModelFactory
 import com.example.myparking.viewmodels.FilterParkingsViewModel
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
@@ -66,15 +67,20 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState);
 //        PreferenceManager(context!!).destroyFiltersInit()
+        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
+        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
         binding = DataBindingUtil.inflate(inflater, R.layout.filter_dialog, container, false)
         //(activity as MainActivity)
-        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance())
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation,null)
+        val filterVMFactory = FilterParkingViewModelFactory(idDriver,lastLocation)
         currentFilterState =
-            ViewModelProviders.of(this.activity!!).get(FilterParkingsViewModel::class.java)
+            ViewModelProviders.of(this.activity!!,filterVMFactory).get(FilterParkingsViewModel::class.java)
         val filtersStored = PreferenceManager(context!!).getFilterInitialInfo()
         currentFilterState.postFilterParkingsState(filtersStored)
         Log.d("readFilterState", currentFilterState.getFilterParkingsState().value!!.toString())
 
+        binding.root.price_range_bar.tickEnd = currentFilterState.getFilterMainInfo().value!!.getPriceMax()
+        binding.root.distance_range_bar.tickEnd = currentFilterState.getFilterMainInfo().value!!.getDistanceMax()
 
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)

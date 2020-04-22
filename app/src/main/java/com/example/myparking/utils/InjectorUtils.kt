@@ -15,10 +15,10 @@ object InjectorUtils {
     private val baseURL = "https://myparking-backend.herokuapp.com/"
     private val retrofit = this.provideRetrofit()
 
-    fun provideParkingListViewModelFactory(): ParkingListViewModelFactory {
-        val parkingListRepository = ParkingListRepository.getInstance( /*dao list*/)
-        return ParkingListViewModelFactory(parkingListRepository)
-    }
+//    fun provideParkingListViewModelFactory(): ParkingListViewModelFactory {
+//        val parkingListRepository = ParkingListRepository.getInstance( /*dao list*/)
+//        return ParkingListViewModelFactory(parkingListRepository)
+//    }
 
     private fun provideRetrofit(): Retrofit {
         Log.d("retrofit inst", "INSTA")

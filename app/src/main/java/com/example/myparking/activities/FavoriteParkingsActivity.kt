@@ -47,11 +47,14 @@ class FavoriteParkingsActivity : Fragment(), MyAdapter.ItemAdapterListener<Parki
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
+        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
+
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_favorite_parkings, container, false)
         binding.lifecycleOwner = activity
 
-        val id = PreferenceManager(context!!).checkDriverProfile().toInt()
-        val factoryParking = FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(),id)
+        val factoryParking = FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(),idDriver,lastLocation, null)
         mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryParking)
             .get(FavoriteParkingViewModel::class.java)
                 mFavoriteParkingsAdapter = FavoriteParkingAdapter(ArrayList<Parking>(),this)

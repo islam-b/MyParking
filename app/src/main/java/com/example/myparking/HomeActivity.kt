@@ -65,7 +65,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         } ,object :OnLocationListener{
             override fun onLocationReady(location: Location) {
-
+                Log.d("received location", location.latitude.toString() +" "+location.longitude.toString())
+                PreferenceManager(this@HomeActivity).writeLastLocation(location)
             }
 
         })
