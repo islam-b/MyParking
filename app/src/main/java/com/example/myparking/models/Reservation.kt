@@ -9,6 +9,7 @@ import java.util.*
 class Reservation(
     val idReservation : Int,
     val qrUrl: String,
+    val dateReservation: String?,
     val dateEntreePrevue : String,
     val dateSortiePrevue: String,
     val dateEntreeEffective: String,

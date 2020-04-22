@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
 
 
         })
-        val factoryReservation = ReservationListViewModelFactory(1, ReservationListRepository.getInstance())
+        val factoryReservation = ReservationListViewModelFactory(idDriver, ReservationListRepository.getInstance())
 
         mReservationListViewModel = ViewModelProviders.of(this, factoryReservation)
             .get(ReservationListViewModel::class.java)
@@ -87,7 +87,7 @@ class HomeFragment : Fragment() {
         {list->
             hideLoading()
             val newList = list.sortedWith(compareBy{df.parse(it.dateEntreePrevue)})
-            mReservationListAdapter?.updateList(ArrayList(list.take(3)))
+            mReservationListAdapter?.updateList(ArrayList(newList.take(3)))
         })
 
 

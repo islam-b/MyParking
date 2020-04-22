@@ -39,6 +39,7 @@ class ReservationListRepository { // maybe add dao
                 call: Call<List<Reservation>>,
                 response: Response<List<Reservation>>
             ) {
+                Log.d("reservations if", id.toString())
                 dataSet = ArrayList(response.body()!!)
                 data.value = dataSet
             }
@@ -79,6 +80,7 @@ class ReservationListRepository { // maybe add dao
             newRes = Reservation(
                 it.idReservation,
                 it.qrUrl,
+                null,
                 newFormatter.format(df.parse(it.dateEntreePrevue.substring(0,19))!!),
                 newFormatter.format(df.parse(it.dateSortiePrevue.substring(0,19))!!),
                 newFormatter.format(df.parse(it.dateEntreeEffective.substring(0,19))!!),

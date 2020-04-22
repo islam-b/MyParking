@@ -32,6 +32,7 @@ import com.example.myparking.repositories.ReservationListRepository
 import com.example.myparking.services.ReservationRequest
 
 import com.example.myparking.utils.DataSource
+import com.example.myparking.utils.PreferenceManager
 import kotlinx.android.synthetic.main.activity_reservation.*
 
 import java.util.*
@@ -70,6 +71,7 @@ class ReservationActivity : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val idDriver = PreferenceManager(context!!).checkDriverProfile()
         //initTarifsLists()
         initDurationsList()
         confirm_btn.setOnClickListener {
@@ -81,7 +83,7 @@ class ReservationActivity : Fragment() {
                 dateEntree,
                 dateSortie,
                 currentParking.idParking.toString(),
-                "1",
+                idDriver,
                 "1",
                 PaiementInstance("89", "5846", df.format(date))
             )

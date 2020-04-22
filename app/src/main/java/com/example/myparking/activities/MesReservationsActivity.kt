@@ -23,6 +23,7 @@ import com.example.myparking.models.Reservation
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.repositories.ReservationListRepository
 import com.example.myparking.utils.DataSource
+import com.example.myparking.utils.PreferenceManager
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import com.example.myparking.viewmodels.ReservationListViewModel
 import com.example.myparking.viewmodels.ReservationListViewModelFactory
@@ -52,7 +53,8 @@ class MesReservationsActivity : Fragment(), MyAdapter.ItemAdapterListener<Reserv
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val factory = ReservationListViewModelFactory(1, ReservationListRepository.getInstance())
+        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
+        val factory = ReservationListViewModelFactory(idDriver, ReservationListRepository.getInstance())
         mReservationListViewModel = ViewModelProviders.of(this, factory)
             .get(ReservationListViewModel::class.java)
         progress_bar.visibility = View.VISIBLE
