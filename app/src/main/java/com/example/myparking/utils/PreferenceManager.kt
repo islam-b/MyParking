@@ -119,5 +119,19 @@ class PreferenceManager(val context: Context){
         sharedPreferences.edit().clear().apply()
     }
 
+    fun activateNotifications() {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("notif_activated", true)
+        editor.apply()
+    }
+    fun desactivateNotifications() {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("notif_activated", false)
+        editor.apply()
+    }
+    fun isNotifActivated():Boolean {
+        return sharedPreferences.getBoolean("notif_activated", true)
+    }
+
 
 }
