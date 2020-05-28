@@ -161,29 +161,22 @@ class ParkingsMap(val parentView:View) : Fragment(),
         })
 
         mAdapter = ParkingCarouselAdapter(parkings, this)
-
-
-
         infiniteAdapter = InfiniteScrollAdapter.wrap(mAdapter!!)
-
         val llBottomSheet =  mView.findViewById<LinearLayout>(R.id.bottom_sheet)
-
 // init the bottom sheet behavior
-
         bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet)
-
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
 
 
         setAction(arguments)
-
-
         initMapEngine()
 
 
         return mView
     }
+
+
 
     fun setAction(arguments: Bundle?) {
         if (arguments==null) {

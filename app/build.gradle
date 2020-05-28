@@ -7,6 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.jetbrains.dokka'
 
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -97,6 +98,30 @@ dependencies {
 
     //facebook login
     implementation 'com.facebook.android:facebook-login:[5,6)'
+    //notifications
+    implementation 'com.google.firebase:firebase-core:17.4.2'
+    implementation 'com.google.firebase:firebase-messaging:20.2.0'
+    implementation 'com.pusher:push-notifications-android:1.6.2'
+    //publish-subscribe
+    implementation 'com.pusher:pusher-java-client:2.2.1'
+    //room
+    def room_version = "2.2.5"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    // For Kotlin use kapt instead of annotationProcessor
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
+
+    // optional - RxJava support for Room
+    implementation "androidx.room:room-rxjava2:$room_version"
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation "androidx.room:room-guava:$room_version"
+
+    // Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
 /*
     // dagger2
     ext.dagger2_version = '2.23'

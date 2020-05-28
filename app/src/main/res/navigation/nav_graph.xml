@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
     <fragment
@@ -105,4 +107,26 @@
         app:argType="com.example.myparking.utils.MapAction"/>
     <argument android:name="data"
             />
+    <action
+        android:id="@+id/action_global_favoriteParkingsActivity"
+        app:destination="@id/favoriteParkingsActivity" />
+    <action
+        android:id="@+id/action_global_mesReservationsActivity"
+        app:destination="@id/mesReservationsActivity" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.myparking.fragements.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <action
+        android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.example.myparking.fragements.NotificationsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <action
+        android:id="@+id/action_global_notificationsFragment"
+        app:destination="@id/notificationsFragment" />
 </navigation>

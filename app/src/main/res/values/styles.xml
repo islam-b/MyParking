@@ -47,7 +47,9 @@
     </style>
 
     <style name="CustomToolbar">
-        <item name="android:textSize">18sp</item>
+        <!--<item name="android:textSize">18sp</item>-->
+        <item name="selectableItemBackground">?android:selectableItemBackground</item>
+        <item name="android:colorControlHighlight">@color/ripple_material_dark</item>
     </style>
 
 
