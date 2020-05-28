@@ -1,13 +1,8 @@
 package com.example.myparking.activities
 
 import android.app.TimePickerDialog
-import android.content.Context
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-
-import android.widget.TimePicker
 
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +10,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 
-import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -25,13 +19,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myparking.R
 import com.example.myparking.adapters.DurationAdapter
 import com.example.myparking.adapters.MyAdapter
-import com.example.myparking.adapters.TarifsAdapter
 import com.example.myparking.databinding.ActivityReservationBinding
 import com.example.myparking.models.*
 import com.example.myparking.repositories.ReservationListRepository
-import com.example.myparking.services.ReservationRequest
+import com.example.myparking.models.ReservationRequest
 
-import com.example.myparking.utils.DataSource
 import com.example.myparking.utils.PreferenceManager
 import kotlinx.android.synthetic.main.activity_reservation.*
 

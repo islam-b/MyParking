@@ -1,19 +1,15 @@
 package com.example.myparking.repositories
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import com.example.myparking.models.Reservation
-import com.example.myparking.services.ReservationRequest
+import com.example.myparking.models.ReservationRequest
 import com.example.myparking.services.ReservationService
 import com.example.myparking.utils.InjectorUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 

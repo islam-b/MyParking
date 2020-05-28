@@ -170,6 +170,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.settingsFragment -> {
                 customizeToolbar("Paramètres",56f,false)
             }
+            R.id.contactUsFragment -> {
+                customizeToolbar("Contactez-nous",56f,false)
+
+            }
             else ->{
                 customizeToolbar("",56f,false)
             }
@@ -287,6 +291,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_settings -> {
                 navController.navigate(R.id.action_global_settingsFragment)
+            }
+            R.id.nav_contact -> {
+                navController.navigate(R.id.action_global_contactUsFragment)
             }
             R.id.nav_logout -> {
                 PreferenceManager(this).destroyProfile()

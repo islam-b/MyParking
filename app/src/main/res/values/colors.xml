@@ -14,4 +14,10 @@
     <color name="facebook">#4267B2</color>
     <color name="inactive_route_inco">#777</color>
     <color name="placeholder">#dadada</color>
+
+
+    <color name="error">#eb4034</color>
+    <color name="success">#2dcc94</color>
+    <color name="warning">#e6ac43</color>
+    <color name="information">#3e85c7</color>
 </resources>

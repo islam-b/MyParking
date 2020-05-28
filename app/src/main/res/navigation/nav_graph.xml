@@ -129,4 +129,12 @@
     <action
         android:id="@+id/action_global_notificationsFragment"
         app:destination="@id/notificationsFragment" />
+    <fragment
+        android:id="@+id/contactUsFragment"
+        android:name="com.example.myparking.fragements.ContactUsFragment"
+        android:label="contact_us_layout"
+        tools:layout="@layout/contact_us_layout" />
+    <action
+        android:id="@+id/action_global_contactUsFragment"
+        app:destination="@id/contactUsFragment" />
 </navigation>
