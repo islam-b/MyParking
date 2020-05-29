@@ -23,8 +23,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.myparking.R
 import com.example.myparking.utils.BeamsTokenProvider
 import com.example.myparking.utils.PreferenceManager
-import com.pusher.client.Pusher
-import com.pusher.client.PusherOptions
+
 
 
 class SettingsFragment : Fragment() {
@@ -95,13 +94,6 @@ class SettingsFragment : Fragment() {
     }
 
     fun initPusher() {
-        // for publish subscriptions
-        val options = PusherOptions()
-        options.setCluster("eu")
-        // for publish subscriptions
-        val pusher = Pusher("970e5539cdcb131e7bc9", options)
-        //pusher.
-
         val driverId = prefMgr.checkDriverProfile()
         try {
             PushNotifications.stop()

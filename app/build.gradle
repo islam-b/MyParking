@@ -102,8 +102,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.4.2'
     implementation 'com.google.firebase:firebase-messaging:20.2.0'
     implementation 'com.pusher:push-notifications-android:1.6.2'
-    //publish-subscribe
-    implementation 'com.pusher:pusher-java-client:2.2.1'
     //room
     def room_version = "2.2.5"
 
@@ -122,6 +120,7 @@ dependencies {
 
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
+
 /*
     // dagger2
     ext.dagger2_version = '2.23'

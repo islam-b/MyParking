@@ -44,14 +44,15 @@ import com.example.myparking.utils.AnimationUtils.convertDpToPixel
 import com.example.myparking.viewmodels.NotificationViewModel
 import com.example.myparking.viewmodels.NotificationViewModelFactory
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.firebase.messaging.RemoteMessage
-import com.pusher.client.Pusher
-import com.pusher.client.PusherOptions
 import com.pusher.pushnotifications.BeamsCallback
 import com.pusher.pushnotifications.PushNotificationReceivedListener
 import com.pusher.pushnotifications.PushNotifications
 import com.pusher.pushnotifications.PusherCallbackError
 import kotlinx.android.synthetic.main.activity_parking_details.*
+import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -72,20 +73,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val prfMgr = PreferenceManager(this)
+        val automobilisteId = prfMgr.checkDriverProfile()
+
 
         MapsUtils.initLocationProvider(this)
-        MapsUtils.getLastLocation(this,object:LocationCallback(){
 
-        } ,object :OnLocationListener{
+        MapsUtils.getLastLocation(this,object:OnLocationListener{
             override fun onLocationReady(location: Location) {
-                Log.d("received location", location.latitude.toString() +" "+location.longitude.toString())
-                PreferenceManager(this@HomeActivity).writeLastLocation(location)
+                prfMgr.writeLastLocation(location)
             }
 
         })
-        Places.initialize(applicationContext, "AIzaSyCDbn_Le90eo8Ry1UEb5GFYIz80Dv4INdY")
+        //Places.initialize(applicationContext, "AIzaSyCDbn_Le90eo8Ry1UEb5GFYIz80Dv4INdY")
         // Create a new Places client instance
-        val placesClient = Places.createClient(this)
+        //val placesClient = Places.createClient(this)
 
 
         setContentView(R.layout.home_nav_layout)
@@ -330,7 +332,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
-        if (true/*prefMgr.isNotifActivated()*/) {
+        MapsUtils.requestNewLocationData(this)
+
+        if (PreferenceManager(this).isNotifActivated()) {
             PushNotifications.setOnMessageReceivedListenerForVisibleActivity(
                 this,
                 object : PushNotificationReceivedListener {
@@ -351,12 +355,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun initPusher() {
-        // for publish subscriptions
-        val options = PusherOptions()
-        options.setCluster("eu")
-        // for publish subscriptions
-        val pusher = Pusher("970e5539cdcb131e7bc9", options)
-        //pusher.
+
 
         val driverId = PreferenceManager(this).checkDriverProfile()
         try {

@@ -2,10 +2,7 @@ package com.example.myparking.utils
 
 import android.util.Log
 import com.example.myparking.repositories.ParkingListRepository
-import com.example.myparking.services.AuthService
-import com.example.myparking.services.ContactUsService
-import com.example.myparking.services.ParkingService
-import com.example.myparking.services.ReservationService
+import com.example.myparking.services.*
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -47,6 +44,10 @@ object InjectorUtils {
 
     fun privideContactUsService(): ContactUsService {
         return retrofit.create(ContactUsService::class.java)
+    }
+
+    fun provideLocationService(): LocationService {
+        return retrofit.create(LocationService::class.java)
     }
 
 }

@@ -13,6 +13,7 @@ import android.location.LocationManager
 import android.os.Looper
 import android.provider.Settings
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -28,14 +29,17 @@ import androidx.fragment.app.Fragment
 
 import com.example.myparking.R
 import com.example.myparking.fragements.OnLocationListener
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
+import com.example.myparking.models.UpdateLocationRequest
+import com.example.myparking.services.LocationService
+import com.google.android.gms.location.*
 import com.here.android.mpa.common.ApplicationContext
 import com.here.android.mpa.common.Image
 import com.here.android.mpa.routing.Maneuver
 import com.here.android.mpa.routing.Maneuver.Action.*
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 object MapsUtils {
@@ -43,9 +47,51 @@ object MapsUtils {
     var PERMISSION_ID=44
     @SuppressLint("StaticFieldLeak")
     private lateinit  var mFusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationService: LocationService
 
     fun initLocationProvider(context:Context) {
+        locationService = InjectorUtils.provideLocationService()
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+        var cpt=0
+        val prfMgr = PreferenceManager(context)
+        val automobilisteId = prfMgr.checkDriverProfile()
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                // locationResult ?: return
+                for (location in locationResult!!.locations){
+                    Log.d("COUNT_LOC",cpt.toString())
+                    cpt += 1
+                    Log.d(
+                        "received location",
+                        locationResult?.lastLocation?.latitude.toString() + " " + locationResult?.lastLocation?.longitude.toString()
+                    )
+                    prfMgr.writeLastLocation(locationResult?.lastLocation!!)
+                    val json = JSONObject()
+                    json.put("lat", locationResult.lastLocation!!.latitude)
+                    json.put("lon", locationResult.lastLocation!!.longitude)
+                    json.put("automobilisteId", automobilisteId.toInt())
+                    val request = UpdateLocationRequest(automobilisteId.toInt(),
+                        locationResult.lastLocation!!.latitude,
+                        locationResult.lastLocation!!.longitude)
+                    Log.d("SENDING NEW LOCATION", json.toString())
+                    locationService.updateLocation(request).enqueue(object : Callback<Any> {
+                        override fun onFailure(call: Call<Any>, t: Throwable) {
+                            Log.d("failure update location","failure to update")
+                        }
+
+                        override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                            Log.d("success","failure to update")
+                            Log.d("success update location",response.raw().body().toString())
+                            Log.d("success location code",response.code().toString())
+                        }
+
+                    })
+
+                }
+            }
+        }
+        requestNewLocationData(context)
     }
 
     private fun checkPermissions(context: Context): Boolean {
@@ -75,7 +121,7 @@ object MapsUtils {
     }
 
 
-    fun getLastLocation(context:Context, locationCallback: LocationCallback, listener: OnLocationListener) {
+    fun getLastLocation(context:Context, listener: OnLocationListener) {
 
         if (checkPermissions(context)) {
             if (isLocationEnabled(context)) {
@@ -83,15 +129,14 @@ object MapsUtils {
                 mFusedLocationClient.lastLocation.addOnCompleteListener { task ->
                     location = task.result
                     if (location == null) {
-                        requestNewLocationData(
-                            context,
-                            locationCallback
-                        )
+                        Log.d("last location","is null")
+                        //requestNewLocationData(context)
                     } else {
                         listener.onLocationReady(location!!)
                     }
                 }
             } else {
+                // add dialog text 'Activer positions...'
                 Toast.makeText(context, "Turn on location", Toast.LENGTH_LONG).show()
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 ContextCompat.startActivity(context, intent, null)
@@ -101,17 +146,23 @@ object MapsUtils {
         }
     }
 
-    private fun requestNewLocationData(context:Context, listener: LocationCallback) {
+     fun requestNewLocationData(context:Context) {
 
-        val mLocationRequest = LocationRequest()
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest.interval = 0
-        mLocationRequest.fastestInterval = 0
-        mLocationRequest.numUpdates = 1
+         val locationRequest = LocationRequest.create()?.apply {
+             interval = 10000
+             fastestInterval = 5000
+             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+         }
+
+//         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+//        mLocationRequest.interval = 0
+//        mLocationRequest.fastestInterval = 0
+//        mLocationRequest.numUpdates = 1
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         mFusedLocationClient.requestLocationUpdates(
-            mLocationRequest, listener, Looper.myLooper()
+            locationRequest,
+            locationCallback, Looper.myLooper()
         )
 
     }
