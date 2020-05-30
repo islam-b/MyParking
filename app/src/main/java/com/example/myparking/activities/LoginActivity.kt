@@ -18,6 +18,7 @@ class LoginActivity : AppCompatActivity(){
         if (profile != "null") {
             Log.d("precious profile", profile)
             startHomeActivity()
+            return
         }
         Log.d("profile null", "null")
 
@@ -31,5 +32,6 @@ class LoginActivity : AppCompatActivity(){
         val mainActivityIntent = Intent(this, HomeActivity::class.java)
         mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(mainActivityIntent)
+        finish()
     }
 }

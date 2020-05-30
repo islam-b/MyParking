@@ -150,8 +150,9 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
         Log.d("signinCode",response.code().toString())
         if (response.code()==200) {
             val id = response.body()?.driverProfile?.idAutomobiliste.toString()
-
-            PreferenceManager(context!!).writeDriverProfile(response.body()?.driverProfile!!)
+            val prfMgr = PreferenceManager(context!!)
+            prfMgr.writeDriverProfile(response.body()?.driverProfile!!)
+            prfMgr.writeInfoDriver(response.body()!!)
             startHomeActivity()
         } else {
             Log.d("error" , response.errorBody()?.string()!!)

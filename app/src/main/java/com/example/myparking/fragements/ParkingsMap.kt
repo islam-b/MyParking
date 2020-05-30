@@ -151,7 +151,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
 
-        mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
+        mParkingListViewModel.filteredParkings.observe(this, Observer<ArrayList<Parking>>
         {
             parkings=it
             mAdapter?.updateList(it)
@@ -728,9 +728,9 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
     override fun onItemClicked(item: Parking) {
         val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
-        val list = mParkingListViewModel.getParkingsList().value
+        val list = mParkingListViewModel.filteredParkings.value
         val index = list?.indexOf(item)
-        val bundle= bundleOf("parking" to item, "parkingIndex" to index)
+        val bundle = bundleOf("parking" to item, "parkingIndex" to index, "favorites" to false,"filtered" to true)
         navController.navigate(R.id.action_mainActivity2_to_parkingsDetailsContainer, bundle)
     }
 

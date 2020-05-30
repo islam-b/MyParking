@@ -57,9 +57,9 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
 
     override fun onItemClicked(item: Parking) {
         val navController = Navigation.findNavController(activity!!, R.id.my_nav_host_fragment)
-        val list = mParkingListViewModel.getParkingsList().value
+        val list = mParkingListViewModel.filteredParkings.value
         val index = list?.indexOf(item)
-        val bundle = bundleOf("parking" to item, "parkingIndex" to index)
+        val bundle = bundleOf("parking" to item, "parkingIndex" to index, "favorites" to false,"filtered" to true)
         navController.navigate(R.id.action_mainActivity2_to_parkingsDetailsContainer, bundle)
     }
 
@@ -74,6 +74,7 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_list, container, false)
 
+
         recyclerview = binding.root.parkings_list
         val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation, null)
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
@@ -86,19 +87,22 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         currentFilterState.postFilterParkingsState(filtersStored)
         Log.d("currentFilterss", filtersStored.toString())
 //        currentFilterState.postFilterParkingsState(filtersStored)
-        this.upadateList(filtersStored)
-        mParkingListViewModel.getParkingsList().observe(viewLifecycleOwner, Observer<ArrayList<Parking>>
+        //this.upadateList(filtersStored)
+        mParkingListViewModel.getFilteredParkings(filtersStored).observe(viewLifecycleOwner, Observer<ArrayList<Parking>>
         {
-            Log.d("ViewModelChanged", it?.size?.toString()!!)
-            Log.d("parkingss", it.toString())
-            parkingList = it
-            mAdapter?.updateList(it)
-            hideProgressBar()
-            if (it.size > 0) {
-                hideNothingFound()
-            } else {
-                showNothingFound()
+            if (it!=null) {
+                Log.d("ViewModelChanged", it?.size?.toString()!!)
+                Log.d("parkingss", it.toString())
+                parkingList = it
+                mAdapter?.updateList(it)
+                hideProgressBar()
+                if (it.size > 0) {
+                    hideNothingFound()
+                } else {
+                    showNothingFound()
+                }
             }
+
 
         })
         mParkingListViewModel.getFilterState()
@@ -120,6 +124,10 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
             FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(), idDriver, lastLocation, null)
         mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryFav)
             .get(FavoriteParkingViewModel::class.java)
+
+        binding.root.list_parkings_refresh.setOnRefreshListener {
+            mParkingListViewModel.refrshFilteredParkings()
+        }
         return binding.root
     }
 
@@ -142,6 +150,9 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         binding.root.shimmer_parking_list.startShimmer()
         binding.root.shimmer_parking_list.visibility = GONE
         recyclerview.visibility = VISIBLE
+        if (binding.root.list_parkings_refresh.isRefreshing){
+            binding.root.list_parkings_refresh.isRefreshing = false
+        }
 
 
     }
@@ -225,10 +236,10 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
     }
 
     private fun upadateList(filterState: FilterParkingsModel) {
-        mParkingListViewModel.receiveFilter(filterState)
+        mParkingListViewModel.getFilteredParkings(filterState)
             .observe(viewLifecycleOwner, Observer<ArrayList<Parking>>
             {
-                mParkingListViewModel.postFilteredList(it)
+                //mParkingListViewModel.postFilteredList(it)
 
             })
     }

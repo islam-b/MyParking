@@ -16,7 +16,7 @@ class FavoriteParkingViewModel(private val favroriteParkingsRepository: Favorite
    }
 
     fun getFavoriteParkings(): MutableLiveData<ArrayList<Parking>> {
-        return mFavoriteList
+        return favroriteParkingsRepository.getFavoriteParkings(idAutomobiliste, lastLocation, destination)
     }
 
     fun addToFavorite(idParking:Int): MutableLiveData<String> {

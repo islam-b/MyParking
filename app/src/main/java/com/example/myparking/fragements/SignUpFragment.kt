@@ -28,7 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.regex.Pattern
 import android.text.TextUtils.isDigitsOnly
-
+import com.example.myparking.utils.PreferenceManager
 
 
 class SignUpFragment : Fragment(), Callback<Any> {
@@ -161,6 +161,10 @@ class SignUpFragment : Fragment(), Callback<Any> {
                     response: Response<SignInModelResponse>
                 ) {
                     if (response.code()==200) {
+                        val prfMgr = PreferenceManager(context!!)
+                        val profile = response.body()
+                        prfMgr.writeDriverProfile(profile?.driverProfile!!)
+                        prfMgr.writeInfoDriver(profile)
                         /* val id = response.body()?.driverProfile?.idAutomobiliste.toString()
                          PreferenceManager(context!!).writeDriverId(id)*/
                         val mainActivityIntent = Intent(activity, HomeActivity::class.java)

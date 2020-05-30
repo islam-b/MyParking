@@ -133,5 +133,32 @@ class PreferenceManager(val context: Context){
         return sharedPreferences.getBoolean("notif_activated", true)
     }
 
+    fun writeInfoDriver(response: SignInModelResponse) {
+        try {
+            val editor = sharedPreferences.edit()
+            editor.putString("profile_nom", response.driverProfile.nom.capitalize())
+            editor.putString("profile_prenom", response.driverProfile.prenom.capitalize())
+            if (response.driverProfile.compte=="facebook") {
+                editor.putString("profile_other", "Compte Facebook")
+            } else {
+                editor.putString("profile_other", response.email)
+            }
+            editor.apply()
+        } catch (e:Exception) {
+
+        }
+
+    }
+    fun getInfoDriver():ArrayList<String> {
+        val list = arrayListOf("","","")
+        try {
+            list[0]=sharedPreferences.getString("profile_nom", "Utilisateur")!!
+            list[1]=sharedPreferences.getString("profile_prenom", "")!!
+            list[2]=sharedPreferences.getString("profile_other", "")!!
+        } catch (e:Exception) {
+        }
+        return list
+    }
+
 
 }

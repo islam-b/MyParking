@@ -67,13 +67,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var showSearch = false
     val networkReceiver = NetworkReceiver()
     private lateinit var notificationViewModel: NotificationViewModel
-
+    private lateinit var prfMgr : PreferenceManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val prfMgr = PreferenceManager(this)
+
+        prfMgr = PreferenceManager(this)
         val automobilisteId = prfMgr.checkDriverProfile()
 
 
@@ -121,9 +122,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupActionBar()
         initPusher()
         initViewModel()
+        showDriverProfile()
 
 
     }
+
+
     private fun initViewModel() {
         val factory = NotificationViewModelFactory(NotificationsRepository.getInstance(this))
         notificationViewModel = ViewModelProviders.of(this, factory)
@@ -329,6 +333,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
     }
+
+    private fun showDriverProfile() {
+        val infosList = prfMgr.getInfoDriver()
+        val navView =  findViewById<NavigationView>(R.id.side_view)
+        val headerView = navView.getHeaderView(0)
+        val nomPrenom =  headerView.findViewById<TextView>(R.id.nom_prenom)
+        nomPrenom.text = infosList[0] + " "+ infosList[1]
+        val emailFb =  headerView.findViewById<TextView>(R.id.email_fb)
+        emailFb.text = infosList[2]
+    }
+
 
     override fun onResume() {
         super.onResume()

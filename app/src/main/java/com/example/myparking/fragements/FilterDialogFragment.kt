@@ -85,15 +85,14 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
         // apply filter stored in initial filter sotred
-        mParkingListViewModel?.receiveFilter(currentFilterState.getFilterParkingsState().value!!)
-            .observe(viewLifecycleOwner, Observer<ArrayList<Parking>>
-            { parkings ->
-                var sortedParkings =
+        mParkingListViewModel.getFilteredParkings(currentFilterState.getFilterParkingsState().value!!)
+            .observe(viewLifecycleOwner, Observer<ArrayList<Parking>> { parkings ->
+                /*var sortedParkings =
                     ArrayList(parkings.sortedWith(compareBy { it.routeInfo?.walkingDistance }))
                 val sort = currentFilterState.getFilterParkingsState().value!!.sort
                 if (sort == 2) sortedParkings =
                     ArrayList(parkings.sortedWith(compareBy { it.tarifs?.get(0).prix }))
-                mParkingListViewModel?.postFilteredList(sortedParkings)
+                mParkingListViewModel?.postFilteredList(sortedParkings)*/
 
             })
         // set values in view
@@ -185,10 +184,10 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
 
         })
         binding.root.apply_filter_btn?.setOnClickListener {
-            mParkingListViewModel?.receiveFilter(currentFilterState.getFilterParkingsState().value!!)
+            mParkingListViewModel.getFilteredParkings(currentFilterState.getFilterParkingsState().value!!)
                 .observe(viewLifecycleOwner, Observer<ArrayList<Parking>>
                 {
-                    mParkingListViewModel?.postFilteredList(it)
+                    //mParkingListViewModel?.postFilteredList(it)
                     dismiss()
                 })
 
@@ -197,10 +196,10 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
         binding.root.reset_filter_btn?.setOnClickListener {
             currentFilterState.postFilterParkingsState(FilterParkingsModel())
             dismiss() // to change by resetting values of filter components
-            mParkingListViewModel?.receiveFilter(FilterParkingsModel())
+            mParkingListViewModel.getFilteredParkings(FilterParkingsModel())
                 .observe(viewLifecycleOwner, Observer<ArrayList<Parking>>
                 {
-                    mParkingListViewModel?.postFilteredList(it)
+                    //mParkingListViewModel?.postFilteredList(it)
                 })
         }
 

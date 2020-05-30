@@ -52,6 +52,7 @@ class HomeFragment : Fragment() {
     private var favoriteParkings = ArrayList<Parking>()
     private var recentReservationList = ArrayList<Reservation>()
     val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.FRANCE)
+    var hide=3
 
     private lateinit var  mFavoriteParkings: HomeFavoriteParkingAdapter
 
@@ -66,28 +67,36 @@ class HomeFragment : Fragment() {
         initNavigation(view)
         val lastLocation = PreferenceManager(context!!).getLastLocationStr()
         val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
-
+        home_swipe_refresh.setOnRefreshListener {
+            hide=3
+            mParkingListViewModel.getAllParkings()
+            mReservationListViewModel.getReservationsList()
+            mFavoriteParkingViewModel.getFavoriteParkings()
+            Log.d("refresh", "requested")
+        }
         val factoryParking = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation,null)
-
+        hide=3
         mParkingListViewModel = ViewModelProviders.of(this, factoryParking)
             .get(ParkingListViewModel::class.java)
-        mParkingListViewModel.getParkingsList().observe(this, Observer<ArrayList<Parking>>
+        mParkingListViewModel.getAllParkings().observe(this, Observer<ArrayList<Parking>>
         {list ->
-            hideLoading()
-            val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
-            mParkingListAdapter?.updateList(ArrayList(newList.takeLast(3)))
-
-
+            if (list!=null)  {
+                hideLoading()
+                val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
+                mParkingListAdapter?.updateList(ArrayList(newList.takeLast(3)))
+            }
         })
         val factoryReservation = ReservationListViewModelFactory(idDriver, ReservationListRepository.getInstance())
 
         mReservationListViewModel = ViewModelProviders.of(this, factoryReservation)
             .get(ReservationListViewModel::class.java)
         mReservationListViewModel.getReservationsList().observe(this, Observer<ArrayList<Reservation>>
-        {list->
-            hideLoading()
-            val newList = list.sortedWith(compareBy{df.parse(it.dateEntreePrevue)})
-            mReservationListAdapter?.updateList(ArrayList(newList.take(3)))
+        {list ->
+            if (list!=null) {
+                hideLoading()
+                val newList = list.sortedWith(compareBy { df.parse(it.dateEntreePrevue) })
+                mReservationListAdapter?.updateList(ArrayList(newList.take(3)))
+            }
         })
 
 
@@ -97,8 +106,12 @@ class HomeFragment : Fragment() {
 
         mFavoriteParkingViewModel.getFavoriteParkings().observe(this, Observer<ArrayList<Parking>>
         {list ->
-            val newList = ArrayList(list.sortedWith(compareBy {it.routeInfo?.walkingDistance}))
-            mFavoriteParkings.updateList(ArrayList(newList.take(3)))
+            if (list!=null) {
+                hideLoading()
+                val newList =
+                    ArrayList(list.sortedWith(compareBy { it.routeInfo?.walkingDistance }))
+                mFavoriteParkings.updateList(ArrayList(newList.take(3)))
+            }
         })
 
 
@@ -138,13 +151,22 @@ class HomeFragment : Fragment() {
     }
 
     fun goToParkingDetails( idParking: Int) {
-        val list = mParkingListViewModel.getParkingsList().value!!
+        val list = mParkingListViewModel.mParkingList.value!!
         val parking = list.find { p -> idParking == p.idParking }
         val index = list.indexOf(parking)
-        val bundle= bundleOf("parking" to parking, "parkingIndex" to index)
+        val bundle = bundleOf("parking" to parking, "parkingIndex" to index, "favorites" to false,"filtered" to false)
         navController.navigate(R.id.action_homeFragment_to_parkingsDetailsContainer, bundle)
 
     }
+    fun goToFavoriteParkingDetails(idParking: Int) {
+        val list = mFavoriteParkingViewModel.mFavoriteList.value!!
+        val parking = list.find { p -> idParking == p.idParking }
+        val index = list.indexOf(parking)
+        val bundle = bundleOf("parking" to parking, "parkingIndex" to index, "favorites" to true,"filtered" to false)
+        navController.navigate(R.id.action_homeFragment_to_parkingsDetailsContainer, bundle)
+
+    }
+
     fun goToReservationDetails( reservation: Reservation) {
         val bundle= bundleOf("reservation" to reservation)
         navController.navigate(R.id.action_homeFragment_to_reservationDetailsActivity, bundle)
@@ -181,7 +203,7 @@ class HomeFragment : Fragment() {
         mFavoriteParkings = HomeFavoriteParkingAdapter(favoriteParkings ,object:
             MyAdapter.ItemAdapterListener<Parking> {
             override fun onItemClicked(item: Parking) {
-                goToParkingDetails(item.idParking)
+                goToFavoriteParkingDetails(item.idParking)
 
             }
 
@@ -209,10 +231,15 @@ class HomeFragment : Fragment() {
     }
 
     fun hideLoading() {
-        binding.root.shimmer_home_activity.stopShimmer()
-        binding.root.shimmer_home_activity.visibility = GONE
-        binding.root.home_activity_content.visibility = VISIBLE
-
+        hide--
+        if (hide<=0) {
+            binding.root.shimmer_home_activity.stopShimmer()
+            binding.root.shimmer_home_activity.visibility = GONE
+            binding.root.home_activity_content.visibility = VISIBLE
+            if (home_swipe_refresh.isRefreshing) {
+                home_swipe_refresh.isRefreshing = false
+            }
+        }
     }
 
 

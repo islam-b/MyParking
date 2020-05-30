@@ -21,14 +21,18 @@
         android:src="@drawable/circle_pro" />
 
     <TextView
+        android:id="@+id/nom_prenom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         android:text="BOUAYACHE Mohamed Islam"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/email_fb"
+        android:textColor="@color/greyBg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="fm_bouayache@esi.dz" />

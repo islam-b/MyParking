@@ -51,6 +51,7 @@ class ParkingDetailFragment : Fragment() {
 
     private lateinit var binding: ActivityParkingDetailsBinding
     private var currentParkingIndex: Int =0
+    private lateinit var parkingsList: ArrayList<Parking>
 
     private lateinit var mParkingViewModel : ParkingItemViewModel
     private var mAdapterTarif: TarifsAdapter? = null
@@ -59,7 +60,8 @@ class ParkingDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            currentParkingIndex = it.getInt("PARKINGINDEX")
+            currentParkingIndex = it.getInt("parkingIndex")
+            parkingsList = it.getParcelableArrayList<Parking>("parkingsList") as ArrayList<Parking>
         }
 
 
@@ -73,7 +75,7 @@ class ParkingDetailFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.activity_parking_details, container, false)
        /* binding.parking = currentParking*/
         binding.lifecycleOwner = activity
-        val factory = ParkingItemViewModelFactory(currentParkingIndex, ParkingListRepository.getInstance())
+        val factory = ParkingItemViewModelFactory(currentParkingIndex, parkingsList)
 
         mParkingViewModel = ViewModelProviders.of(this, factory)
             .get(ParkingItemViewModel::class.java)
@@ -212,11 +214,12 @@ class ParkingDetailFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(/*parking: Parking*/index: Int) =
+        fun newInstance(parkings:ArrayList<Parking>,index: Int) =
             ParkingDetailFragment().apply {
                 arguments = Bundle().apply {
                     /*putParcelable("PARKING", parking)*/
-                    putInt("PARKINGINDEX", index)
+                    putInt("parkingIndex", index)
+                    putParcelableArrayList("parkingsList",parkings)
 
                 }
             }

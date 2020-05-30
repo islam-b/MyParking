@@ -19,11 +19,15 @@ import java.util.logging.Filter
 class ParkingListRepository { // maybe add dao
 
     private var dataSet = ArrayList<Parking>()
+    var mParkingList: MutableLiveData<ArrayList<Parking>>
+    var filteredParkings : MutableLiveData<ArrayList<Parking>>
 
     var service: ParkingService
 
     init {
         service = InjectorUtils.provideParkingService()
+        mParkingList = MutableLiveData()
+        filteredParkings = MutableLiveData()
     }
 
 
@@ -39,7 +43,7 @@ class ParkingListRepository { // maybe add dao
             filterState.minDistance = null
             filterState.maxDistance = null
         }
-        var data = MutableLiveData<ArrayList<Parking>>()
+        //var data = MutableLiveData<ArrayList<Parking>>()
 
         Log.d("params values",idAutomobiliste.toString())
         /*if (dataSet.size == 0 || dataSet.isEmpty()) {*/
@@ -64,21 +68,57 @@ class ParkingListRepository { // maybe add dao
                 if(filterState.sort==1) {
                     Log.d("ViewModelReRequestSort", "distance")
                     val newList =  ArrayList(dataSet.sortedWith(compareBy { it.routeInfo?.walkingDistance }))
-                    data.value = newList
+                    filteredParkings.postValue(newList)
                 }else {
                     Log.d("ViewModelReRequestSort", "price")
                     val newList = ArrayList(dataSet?.sortedWith(compareBy {it.tarifs?.get(0).prix}))
-                    data.value = newList
+                    filteredParkings.postValue(newList)
                 }
 
 
             }
         })
-        return data
+        return filteredParkings
         /*  }
           data.value= dataSet
           return data*/
     }
+
+    fun getNotFilteredParkingsList(idAutomobiliste: Int,start: String?, destination:String?): MutableLiveData<ArrayList<Parking>> {
+        var filterState = FilterParkingsModel()
+        //var data = MutableLiveData<ArrayList<Parking>>()
+
+        Log.d("params values",idAutomobiliste.toString())
+        /*if (dataSet.size == 0 || dataSet.isEmpty()) {*/
+        service.findParkings(idAutomobiliste, start, destination ,
+            filterState.minPrice,
+            filterState.maxPrice,
+            filterState.equipements,
+            filterState.minDistance,
+            filterState.maxDistance
+        ).enqueue(object : Callback<List<Parking>> {
+            override fun onFailure(call: Call<List<Parking>>, t: Throwable) {
+            }
+
+            override fun onResponse(
+                call: Call<List<Parking>>,
+                response: Response<List<Parking>>
+            ) {
+                Log.d("code body",response.code().toString())
+                Log.d("text body",response.toString())
+                dataSet = ArrayList(response.body()!!)
+                Log.d("ViewModelReRequest", dataSet.size.toString())
+                Log.d("ViewModelReRequestSort", "distance")
+                val newList =  ArrayList(dataSet.sortedWith(compareBy { it.routeInfo?.walkingDistance }))
+                mParkingList.postValue(newList)
+            }
+        })
+        return mParkingList
+        /*  }
+          data.value= dataSet
+          return data*/
+    }
+
 
     fun getFilterInfo(idAutomobiliste:Int, start: String?) : MutableLiveData<FilterInfoResponse> {
         var data = MutableLiveData<FilterInfoResponse>(FilterInfoResponse())

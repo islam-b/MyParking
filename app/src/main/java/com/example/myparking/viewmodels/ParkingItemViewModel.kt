@@ -10,12 +10,12 @@ import kotlin.math.roundToInt
 
 class ParkingItemViewModel(
     private val index: Int,
-    private val parkingListRepository: ParkingListRepository
+    private val mList: ArrayList<Parking>
 ) : ViewModel() {
     private var mParking: MutableLiveData<Parking> = MutableLiveData<Parking>()
 
     init {
-        mParking.value = parkingListRepository.getParkings()[index]
+        mParking.value = mList[index]
     }
 
     fun getParkingItem(): LiveData<Parking> { // can't change it only observe

@@ -20,7 +20,7 @@ class ReservationListViewModel(
 
 
     fun getReservationsList(): LiveData<ArrayList<Reservation>> { // can't change it only observe
-        return mReservationList
+        return reservationListRepository.getReservationsList(id)
     }
 
 

@@ -22,6 +22,12 @@
         <argument android:name="parking"
             app:argType="com.example.myparking.models.Parking"
             />
+        <argument android:name="favorites"
+            android:defaultValue="false"
+            />
+        <argument android:name="filtered"
+            android:defaultValue="false"
+            />
         <action
             android:id="@+id/action_homeFragment_to_mesReservationsActivity"
             app:destination="@id/mesReservationsActivity" />

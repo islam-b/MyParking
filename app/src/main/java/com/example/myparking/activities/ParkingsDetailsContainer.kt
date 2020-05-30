@@ -16,6 +16,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.PagerAdapter
 import com.example.myparking.adapters.ParkingsPagerAdapter
 import com.example.myparking.fragements.ParkingDetailFragment
+import com.example.myparking.repositories.FavoriteParkingRepository
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.viewmodels.ParkingListViewModel
 import javax.crypto.AEADBadTagException
@@ -25,7 +26,7 @@ class ParkingsDetailsContainer : Fragment() {
 
     private var currentParking : Parking? = null
     private var currentId :Int? =0
-    private  var parkingsList  = ParkingListRepository.getInstance().getParkings()
+    private lateinit var parkingsList  : ArrayList<Parking>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,18 @@ class ParkingsDetailsContainer : Fragment() {
 
         currentId =  arguments?.getInt("parkingIndex")
         currentParking = arguments?.getParcelable<Parking>("parking") as Parking
+        val favorites = arguments?.getBoolean("favorites",false)
+        if (favorites!!) {
+            parkingsList = FavoriteParkingRepository.getInstance().dataSet.value!!
+        }else {
+            val filtered = arguments?.getBoolean("filtered",false)
+            if (filtered!!) {
+                parkingsList = ParkingListRepository.getInstance().filteredParkings.value!!
+            }else {
+                parkingsList = ParkingListRepository.getInstance().mParkingList.value!!
+            }
+
+        }
 
 
     }
@@ -54,7 +67,7 @@ class ParkingsDetailsContainer : Fragment() {
     private fun initPaging(view: View) {
         val fragmentsList= ArrayList<Fragment>()
         parkingsList?.forEach {
-            fragmentsList.add(ParkingDetailFragment.newInstance(parkingsList.indexOf(it)))
+            fragmentsList.add(ParkingDetailFragment.newInstance(parkingsList,parkingsList.indexOf(it)))
         }
 
         val pagerAdapter = ParkingsPagerAdapter(childFragmentManager,fragmentsList)

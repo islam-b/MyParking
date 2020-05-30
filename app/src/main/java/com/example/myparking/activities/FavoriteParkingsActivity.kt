@@ -82,7 +82,7 @@ class FavoriteParkingsActivity : Fragment(), MyAdapter.ItemAdapterListener<Parki
         Log.d("parking clicked", "cc")
         val list = mFavoriteParkingViewModel.getFavoriteParkings().value!!
         val index = list.indexOf(item)
-        val bundle= bundleOf("parking" to item, "parkingIndex" to index)
+        val bundle = bundleOf("parking" to item, "parkingIndex" to index, "favorites" to true,"filtered" to false)
         val navController = Navigation.findNavController(binding.root)
         navController.navigate(R.id.action_favoriteParkingsActivity_to_parkingsDetailsContainer, bundle)
     }

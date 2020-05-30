@@ -13,26 +13,29 @@ import com.example.myparking.repositories.ParkingListRepository
 class ParkingListViewModel (private val parkingListRepository: ParkingListRepository, val idAutomobiliste: Int, var start: String?, var destination: String?) : ViewModel() {
     private var filterState : MutableLiveData<FilterParkingsModel>
     var mParkingList: MutableLiveData<ArrayList<Parking>>
-
+    var filteredParkings : MutableLiveData<ArrayList<Parking>>
     init {
         filterState = MutableLiveData()
         filterState.value = FilterParkingsModel()
         mParkingList = parkingListRepository.getParkingsList(filterState, idAutomobiliste, start, destination)
-
-    }
-    fun getParkingsList(): MutableLiveData<ArrayList<Parking>> { // why mutubale.
-
-        return mParkingList;
+        filteredParkings = parkingListRepository.getParkingsList(filterState, idAutomobiliste, start, destination)
     }
 
-   fun receiveFilter(newFilterState : FilterParkingsModel): MutableLiveData<ArrayList<Parking>> {
-       filterState.value = newFilterState
-      return  parkingListRepository.getParkingsList(filterState,idAutomobiliste, start, destination)
-
+    fun getAllParkings(): MutableLiveData<ArrayList<Parking>> { // why mutubale.
+        return  parkingListRepository.getNotFilteredParkingsList(idAutomobiliste, start, destination)
     }
-   fun postFilteredList(newFilteredList: ArrayList<Parking>) {
+
+    fun getFilteredParkings(newFilterState : FilterParkingsModel): MutableLiveData<ArrayList<Parking>> {
+        filterState.value = newFilterState
+        return  parkingListRepository.getParkingsList(filterState,idAutomobiliste, start, destination)
+    }
+    fun refrshFilteredParkings(): MutableLiveData<ArrayList<Parking>> {
+        return  parkingListRepository.getParkingsList(filterState,idAutomobiliste, start, destination)
+    }
+
+   /*fun postFilteredList(newFilteredList: ArrayList<Parking>) {
        mParkingList?.value = newFilteredList
-   }
+   }*/
     fun getFilterState(): MutableLiveData<FilterParkingsModel> {
         return filterState
     }

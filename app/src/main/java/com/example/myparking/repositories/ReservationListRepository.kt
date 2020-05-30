@@ -16,6 +16,7 @@ import kotlin.collections.ArrayList
 class ReservationListRepository { // maybe add dao
 
     private var dataSet = ArrayList<Reservation>()
+    var mReservationList = MutableLiveData<ArrayList<Reservation>>()
     private lateinit var createdReservation : MutableLiveData<Reservation>
     var service: ReservationService
 
@@ -25,7 +26,7 @@ class ReservationListRepository { // maybe add dao
 
 
     fun getReservationsList(id: Int): MutableLiveData<ArrayList<Reservation>> {
-        var data = MutableLiveData<ArrayList<Reservation>>()
+
 
         service.findReservations(id).enqueue(object : Callback<List<Reservation>> {
             override fun onFailure(call: Call<List<Reservation>>, t: Throwable) {
@@ -37,10 +38,10 @@ class ReservationListRepository { // maybe add dao
             ) {
                 Log.d("reservations if", id.toString())
                 dataSet = ArrayList(response.body()!!)
-                data.value = dataSet
+                mReservationList.value = dataSet
             }
         })
-        return data
+        return mReservationList
     }
 
     fun getCreatedReservation(reservationRequest: ReservationRequest) : MutableLiveData<Reservation> {
