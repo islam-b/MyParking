@@ -21,7 +21,7 @@ object InjectorUtils {
 //    }
 
     private fun provideRetrofit(): Retrofit {
-        Log.d("retrofit inst", "INSTA")
+       // Log.d("retrofit inst", "INSTA")
         return Retrofit.Builder()
             .baseUrl(baseURL)
             .addConverterFactory(GsonConverterFactory.create())

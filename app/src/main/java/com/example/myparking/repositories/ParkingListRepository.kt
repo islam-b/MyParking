@@ -41,7 +41,7 @@ class ParkingListRepository { // maybe add dao
         }
         var data = MutableLiveData<ArrayList<Parking>>()
 
-        Log.d("params values",idAutomobiliste.toString())
+       /* Log.d("params values",idAutomobiliste.toString())*/
         /*if (dataSet.size == 0 || dataSet.isEmpty()) {*/
         service.findParkings(idAutomobiliste, start, destination ,
             filterState.minPrice,
@@ -57,16 +57,16 @@ class ParkingListRepository { // maybe add dao
                 call: Call<List<Parking>>,
                 response: Response<List<Parking>>
             ) {
-                Log.d("code body",response.code().toString())
-                Log.d("text body",response.toString())
+//                Log.d("code body",response.code().toString())
+//                Log.d("text body",response.toString())
                 dataSet = ArrayList(response.body()!!)
-                Log.d("ViewModelReRequest", dataSet.size.toString())
+                //Log.d("ViewModelReRequest", dataSet.size.toString())
                 if(filterState.sort==1) {
-                    Log.d("ViewModelReRequestSort", "distance")
+                   // Log.d("ViewModelReRequestSort", "distance")
                     val newList =  ArrayList(dataSet.sortedWith(compareBy { it.routeInfo?.walkingDistance }))
                     data.value = newList
                 }else {
-                    Log.d("ViewModelReRequestSort", "price")
+                    //Log.d("ViewModelReRequestSort", "price")
                     val newList = ArrayList(dataSet?.sortedWith(compareBy {it.tarifs?.get(0).prix}))
                     data.value = newList
                 }
@@ -90,8 +90,8 @@ class ParkingListRepository { // maybe add dao
                 call: Call<FilterInfoResponse>,
                 response: Response<FilterInfoResponse>
             ) {
-                Log.d("info params filter", idAutomobiliste.toString() +" "+start)
-                Log.d("filter infos", response.body().toString())
+              //  Log.d("info params filter", idAutomobiliste.toString() +" "+start)
+               // Log.d("filter infos", response.body().toString())
                 data.value = response.body()
             }
         })

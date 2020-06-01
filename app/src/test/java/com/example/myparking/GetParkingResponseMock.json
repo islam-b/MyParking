@@ -1,0 +1,227 @@
+[
+  {
+    "idParking": 2,
+    "nbEtages": 2,
+    "nbPlaces": 20,
+    "nbPlacesLibres": 6,
+    "nom": "Parking Said hamdine",
+    "adresse": "Alger",
+    "imageUrl": "https://www.miresparis.com/wp-content/uploads/2018/06/C1577-bis-241.jpg",
+    "lattitude": 36.7275239,
+    "longitude": 3.0448747,
+    "etages": [
+      {
+        "idEtage": 2,
+        "nbPlaces": 10
+      }
+    ],
+    "tarifs": [
+      {
+        "idTarif": 2,
+        "duree": 60.0,
+        "prix": 120.0
+      }
+    ],
+    "termes": [
+      {
+        "idTerme": 3,
+        "contenu": "TERME1"
+      },
+      {
+        "idTerme": 4,
+        "contenu": "TERM2"
+      }
+    ],
+    "paiments": [
+      {
+        "idPaiment": 1,
+        "type": "CIB",
+        "iconUrl": "https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/money_bag-512.png"
+      },
+      {
+        "idPaiment": 2,
+        "type": "Edahbiya",
+        "iconUrl": "https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/money_bag-512.png"
+      }
+    ],
+    "equipements": [
+      {
+        "idEquipement": 1,
+        "designation": "Surveillance",
+        "iconUrl": "https://image.flaticon.com/icons/png/512/68/68544.png"
+      },
+      {
+        "idEquipement": 2,
+        "designation": "H24",
+        "iconUrl": "https://image.flaticon.com/icons/png/512/68/68544.png"
+      }
+    ],
+    "horairesStatus": [
+      {
+        "days": [
+          "Dimanche"
+        ],
+        "HeureOuverture": "07:00:00",
+        "HeureFermeture": "19:00:00"
+      }
+    ],
+    "ouvert": "Fermé",
+    "routeInfo": {
+      "travelDistance": 0,
+      "travelTime": 0,
+      "walkingDistance": 0,
+      "walkingTime": 0,
+      "canWalk": true
+    }
+  },
+  {
+    "idParking": 3,
+    "nbEtages": 2,
+    "nbPlaces": 20,
+    "nbPlacesLibres": 19,
+    "nom": "Parking Val d'hhydra",
+    "adresse": "Alger",
+    "imageUrl": "https://www.miresparis.com/wp-content/uploads/2018/06/C1577-bis-241.jpg",
+    "lattitude": 36.7275137,
+    "longitude": 3.0448746,
+    "etages": [
+      {
+        "idEtage": 3,
+        "nbPlaces": 10
+      }
+    ],
+    "tarifs": [
+      {
+        "idTarif": 3,
+        "duree": 60.0,
+        "prix": 120.0
+      }
+    ],
+    "termes": [
+      {
+        "idTerme": 5,
+        "contenu": "TERME1"
+      },
+      {
+        "idTerme": 6,
+        "contenu": "TERM2"
+      }
+    ],
+    "paiments": [
+      {
+        "idPaiment": 1,
+        "type": "CIB",
+        "iconUrl": "https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/money_bag-512.png"
+      },
+      {
+        "idPaiment": 2,
+        "type": "Edahbiya",
+        "iconUrl": "https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/money_bag-512.png"
+      }
+    ],
+    "equipements": [
+      {
+        "idEquipement": 1,
+        "designation": "Surveillance",
+        "iconUrl": "https://image.flaticon.com/icons/png/512/68/68544.png"
+      },
+      {
+        "idEquipement": 2,
+        "designation": "H24",
+        "iconUrl": "https://image.flaticon.com/icons/png/512/68/68544.png"
+      }
+    ],
+    "horairesStatus": [
+      {
+        "days": [
+          "Dimanche"
+        ],
+        "HeureOuverture": "07:00:00",
+        "HeureFermeture": "19:00:00"
+      }
+    ],
+    "ouvert": "Fermé",
+    "routeInfo": {
+      "travelDistance": 4383,
+      "travelTime": 358,
+      "walkingDistance": 2,
+      "walkingTime": 2,
+      "canWalk": true
+    }
+  },
+  {
+    "idParking": 4,
+    "nbEtages": 2,
+    "nbPlaces": 20,
+    "nbPlacesLibres": 13,
+    "nom": "Parking jardin d'essai",
+    "adresse": "Alger",
+    "imageUrl": "https://www.miresparis.com/wp-content/uploads/2018/06/C1577-bis-241.jpg",
+    "lattitude": 36.7277737,
+    "longitude": 3.0475145,
+    "etages": [
+      {
+        "idEtage": 4,
+        "nbPlaces": 10
+      }
+    ],
+    "tarifs": [
+      {
+        "idTarif": 4,
+        "duree": 60.0,
+        "prix": 120.0
+      }
+    ],
+    "termes": [
+      {
+        "idTerme": 7,
+        "contenu": "TERME1"
+      },
+      {
+        "idTerme": 8,
+        "contenu": "TERM2"
+      }
+    ],
+    "paiments": [
+      {
+        "idPaiment": 1,
+        "type": "CIB",
+        "iconUrl": "https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/money_bag-512.png"
+      },
+      {
+        "idPaiment": 2,
+        "type": "Edahbiya",
+        "iconUrl": "https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/money_bag-512.png"
+      }
+    ],
+    "equipements": [
+      {
+        "idEquipement": 1,
+        "designation": "Surveillance",
+        "iconUrl": "https://image.flaticon.com/icons/png/512/68/68544.png"
+      },
+      {
+        "idEquipement": 2,
+        "designation": "H24",
+        "iconUrl": "https://image.flaticon.com/icons/png/512/68/68544.png"
+      }
+    ],
+    "horairesStatus": [
+      {
+        "days": [
+          "Dimanche"
+        ],
+        "HeureOuverture": "07:00:00",
+        "HeureFermeture": "19:00:00"
+      }
+    ],
+    "ouvert": "Fermé",
+    "routeInfo": {
+      "travelDistance": 695,
+      "travelTime": 74,
+      "walkingDistance": 699,
+      "walkingTime": 722,
+      "canWalk": true
+    }
+  }
+]
