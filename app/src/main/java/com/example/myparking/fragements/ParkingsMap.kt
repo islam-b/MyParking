@@ -278,8 +278,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
             markers.clear()
             parkings.forEach {target->
                 val icon = Image()
-                val prc = ((BigDecimal(target.nbPlaces).minus(BigDecimal(target.nbPlacesLibres)))
-                    .div(BigDecimal(target.nbPlaces)) * BigDecimal(100)).toInt().toString() +"%"
+                val prc = ((target.nbPlacesLibres.toDouble() / target.nbPlaces.toDouble())*100).toInt().toString() + "%"
                 icon.bitmap =  MapsUtils.createCustomMarker(
                     context!!, binding.root as ViewGroup,R.layout.pin_layout,
                     R.color.colorPrimary, prc

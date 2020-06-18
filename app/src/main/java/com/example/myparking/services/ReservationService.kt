@@ -1,5 +1,6 @@
 package com.example.myparking.services
 
+import com.example.myparking.models.PaimentMethod
 import com.example.myparking.models.Reservation
 import com.example.myparking.models.ReservationRequest
 import retrofit2.Call
@@ -14,5 +15,8 @@ interface ReservationService {
     @POST("reservation/")
     fun createReservation(@Body reservationRequest : ReservationRequest) : Call<Reservation>
 
- /*   , success Callback<Boolean>*/
+    @POST("braintree/checkout")
+    fun checkout(@Body paiementNonce : PaimentMethod) : Call<Any>
+
+    /*   , success Callback<Boolean>*/
 }

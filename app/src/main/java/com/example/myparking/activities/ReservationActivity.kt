@@ -1,6 +1,7 @@
 package com.example.myparking.activities
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.braintreepayments.api.dropin.DropInRequest
 import com.example.myparking.R
 import com.example.myparking.adapters.DurationAdapter
 import com.example.myparking.adapters.MyAdapter
@@ -31,10 +33,22 @@ import java.util.*
 
 import kotlinx.android.synthetic.main.reservation_dialog.view.*
 import java.text.SimpleDateFormat
+import com.braintreepayments.api.dropin.DropInActivity
+import android.R.attr.data
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import com.braintreepayments.api.dropin.DropInResult
+import com.example.myparking.utils.InjectorUtils
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ReservationActivity : Fragment() {
 
+    private val BRAINTREE_REQUEST_CODE = 11
     private lateinit var binding: ActivityReservationBinding
     private lateinit var currentParking: Parking
     private lateinit var dateEntree: String
@@ -68,32 +82,16 @@ class ReservationActivity : Fragment() {
         initDurationsList()
         confirm_btn.setOnClickListener {
             // create Reservation
-            val date = Calendar.getInstance().time
+
             Log.d("dateentree", dateEntree)
             Log.d("datesortie", dateSortie)
-            val reservationRequest = ReservationRequest(
-                dateEntree,
-                dateSortie,
-                currentParking.idParking.toString(),
-                idDriver,
-                "1",
-                PaiementInstance("89", "5846", df.format(date))
-            )
-            ReservationListRepository.getInstance().getCreatedReservation(reservationRequest)
-                .observe(this, Observer<Reservation> {res ->
-                    val mBuilder = AlertDialog.Builder(context!!)
-                        .setView(mDialogSuccuess)
 
-                    val mAlertDialog = mBuilder.show()
-                    mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-                    mDialogSuccuess.see_details_btn.setOnClickListener {
 
-                        goToReservationDetails(res)
-
-                    }
-
-                })
             mDialogSuccuess = LayoutInflater.from(context!!).inflate(R.layout.reservation_dialog, null)
+            onBraintreeSubmit(view)
+
+            /* here create res*/
+
             /*  val mBuilder = AlertDialog.Builder(this)
                   .setView(mDialogSuccuess)
 
@@ -113,6 +111,66 @@ class ReservationActivity : Fragment() {
 
               }*/
 
+        }
+    }
+
+    fun onBraintreeSubmit(v:View) {
+        val dropInRequest = DropInRequest()
+            .clientToken(PreferenceManager(context!!).getBrainTreeToken())
+        startActivityForResult(dropInRequest.getIntent(context!!), BRAINTREE_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == BRAINTREE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                val result = data?.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT) as Any
+                // use the result to update your UI and send the payment method nonce to your server
+                Log.d("nonce", result.toString())
+                InjectorUtils.provideReservationService().checkout(PaimentMethod(result.toString())).enqueue(object:
+                    Callback<Any> {
+                    override fun onFailure(call: Call<Any>, t: Throwable) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                        if (response.code()==200) {
+                            val idDriver = PreferenceManager(context!!).checkDriverProfile()
+                            val date = Calendar.getInstance().time
+                            val reservationRequest = ReservationRequest(
+                                dateEntree,
+                                dateSortie,
+                                currentParking.idParking.toString(),
+                                idDriver,
+                                "1",
+                                PaiementInstance("89", "5846", df.format(date))
+                            )
+                            showLoading()
+                            ReservationListRepository.getInstance().getCreatedReservation(reservationRequest)
+                                .observe(this@ReservationActivity, Observer<Reservation> {res ->
+                                    if (res!=null) {
+                                        hideLoading()
+                                        val mBuilder = AlertDialog.Builder(context!!)
+                                            .setView(mDialogSuccuess)
+                                        val mAlertDialog = mBuilder.show()
+                                        mAlertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+                                        mDialogSuccuess.see_details_btn.setOnClickListener {
+
+                                            goToReservationDetails(res)
+
+                                        }
+                                    }
+
+                                })
+                        }
+                    }
+
+                })
+            } else if (resultCode == RESULT_CANCELED) {
+                // the user canceled
+            } else {
+                // handle errors here, an exception may be available in
+                val error = data?.getSerializableExtra(DropInActivity.EXTRA_ERROR) as Exception
+            }
         }
     }
 
@@ -222,6 +280,13 @@ class ReservationActivity : Fragment() {
         }
         adapter = DurationAdapter(list, listener)
         recyclerView.adapter = adapter
+    }
+
+    fun showLoading() {
+        reserv_loading.visibility=VISIBLE
+    }
+    fun hideLoading() {
+        reserv_loading.visibility= INVISIBLE
     }
 
 

@@ -28,27 +28,34 @@
 
     <group android:id="@+id/group_1">
 
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:enabled="true"
+            android:title="Acceuil" />
+
             <item
                 android:id="@+id/nav_reservations"
                 android:icon="@drawable/ic_event"
-                android:iconTint="@color/colorPrimary"
                 android:title="Mes réservations" />
 
             <item
                 android:id="@+id/nav_fav"
                 android:icon="@drawable/ic_favorite_w"
                 android:title="Parking favoris"/>
+
 <!--            <item-->
-<!--                android:id="@+id/nav_notifs"-->
-<!--                android:icon="@drawable/ic_notifications"-->
-<!--                android:title="Notifications" />-->
-            <item
-                android:id="@+id/nav_find_my_car"
-                android:icon="@drawable/ic_my_location"
-                android:title="Trouvez ma voiture" />
+<!--                android:id="@+id/nav_find_my_car"-->
+<!--                android:icon="@drawable/ic_my_location"-->
+<!--                android:title="Trouvez ma voiture" />-->
 
     </group>
     <group android:id="@+id/group_2">
+        <item
+            android:id="@+id/nav_notifs"
+            android:icon="@drawable/ic_notifications"
+            android:title="Notifications" />
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings"
@@ -57,10 +64,10 @@
                 android:id="@+id/nav_contact"
                 android:icon="@drawable/ic_forum"
                 android:title="Contactez nous" />
-            <item
-                android:id="@+id/nav_help"
-                android:icon="@drawable/ic_help"
-                android:title="Aide" />
+<!--            <item-->
+<!--                android:id="@+id/nav_help"-->
+<!--                android:icon="@drawable/ic_help"-->
+<!--                android:title="Aide" />-->
     </group>
     <group android:id="@+id/group_3">
             <item

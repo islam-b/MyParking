@@ -143,4 +143,10 @@
     <action
         android:id="@+id/action_global_contactUsFragment"
         app:destination="@id/contactUsFragment" />
+    <action
+        android:id="@+id/action_global_homeFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true"
+        app:destination="@id/homeFragment" />
 </navigation>

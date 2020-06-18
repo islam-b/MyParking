@@ -160,5 +160,12 @@ class PreferenceManager(val context: Context){
         return list
     }
 
+    fun writeBrainTreeToken(token: String) {
+        sharedPreferences.edit().putString("braintreeToken",token).apply()
+    }
+
+    fun getBrainTreeToken():String? {
+        return sharedPreferences.getString("braintreeToken",null)
+    }
 
 }

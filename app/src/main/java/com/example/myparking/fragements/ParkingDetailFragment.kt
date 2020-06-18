@@ -2,6 +2,7 @@ package com.example.myparking.fragements
 
 import com.example.myparking.databinding.ActivityParkingDetailsBinding
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -29,8 +30,10 @@ import com.example.myparking.R
 import com.example.myparking.activities.ReservationActivity
 import com.example.myparking.adapters.*
 import com.example.myparking.models.*
+import com.example.myparking.repositories.FavoriteParkingRepository
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.MapAction
+import com.example.myparking.utils.PreferenceManager
 
 import com.example.myparking.utils.loadBackground
 import com.example.myparking.viewmodels.ParkingItemViewModel
@@ -38,6 +41,7 @@ import com.example.myparking.viewmodels.ParkingItemViewModelFactory
 import com.example.myparking.viewmodels.ParkingListViewModel
 import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_parking_details.*
@@ -89,18 +93,43 @@ class ParkingDetailFragment : Fragment() {
         val toolbar = binding.root.toolbar
 
         toolbar.inflateMenu(R.menu.parking_details_menu)
+
         toolbar.setNavigationIcon(R.drawable.ic_back_toolbar)
         toolbar.setNavigationOnClickListener {
             val navController = Navigation.findNavController(activity!!,R.id.my_nav_host_fragment)
             navController.navigateUp()
             //activity!!.onBackPressed()
         }
+        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_share -> {
                     Log.d("CLICK", "Share BTN CLICKED")
+                    val parking = parkingsList[currentParkingIndex]
+                    val uri = "https://www.google.com/maps/?q=${parking.lattitude},${parking.longitude}"
+                    val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+                    sharingIntent.type = "text/plain"
+                    val ShareSub = parking.nom
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, ShareSub)
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, uri)
+                    startActivity(Intent.createChooser(sharingIntent, "Partager avec..."))
                     true
                 }
+                R.id.action_fav -> {
+                    showFavLoading()
+                   FavoriteParkingRepository.getInstance().addToFavorites(idDriver,
+                       parkingsList[currentParkingIndex].idParking,null,null).observe(
+                       this@ParkingDetailFragment, Observer<String> {
+                       if (it !== null && it != "") {
+                           hideFavLoading()
+                           val snackbar = Snackbar
+                               .make(binding.root, it, Snackbar.LENGTH_LONG)
+                           snackbar.show()
+                       }
+                   })
+                    true
+                }
+
             }
             false
         }
@@ -113,6 +142,19 @@ class ParkingDetailFragment : Fragment() {
 
         }
         return binding.root
+    }
+
+
+    private fun showFavLoading() {
+        val item = toolbar.menu.findItem(R.id.action_fav)
+        val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val abprogress = inflater.inflate(R.layout.loading_spinner, null)
+        item.actionView = abprogress
+    }
+
+    private fun hideFavLoading() {
+        val item = toolbar.menu.findItem(R.id.action_fav)
+        item.actionView = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

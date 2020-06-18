@@ -16,4 +16,7 @@ interface AuthService {
 
     @POST("api/driver/login")
     fun signInWithFb(@Body model: FbSignInModelRequest): Call<SignInModelResponse>
+
+    @GET("braintree/auth")
+    fun authBrainTree(@Query("customer_id") customer_id:Int): Call<String>
 }

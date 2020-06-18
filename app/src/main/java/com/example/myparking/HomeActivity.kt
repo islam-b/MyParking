@@ -46,12 +46,16 @@ import com.example.myparking.viewmodels.NotificationViewModelFactory
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.firebase.messaging.RemoteMessage
+import com.here.sdk.analytics.internal.HttpClient
 import com.pusher.pushnotifications.BeamsCallback
 import com.pusher.pushnotifications.PushNotificationReceivedListener
 import com.pusher.pushnotifications.PushNotifications
 import com.pusher.pushnotifications.PusherCallbackError
 import kotlinx.android.synthetic.main.activity_parking_details.*
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 
@@ -89,7 +93,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //Places.initialize(applicationContext, "AIzaSyCDbn_Le90eo8Ry1UEb5GFYIz80Dv4INdY")
         // Create a new Places client instance
         //val placesClient = Places.createClient(this)
+        InjectorUtils.provideAuthService().authBrainTree(automobilisteId.toInt()).enqueue(object: Callback<String>{
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("token_brain_error", t.message.toString())
+            }
 
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+               if (response.code()==200) {
+                   Log.d("token_brain",response.body()!!)
+                   prfMgr.writeBrainTreeToken(response.body()!!)
+               }
+            }
+
+        })
 
         setContentView(R.layout.home_nav_layout)
 
@@ -285,16 +301,22 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
+            R.id.nav_home -> {
+                navController.navigate(R.id.action_global_homeFragment)
+            }
             R.id.nav_fav -> {
                 navController.navigate(R.id.action_global_favoriteParkingsActivity)
             }
             R.id.nav_reservations ->{
                 navController.navigate(R.id.action_global_mesReservationsActivity)
             }
-            R.id.nav_find_my_car -> {
-                val args = bundleOf("viewType" to MainActivity.MAP_VIEW, "actionType" to MapAction.MARK_CAR)
-                navController.navigate(R.id.action_global_mainActivity2, args)
+            R.id.nav_notifs -> {
+                navController.navigate(R.id.action_global_notificationsFragment)
             }
+//            R.id.nav_find_my_car -> {
+//                val args = bundleOf("viewType" to MainActivity.MAP_VIEW, "actionType" to MapAction.MARK_CAR)
+//                navController.navigate(R.id.action_global_mainActivity2, args)
+//            }
             R.id.nav_settings -> {
                 navController.navigate(R.id.action_global_settingsFragment)
             }

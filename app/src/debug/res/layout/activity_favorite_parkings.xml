@@ -34,12 +34,12 @@ android:fitsSystemWindows="true">
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add_white_24"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_height="wrap_content"/>
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:src="@drawable/ic_add_white_24"-->
+<!--        android:layout_margin="@dimen/fab_margin"-->
+<!--        android:layout_height="wrap_content"/>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
