@@ -67,12 +67,12 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState);
 //        PreferenceManager(context!!).destroyFiltersInit()
-        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
-        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
+        val prefManager = PreferenceManager(context!!)
+        val idDriver = prefManager.checkDriverProfile().toInt()
         binding = DataBindingUtil.inflate(inflater, R.layout.filter_dialog, container, false)
         //(activity as MainActivity)
-        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation,null)
-        val filterVMFactory = FilterParkingViewModelFactory(idDriver,lastLocation)
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,prefManager)
+        val filterVMFactory = FilterParkingViewModelFactory(idDriver,prefManager)
         currentFilterState =
             ViewModelProviders.of(this.activity!!,filterVMFactory).get(FilterParkingsViewModel::class.java)
         val filtersStored = PreferenceManager(context!!).getFilterInitialInfo()

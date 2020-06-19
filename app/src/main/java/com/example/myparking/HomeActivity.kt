@@ -79,6 +79,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         prfMgr = PreferenceManager(this)
+        prfMgr.clearDestinationLocation()
         val automobilisteId = prfMgr.checkDriverProfile()
 
 

@@ -65,8 +65,8 @@ class HomeFragment : Fragment() {
 
         //for navigation
         initNavigation(view)
-        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
-        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
+        val prefManager = PreferenceManager(context!!)
+        val idDriver = prefManager.checkDriverProfile().toInt()
         home_swipe_refresh.setOnRefreshListener {
             hide=3
             mParkingListViewModel.getAllParkings()
@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
             mFavoriteParkingViewModel.getFavoriteParkings()
             Log.d("refresh", "requested")
         }
-        val factoryParking = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation,null)
+        val factoryParking = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,prefManager)
         hide=3
         mParkingListViewModel = ViewModelProviders.of(this, factoryParking)
             .get(ParkingListViewModel::class.java)
@@ -100,7 +100,7 @@ class HomeFragment : Fragment() {
         })
 
 
-        val factoryFav = FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(),idDriver,lastLocation,null)
+        val factoryFav = FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(),idDriver,prefManager)
         mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryFav)
             .get(FavoriteParkingViewModel::class.java)
 

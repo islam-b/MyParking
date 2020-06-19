@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.parking_carousel_item2.view.*
 import kotlinx.android.synthetic.main.parking_carousel_item2.view.go_to
 
 class ParkingCarouselAdapter(val parkings:ArrayList<Parking>,
-                             val navigationListener: NavigationListener) :
+                             val navigationListener: NavigationListener, var destination: SearchResult?) :
     MyAdapter<Parking, ParkingCarouselItemBinding>(parkings,
         R.layout.parking_carousel_item,navigationListener) {
 
@@ -63,8 +63,8 @@ class ParkingCarouselAdapter(val parkings:ArrayList<Parking>,
             view.distance_txt.text = (it.travelDistance/1000).toString() + " km"
             view.time_txt.text = (it.travelTime/60).toString() + " min"
         }
-        view.car_btn.setOnClickListener { switchRouteInfo(view,parking) }
-        view.walk_btn.setOnClickListener { switchRouteInfo(view,parking) }
+        view.car_btn.setOnClickListener { switchRouteInfo(view.car_btn, view,parking) }
+        view.walk_btn.setOnClickListener { switchRouteInfo(view.walk_btn, view,parking) }
 
         holder.binding.root.setOnClickListener {
             navigationListener.onItemClicked(parkings[position])
@@ -78,32 +78,33 @@ class ParkingCarouselAdapter(val parkings:ArrayList<Parking>,
     }
 
     private var byCar = true
-    private var destination : SearchResult? = null
 
-    fun setDestination(destination: SearchResult?) {
-        val clone = ArrayList(parkings)
-        this.destination = destination
-        super.updateList(clone)
-    }
+//    fun setDestination(destination: SearchResult?) {
+//        val clone = ArrayList(parkings)
+//        this.destination = destination
+//        super.updateList(clone)
+//    }
 
-    private fun switchRouteInfo(root: View, parking:Parking) {
-        if (byCar) {
+    private fun switchRouteInfo(source: View, root: View, parking:Parking) {
+        if (byCar && source==root.walk_btn) {
             root.car_btn.setColorFilter(ContextCompat.getColor(root.context,R.color.inactive_route_inco))
             root.walk_btn.setColorFilter(ContextCompat.getColor(root.context,R.color.colorPrimary))
             parking.routeInfo?.let {
                 root.distance_txt.text = (it.walkingDistance/1000).toString() + " km"
                 root.time_txt.text = (it.walkingTime/60).toString() + " min"
             }
+            byCar = !byCar
 
-        } else {
+        } else if (!byCar && source==root.car_btn) {
             root.walk_btn.setColorFilter(ContextCompat.getColor(root.context,R.color.inactive_route_inco))
             root.car_btn.setColorFilter(ContextCompat.getColor(root.context,R.color.colorPrimary))
             parking.routeInfo?.let {
                 root.distance_txt.text = (it.travelDistance/1000).toString() + " km"
                 root.time_txt.text = (it.travelTime/60).toString() + " min"
             }
+            byCar = !byCar
         }
-        byCar = !byCar
+
     }
 
 

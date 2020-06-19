@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -52,6 +54,11 @@ class NotificationsFragment : Fragment(), NotificationsListAdapter.OnNotifClickL
         notifs_list.adapter = adapter
         notificationViewModel.getAllNotifs().observe(activity!!, Observer<ArrayList<NotificationModel>>{
             Log.d("RECEIVED_NEW_notif","RECEIVE")
+            if (it==null || it.size==0) {
+                no_notif_msg.visibility = VISIBLE
+            } else {
+                no_notif_msg.visibility = GONE
+            }
             adapter.updateList(it)
         })
 

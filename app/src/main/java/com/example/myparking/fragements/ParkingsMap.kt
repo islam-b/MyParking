@@ -32,6 +32,7 @@ import com.example.myparking.databinding.ParkingCarouselItemBinding
 
 import com.example.myparking.models.Parking
 import com.example.myparking.models.SearchResult
+import com.example.myparking.models.UpdateLocationRequest
 import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.*
 import com.example.myparking.utils.MapAction.*
@@ -55,6 +56,9 @@ import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.bottom_sheet_layout.view.*
 import net.cachapa.expandablelayout.ExpandableLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.lang.ref.WeakReference
 import java.math.BigDecimal
@@ -95,7 +99,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
     private lateinit var mView : View
     private lateinit var binding: FragmentParkingsMapBinding
     private lateinit var mParkingListViewModel: ParkingListViewModel
-
+    private lateinit var prefManager: PreferenceManager
     private var destination: SearchResult? = null
 
     private var actionType: MapAction? = null
@@ -134,8 +138,8 @@ class ParkingsMap(val parentView:View) : Fragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
-        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
+        prefManager = PreferenceManager(context!!)
+        val idDriver = prefManager.checkDriverProfile().toInt()
         // Inflate the layout for this fragment
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_map, container, false)
@@ -146,7 +150,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
         mMapView = childFragmentManager.findFragmentById(R.id.hereMapfragment) as AndroidXMapFragment
 
-        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation,null)
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,prefManager)
 
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
@@ -160,12 +164,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
         })
 
-        mAdapter = ParkingCarouselAdapter(parkings, this)
-        infiniteAdapter = InfiniteScrollAdapter.wrap(mAdapter!!)
-        val llBottomSheet =  mView.findViewById<LinearLayout>(R.id.bottom_sheet)
-// init the bottom sheet behavior
-        bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        initCarousel()
 
 
 
@@ -302,6 +301,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
                 SEARCH_ACTION -> {
                     Log.d("search action", "action")
                     this.destination = data as SearchResult
+                    updateLocationInfo(this.destination, false)
                     markDestination()
                     initDestinationTopInfo()
                 }
@@ -351,6 +351,34 @@ class ParkingsMap(val parentView:View) : Fragment(),
         }
     }
 
+    private fun updateLocationInfo(destination:SearchResult?, reset:Boolean) {
+        val automobilisteId = prefManager.checkDriverProfile().toInt()
+        var request = UpdateLocationRequest(automobilisteId, 0.0,0.0)
+        if (reset) {
+            prefManager.clearDestinationLocation()
+            val start = prefManager.getLastLocationStr()
+            val list = start?.split(',')!!
+            request = UpdateLocationRequest(automobilisteId,
+                list[0].toDouble() ,list[1].toDouble())
+        } else {
+            prefManager.writeDestinationLocation(destination!!)
+            Log.d("SENDING NEW LOCATION", (destination.position[0]+destination.position[1]).toString())
+            request = UpdateLocationRequest(automobilisteId,
+                destination.position[0],destination.position[1])
+        }
+        InjectorUtils.provideLocationService().updateLocation(request).enqueue(object :
+            Callback<Any> {
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                Log.d("failure update location", "failure to update")
+            }
+
+            override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                mParkingListViewModel.refrshFilteredParkings()
+            }
+        })
+
+    }
+
     fun saveCarLocation() {
         val currentPos = pstManager?.position!!.coordinate
         val icone = Image()
@@ -377,12 +405,16 @@ class ParkingsMap(val parentView:View) : Fragment(),
             Map.Animation.LINEAR
         )
 
+
     }
 
     fun initDestinationTopInfo() {
         if(destination!==null) {
 
-            mAdapter!!.setDestination(destination)
+            //mAdapter!!.setDestination()
+            initCarousel()
+
+
             val bitmap =  MapsUtils.createCustomMarker(
                 context!!, binding.root as ViewGroup,R.layout.pin_layout,
                 R.color.centre_button_color, "D"
@@ -392,6 +424,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
             showDestinationTopInfo(true)
             mView.findViewById<ImageView>(R.id.destination_close).setOnClickListener {
                 onCloseDestinationInfo()
+
             }
 
         }
@@ -399,6 +432,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
 
     fun onCloseDestinationInfo() {
+        updateLocationInfo(null,true)
         hideDestinationTopInfo(true)
         mMap.removeMapObject(route)
         mMap.removeMapObject(destinationMarker)
@@ -410,7 +444,10 @@ class ParkingsMap(val parentView:View) : Fragment(),
                 pstManager?.position?.coordinate?.longitude!!), Map.Animation.BOW)
         }
 
-        mAdapter!!.setDestination(null)
+        initCarousel()
+
+
+        //mAdapter!!.setDestination(null)
     }
 
 
@@ -507,6 +544,16 @@ class ParkingsMap(val parentView:View) : Fragment(),
      * @param view The root view
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+    }
+
+    fun initCarousel() {
+        mAdapter = ParkingCarouselAdapter(parkings, this,this.destination)
+        infiniteAdapter = InfiniteScrollAdapter.wrap(mAdapter!!)
+        val llBottomSheet =  mView.findViewById<LinearLayout>(R.id.bottom_sheet)
+// init the bottom sheet behavior
+        bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         carousel = binding.root.carousel
 
         carousel.setOffscreenItems(1)

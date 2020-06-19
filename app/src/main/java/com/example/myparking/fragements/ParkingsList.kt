@@ -69,18 +69,18 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         savedInstanceState: Bundle?
     ): View? {
         Log.d("OnCreateViewList", "parkiings")
-        val lastLocation = PreferenceManager(context!!).getLastLocationStr()
-        val idDriver = PreferenceManager(context!!).checkDriverProfile().toInt()
+        val prefManager = PreferenceManager(context!!)
+        val idDriver = prefManager.checkDriverProfile().toInt()
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_parkings_list, container, false)
 
 
         recyclerview = binding.root.parkings_list
-        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,lastLocation, null)
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),idDriver,prefManager)
         mParkingListViewModel = ViewModelProviders.of(this.activity!!, factory)
             .get(ParkingListViewModel::class.java)
         showProgressBar()
-        val filterVMFactory = FilterParkingViewModelFactory(idDriver,lastLocation)
+        val filterVMFactory = FilterParkingViewModelFactory(idDriver,prefManager)
         currentFilterState =
             ViewModelProviders.of(this.activity!!,filterVMFactory).get(FilterParkingsViewModel::class.java)
         val filtersStored = PreferenceManager(context!!).getFilterInitialInfo()
@@ -121,7 +121,7 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         initParkings()
         Log.d("step", "6")
         val factoryFav =
-            FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(), idDriver, lastLocation, null)
+            FavoriteParkingViewModelFactory(FavoriteParkingRepository.getInstance(), idDriver, prefManager)
         mFavoriteParkingViewModel = ViewModelProviders.of(this, factoryFav)
             .get(FavoriteParkingViewModel::class.java)
 

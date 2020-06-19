@@ -14,14 +14,16 @@ import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.utils.PreferenceManager
 import java.util.*
 
-class FilterParkingsViewModel(var idAutomobiliste: Int, var start: String?): ViewModel(){
+class FilterParkingsViewModel(var idAutomobiliste: Int, val  prfManager: PreferenceManager): ViewModel(){
 
 
 
-    private var filterMainInfo = ParkingListRepository.getInstance().getFilterInfo(idAutomobiliste,start) // for equipemnt list , from data base min and max a discuter
+    private var filterMainInfo : MutableLiveData<FilterInfoResponse>// for equipemnt list , from data base min and max a discuter
     private var filterParkingsState = MutableLiveData<FilterParkingsModel> ()
 //    var distanceCheck = filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null
     init {
+        val start = prfManager.getLastLocationStr()
+        filterMainInfo = ParkingListRepository.getInstance().getFilterInfo(idAutomobiliste,start)
         filterParkingsState.value = FilterParkingsModel()
     }
    /* fun setInitialFilters(filters: FilterParkingsModel) {

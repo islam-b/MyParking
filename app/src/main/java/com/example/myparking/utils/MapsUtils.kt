@@ -26,11 +26,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 
 import com.example.myparking.R
 import com.example.myparking.fragements.OnLocationListener
 import com.example.myparking.models.UpdateLocationRequest
+import com.example.myparking.repositories.ParkingListRepository
 import com.example.myparking.services.LocationService
+import com.example.myparking.viewmodels.ParkingListViewModel
+import com.example.myparking.viewmodels.ParkingListViewModelFactory
 import com.google.android.gms.location.*
 import com.here.android.mpa.common.ApplicationContext
 import com.here.android.mpa.common.Image
@@ -56,6 +61,13 @@ object MapsUtils {
         var cpt=0
         val prfMgr = PreferenceManager(context)
         val automobilisteId = prfMgr.checkDriverProfile()
+
+        val factory = ParkingListViewModelFactory(ParkingListRepository.getInstance(),automobilisteId.toInt(),prfMgr)
+
+        val mParkingListViewModel = ViewModelProviders.of(context as FragmentActivity, factory)
+            .get(ParkingListViewModel::class.java)
+
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 // locationResult ?: return
@@ -71,9 +83,16 @@ object MapsUtils {
                     json.put("lat", locationResult.lastLocation!!.latitude)
                     json.put("lon", locationResult.lastLocation!!.longitude)
                     json.put("automobilisteId", automobilisteId.toInt())
-                    val request = UpdateLocationRequest(automobilisteId.toInt(),
+                    var request = UpdateLocationRequest(automobilisteId.toInt(),
                         locationResult.lastLocation!!.latitude,
                         locationResult.lastLocation!!.longitude)
+                    val dest = prfMgr.getDestinationLocation()
+                    if (dest.size>0) {
+                        request = UpdateLocationRequest(automobilisteId.toInt(),
+                            dest[0],
+                            dest[1])
+                    }
+
                     Log.d("SENDING NEW LOCATION", json.toString())
                     locationService.updateLocation(request).enqueue(object : Callback<Any> {
                         override fun onFailure(call: Call<Any>, t: Throwable) {
@@ -84,6 +103,7 @@ object MapsUtils {
                             Log.d("success","failure to update")
                             Log.d("success update location",response.raw().body().toString())
                             Log.d("success location code",response.code().toString())
+                            mParkingListViewModel.refrshFilteredParkings()
                         }
 
                     })

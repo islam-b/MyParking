@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.myparking.R
 import com.example.myparking.models.DriverProfile
 import com.example.myparking.models.FilterParkingsModel
+import com.example.myparking.models.SearchResult
 import com.example.myparking.models.SignInModelResponse
 
 class PreferenceManager(val context: Context){
@@ -166,6 +167,28 @@ class PreferenceManager(val context: Context){
 
     fun getBrainTreeToken():String? {
         return sharedPreferences.getString("braintreeToken",null)
+    }
+
+    fun writeDestinationLocation(destination: SearchResult) {
+        val editor = sharedPreferences.edit()
+        val str = destination.position[0].toString()+","+destination.position[1].toString()
+        Log.d("last location", str)
+        editor.putString("destination_location",str)
+        editor.apply()
+    }
+
+    fun getDestinationLocation(): Array<Double> {
+        val str= sharedPreferences.getString("destination_location",null)
+        if (str==null) {
+            return arrayOf()
+        }else {
+            val pos = str.split(',')
+            return arrayOf(pos[0].toDouble(), pos[1].toDouble())
+        }
+    }
+
+    fun clearDestinationLocation() {
+        sharedPreferences.edit().remove("destination_location").apply()
     }
 
 }

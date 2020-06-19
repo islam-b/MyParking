@@ -9,28 +9,53 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.ActivityNavigator
 import com.example.myparking.models.*
 import com.example.myparking.repositories.ParkingListRepository
+import com.example.myparking.utils.PreferenceManager
 
-class ParkingListViewModel (private val parkingListRepository: ParkingListRepository, val idAutomobiliste: Int, var start: String?, var destination: String?) : ViewModel() {
+class ParkingListViewModel (private val parkingListRepository: ParkingListRepository, val idAutomobiliste: Int, val  prfManager: PreferenceManager) : ViewModel() {
     private var filterState : MutableLiveData<FilterParkingsModel>
     var mParkingList: MutableLiveData<ArrayList<Parking>>
     var filteredParkings : MutableLiveData<ArrayList<Parking>>
     init {
         filterState = MutableLiveData()
         filterState.value = FilterParkingsModel()
-        mParkingList = parkingListRepository.getParkingsList(filterState, idAutomobiliste, start, destination)
-        filteredParkings = parkingListRepository.getParkingsList(filterState, idAutomobiliste, start, destination)
+        val start = prfManager.getLastLocationStr()
+        val destination = prfManager.getDestinationLocation()
+        var dest :String? = null
+        if (destination.size>0) {
+            dest = destination[0].toString()+','+destination[1].toString()
+        }
+        mParkingList = parkingListRepository.getParkingsList(filterState, idAutomobiliste, start, dest)
+        filteredParkings = parkingListRepository.getParkingsList(filterState, idAutomobiliste, start, dest)
     }
 
     fun getAllParkings(): MutableLiveData<ArrayList<Parking>> { // why mutubale.
-        return  parkingListRepository.getNotFilteredParkingsList(idAutomobiliste, start, destination)
+        val start = prfManager.getLastLocationStr()
+        val destination = prfManager.getDestinationLocation()
+        var dest :String? = null
+        if (destination.size>0) {
+            dest = destination[0].toString()+','+destination[1].toString()
+        }
+        return  parkingListRepository.getNotFilteredParkingsList(idAutomobiliste, start, dest)
     }
 
     fun getFilteredParkings(newFilterState : FilterParkingsModel): MutableLiveData<ArrayList<Parking>> {
+        val start = prfManager.getLastLocationStr()
+        val destination = prfManager.getDestinationLocation()
+        var dest :String? = null
+        if (destination.size>0) {
+            dest = destination[0].toString()+','+destination[1].toString()
+        }
         filterState.value = newFilterState
-        return  parkingListRepository.getParkingsList(filterState,idAutomobiliste, start, destination)
+        return  parkingListRepository.getParkingsList(filterState,idAutomobiliste, start, dest)
     }
     fun refrshFilteredParkings(): MutableLiveData<ArrayList<Parking>> {
-        return  parkingListRepository.getParkingsList(filterState,idAutomobiliste, start, destination)
+        val start = prfManager.getLastLocationStr()
+        val destination = prfManager.getDestinationLocation()
+        var dest :String? = null
+        if (destination.size>0) {
+            dest = destination[0].toString()+','+destination[1].toString()
+        }
+        return  parkingListRepository.getParkingsList(filterState,idAutomobiliste, start, dest)
     }
 
    /*fun postFilteredList(newFilteredList: ArrayList<Parking>) {
