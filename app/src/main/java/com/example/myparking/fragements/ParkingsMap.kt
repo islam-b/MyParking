@@ -202,8 +202,8 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
         //val success = setIsolatedDiskCacheRootPath(diskCacheRoot, intentName)
         val success = setIsolatedDiskCacheRootPath(
-            context?.applicationContext?.getExternalFilesDir(null)?.path + File.separator + ".here-maps",
-            "here_map_intent")
+            context?.applicationContext?.getExternalFilesDir(null)?.path + File.separator + ".here-maps")
+            //"here_map_intent")
 
 
         if (mapInitialized) {
@@ -242,8 +242,8 @@ class ParkingsMap(val parentView:View) : Fragment(),
             mapLoader.addListener(this)
             mapLoader.mapPackages*/
 
-            mMapView.mapGesture.addOnGestureListener(this,100,false)
-            mMap = mMapView.map
+            mMapView.mapGesture?.addOnGestureListener(this,100,false)
+            mMap = mMapView.map!!
 
             pstManager = PositioningManager.getInstance()
             pstManager?.start(PositioningManager.LocationMethod.GPS_NETWORK_INDOOR)
@@ -252,7 +252,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
 
 
-            mMapView.positionIndicator.isVisible = true
+            mMapView.positionIndicator?.isVisible = true
             mMap.projectionMode = Map.Projection.MERCATOR
            mMap.zoomLevel = 13.0
             mMap.setCenter(GeoCoordinate(36.7553388,3.0605876), Map.Animation.NONE)
@@ -276,12 +276,12 @@ class ParkingsMap(val parentView:View) : Fragment(),
             mMap.removeMapObjects(markers.toList())
             markers.clear()
             parkings.forEach {target->
-                val icon = Image()
+                var icon = Image()
                 val prc = ((target.nbPlacesLibres.toDouble() / target.nbPlaces.toDouble())*100).toInt().toString() + "%"
-                icon.bitmap =  MapsUtils.createCustomMarker(
+                icon.setBitmap(  MapsUtils.createCustomMarker(
                     context!!, binding.root as ViewGroup,R.layout.pin_layout,
                     R.color.colorPrimary, prc
-                )
+                ))
                 val marker = CustomMarker(GeoCoordinate(target.lattitude, target.longitude),icon,
                     PlaceType.PARKING, target)
                 mMap.addMapObject(marker)
@@ -312,12 +312,12 @@ class ParkingsMap(val parentView:View) : Fragment(),
                     calculateRoute(target, object : CoreRouter.Listener {
                         override fun onCalculateRouteFinished(
                             p0: MutableList<RouteResult>?,
-                            p1: RoutingError?
+                            p1: RoutingError
                         ) {
                             if (p1 == RoutingError.NONE) {
-                                if (route != null) mMap.removeMapObject(route)
+                                if (route != null) mMap.removeMapObject(route!!)
                                 route = MapRoute(p0!![0].route)
-                                mMap.addMapObject(route)
+                                mMap.addMapObject(route!!)
                                 mMap.setCenter(GeoCoordinate(target.lattitude, target.longitude), Map.Animation.BOW)
                             }
                             Log.d("error route", p1?.name)
@@ -382,23 +382,23 @@ class ParkingsMap(val parentView:View) : Fragment(),
     fun saveCarLocation() {
         val currentPos = pstManager?.position!!.coordinate
         val icone = Image()
-        icone.bitmap = MapsUtils.createCustomMarker(context!!,binding.root as ViewGroup,
-            R.layout.car_marker_layout, R.color.authorized, "")
+        icone.setBitmap(MapsUtils.createCustomMarker(context!!,binding.root as ViewGroup,
+            R.layout.car_marker_layout, R.color.authorized, ""))
         carMarker = CustomMarker(currentPos, icone,PlaceType.CAR_LOCATION,currentPos)
-        mMap.addMapObject(carMarker)
+        mMap.addMapObject(carMarker!!)
     }
 
     fun markDestination() {
         val icon = Image()
         val title = "D"
-        icon.bitmap =  MapsUtils.createCustomMarker(
+        icon.setBitmap( MapsUtils.createCustomMarker(
             context!!, binding.root as ViewGroup,R.layout.pin_layout,
             R.color.centre_button_color, title
-        )
+        ))
         val geo = GeoCoordinate(destination!!.position[0], destination!!.position[1])
         val marker = CustomMarker(geo, icon,PlaceType.DESTINATION, destination!!)
         destinationMarker = marker
-        mMap.addMapObject(destinationMarker)
+        mMap.addMapObject(destinationMarker!!)
         mMap.zoomLevel = 14.0
         mMap.setCenter(
             GeoCoordinate(geo),
@@ -434,8 +434,8 @@ class ParkingsMap(val parentView:View) : Fragment(),
     fun onCloseDestinationInfo() {
         updateLocationInfo(null,true)
         hideDestinationTopInfo(true)
-        mMap.removeMapObject(route)
-        mMap.removeMapObject(destinationMarker)
+        mMap.removeMapObject(route!!)
+        mMap.removeMapObject(destinationMarker!!)
         route = null
         destinationMarker = null
         destination = null
@@ -484,7 +484,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
     }
 
-    override fun onMapObjectsSelected(p0: MutableList<ViewObject>?): Boolean {
+    override fun onMapObjectsSelected(p0: MutableList<ViewObject>): Boolean {
         for (viewObj in p0!!) {
             if (viewObj.baseType == ViewObject.Type.USER_OBJECT) {
                 if ((viewObj as MapObject).type == MapObject.Type.MARKER) {
@@ -497,14 +497,15 @@ class ParkingsMap(val parentView:View) : Fragment(),
                                 // show loading in carousel
 
                                 calculateRoute(target, object:CoreRouter.Listener {
+
                                     override fun onCalculateRouteFinished(
                                         p0: MutableList<RouteResult>?,
-                                        p1: RoutingError?
+                                        p1: RoutingError
                                     ) {
                                         if (p1 == RoutingError.NONE) {
-                                            if (route!=null) mMap.removeMapObject(route)
+                                            if (route!=null) mMap.removeMapObject(route!!)
                                             route = MapRoute(p0!![0].route)
-                                            mMap.addMapObject(route)
+                                            mMap.addMapObject(route!!)
                                         }
                                         Log.d("error route",p1?.name)
                                     }
@@ -579,14 +580,15 @@ class ParkingsMap(val parentView:View) : Fragment(),
                 val target = parkings[realPos]
 
                 calculateRoute(target, object : CoreRouter.Listener {
-                    override fun onCalculateRouteFinished(
-                        p0: MutableList<RouteResult>?,
-                        p1: RoutingError?
-                    ) {
+
+                        override fun onCalculateRouteFinished(
+                    p0: MutableList<RouteResult>?,
+                    p1: RoutingError
+                ) {
                         if (p1 == RoutingError.NONE) {
-                            if (route != null) mMap.removeMapObject(route)
+                            if (route != null) mMap.removeMapObject(route!!)
                             route = MapRoute(p0!![0].route)
-                            mMap.addMapObject(route)
+                            mMap.addMapObject(route!!)
                         }
                         Log.d("error route", p1?.name)
                     }
@@ -642,13 +644,13 @@ class ParkingsMap(val parentView:View) : Fragment(),
         showDestinationTopInfo(true)
     }
 
-    override fun onPinchZoomEvent(p0: Float, p1: PointF?): Boolean {
+    override fun onPinchZoomEvent(p0: Float, p1: PointF): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         showDestinationTopInfo(true)
         return false
     }
 
-    override fun onTapEvent(p0: PointF?): Boolean {
+    override fun onTapEvent(p0: PointF): Boolean {
         if (mMap.getSelectedObjects(p0).isEmpty()) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             showDestinationTopInfo(true)
@@ -674,7 +676,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
         showDestinationTopInfo(true)
     }
 
-    override fun onDoubleTapEvent(p0: PointF?): Boolean {
+    override fun onDoubleTapEvent(p0: PointF): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         showDestinationTopInfo(true)
         return false
@@ -696,17 +698,19 @@ class ParkingsMap(val parentView:View) : Fragment(),
         showDestinationTopInfo(true)
     }
 
-    override fun onLongPressEvent(p0: PointF?): Boolean {
+    override fun onLongPressEvent(p0: PointF): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         showDestinationTopInfo(true)
         return false
     }
 
-    override fun onTwoFingerTapEvent(p0: PointF?): Boolean {
+    override fun onTwoFingerTapEvent(p0: PointF): Boolean {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         showDestinationTopInfo(true)
         return false
     }
+
+
 
 
 
@@ -735,6 +739,8 @@ class ParkingsMap(val parentView:View) : Fragment(),
     override fun onPerformMapDataUpdateComplete(p0: MapPackage?, p1: MapLoader.ResultCode?) {
 
     }
+
+
 
     override fun onProgress(p0: Int) {
        Log.d("download",p0.toString())
@@ -836,7 +842,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
             navigationManager.addNewInstructionEventListener(WeakReference(navEventsListener))
             startForegroundService()
-            val error = navigationManager.simulate(route?.route,60)
+            val error = navigationManager.simulate(route?.route!!,60)
 
             Log.d("errorNav", error.toString())
         }
@@ -851,7 +857,7 @@ class ParkingsMap(val parentView:View) : Fragment(),
         mView.findViewById<CardView>(R.id.nav_top_section).visibility = VISIBLE
         mMap.zoomLevel = 18.0
         mMap.tilt = 60.0f
-        mMap.setCenter(route?.route?.start, Map.Animation.BOW)
+        mMap.setCenter(route?.route?.start!!, Map.Animation.BOW)
         NavigationManager.getInstance().mapUpdateMode = NavigationManager.MapUpdateMode.POSITION_ANIMATION
     }
 

@@ -84,6 +84,7 @@ class ParkingsList : Fragment(), MyAdapter.ItemAdapterListener<Parking>, Parking
         currentFilterState =
             ViewModelProviders.of(this.activity!!,filterVMFactory).get(FilterParkingsViewModel::class.java)
         val filtersStored = PreferenceManager(context!!).getFilterInitialInfo()
+        currentFilterState.resetFilterInfos()
         currentFilterState.postFilterParkingsState(filtersStored)
         Log.d("currentFilterss", filtersStored.toString())
 //        currentFilterState.postFilterParkingsState(filtersStored)

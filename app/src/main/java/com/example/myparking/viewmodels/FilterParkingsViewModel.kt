@@ -18,18 +18,22 @@ class FilterParkingsViewModel(var idAutomobiliste: Int, val  prfManager: Prefere
 
 
 
-    private var filterMainInfo : MutableLiveData<FilterInfoResponse>// for equipemnt list , from data base min and max a discuter
+    private var filterMainInfo : MutableLiveData<FilterInfoResponse>// for equipemnt list , from data base min and max
     private var filterParkingsState = MutableLiveData<FilterParkingsModel> ()
 //    var distanceCheck = filterParkingsState.value?.minDistance!=null || filterParkingsState.value?.maxDistance!= null
     init {
-        val start = prfManager.getLastLocationStr()
-        filterMainInfo = ParkingListRepository.getInstance().getFilterInfo(idAutomobiliste,start)
+
+        filterMainInfo = ParkingListRepository.getInstance().filterInfos
         filterParkingsState.value = FilterParkingsModel()
+    }
+    fun resetFilterInfos() {
+        val start = prfManager.getLastLocationStr()
+        ParkingListRepository.getInstance().getFilterInfo(idAutomobiliste,start)
     }
    /* fun setInitialFilters(filters: FilterParkingsModel) {
         filterParkingsState.value = filter
     }*/
-    fun getFilterMainInfo(): LiveData<FilterInfoResponse> {
+    fun getFilterMainInfo(): MutableLiveData<FilterInfoResponse> {
         return filterMainInfo
     }
     fun getFilterParkingsState(): LiveData<FilterParkingsModel> {

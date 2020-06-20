@@ -21,7 +21,7 @@ class ParkingListRepository { // maybe add dao
     private var dataSet = ArrayList<Parking>()
     var mParkingList: MutableLiveData<ArrayList<Parking>>
     var filteredParkings : MutableLiveData<ArrayList<Parking>>
-
+    var filterInfos = MutableLiveData<FilterInfoResponse>(FilterInfoResponse())
     var service: ParkingService
 
     init {
@@ -121,9 +121,11 @@ class ParkingListRepository { // maybe add dao
 
 
     fun getFilterInfo(idAutomobiliste:Int, start: String?) : MutableLiveData<FilterInfoResponse> {
-        var data = MutableLiveData<FilterInfoResponse>(FilterInfoResponse())
+
         service.findFilterInfo(idAutomobiliste,start).enqueue(object : Callback<FilterInfoResponse> {
             override fun onFailure(call: Call<FilterInfoResponse>, t: Throwable) {
+
+                Log.d("filters_error",t.message.toString())
             }
 
             override fun onResponse(
@@ -132,10 +134,10 @@ class ParkingListRepository { // maybe add dao
             ) {
                 Log.d("info params filter", idAutomobiliste.toString() +" "+start)
                 Log.d("filter infos", response.body().toString())
-                data.value = response.body()
+                filterInfos.postValue(response.body())
             }
         })
-        return data
+        return filterInfos
     }
     /* fun getParkingItem(index: Int) : Parking {
          if (dataSet.find { parking -> parking.idParking == index })!=null) {

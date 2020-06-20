@@ -480,6 +480,7 @@ class FilterDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
     override fun onDismiss(dialog: DialogInterface) {
         val c = currentFilterState.getFilterParkingsState().value!!
         Log.d("savingUpDismissing", c.toString())
+        currentFilterState.resetFilterInfos()
         PreferenceManager(context!!).writeFilterInfo(currentFilterState.getFilterParkingsState().value!!)
         super.onDismiss(dialog)
     }
