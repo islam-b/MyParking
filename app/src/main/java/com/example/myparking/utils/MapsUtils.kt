@@ -85,12 +85,14 @@ object MapsUtils {
                     json.put("automobilisteId", automobilisteId.toInt())
                     var request = UpdateLocationRequest(automobilisteId.toInt(),
                         locationResult.lastLocation!!.latitude,
-                        locationResult.lastLocation!!.longitude)
+                        locationResult.lastLocation!!.longitude,
+                        forSearch = false)
                     val dest = prfMgr.getDestinationLocation()
                     if (dest.size>0) {
                         request = UpdateLocationRequest(automobilisteId.toInt(),
                             dest[0],
-                            dest[1])
+                            dest[1],
+                            forSearch = false)
                     }
 
                     Log.d("SENDING NEW LOCATION", json.toString())

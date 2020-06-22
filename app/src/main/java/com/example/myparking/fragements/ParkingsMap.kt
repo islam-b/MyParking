@@ -353,18 +353,18 @@ class ParkingsMap(val parentView:View) : Fragment(),
 
     private fun updateLocationInfo(destination:SearchResult?, reset:Boolean) {
         val automobilisteId = prefManager.checkDriverProfile().toInt()
-        var request = UpdateLocationRequest(automobilisteId, 0.0,0.0)
+        var request = UpdateLocationRequest(automobilisteId, 0.0,0.0, true)
         if (reset) {
             prefManager.clearDestinationLocation()
             val start = prefManager.getLastLocationStr()
             val list = start?.split(',')!!
             request = UpdateLocationRequest(automobilisteId,
-                list[0].toDouble() ,list[1].toDouble())
+                list[0].toDouble() ,list[1].toDouble(), forSearch=true)
         } else {
             prefManager.writeDestinationLocation(destination!!)
             Log.d("SENDING NEW LOCATION", (destination.position[0]+destination.position[1]).toString())
             request = UpdateLocationRequest(automobilisteId,
-                destination.position[0],destination.position[1])
+                destination.position[0],destination.position[1], forSearch = true)
         }
         InjectorUtils.provideLocationService().updateLocation(request).enqueue(object :
             Callback<Any> {
