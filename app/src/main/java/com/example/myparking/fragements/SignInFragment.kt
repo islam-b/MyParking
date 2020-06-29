@@ -22,6 +22,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.R.string.cancel
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.view.View.GONE
@@ -150,10 +151,12 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
         Log.d("signinCode",response.code().toString())
         if (response.code()==200) {
             val id = response.body()?.driverProfile?.idAutomobiliste.toString()
-            val prfMgr = PreferenceManager(context!!)
-            prfMgr.writeDriverProfile(response.body()?.driverProfile!!)
-            prfMgr.writeInfoDriver(response.body()!!)
-            startHomeActivity()
+            if (activity !==null) {
+                val prfMgr = PreferenceManager(activity!!)
+                prfMgr?.writeDriverProfile(response.body()?.driverProfile!!)
+                prfMgr?.writeInfoDriver(response.body()!!)
+                startHomeActivity()
+            }
         } else {
             Log.d("error" , response.errorBody()?.string()!!)
             hideLoading()
@@ -205,11 +208,11 @@ class SignInFragment : Fragment(), Callback<SignInModelResponse>, FacebookCallba
 
     fun showLoading() {
         signInButton.visibility = GONE
-        signInLoading.visibility = VISIBLE
+        signInLoading?.visibility = VISIBLE
     }
     fun hideLoading() {
         signInButton.visibility = VISIBLE
-        signInLoading.visibility = GONE
+        signInLoading?.visibility = GONE
     }
 
     /*@SuppressLint("PackageManagerGetSignatures")
